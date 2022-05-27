@@ -1,0 +1,14 @@
+/*
+** Project FileShare, 2022
+**
+** Author Francois Michaut
+**
+** Started on  Sat Jan 15 01:25:12 2022 Francois Michaut
+** Last update Sat Jan 15 01:25:15 2022 Francois Michaut
+**
+** FileShareVersion.hpp.in : Project version
+*/
+
+#define FILE_SHARE_VERSION_MAJOR @FileShare_VERSION_MAJOR@
+#define FILE_SHARE_VERSION_MINOR @FileShare_VERSION_MINOR@
+#define FILE_SHARE_VERSION_PATCH @FileShare_VERSION_PATCH@
