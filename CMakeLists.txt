@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Sat Jan 15 01:19:13 2022 Francois Michaut
-## Last update Tue Mar  1 15:50:54 2022 Francois Michaut
+## Last update Sat Aug 27 21:20:16 2022 Francois Michaut
 ##
 ## CMakeLists.txt : Top level CMake
 ##
@@ -17,7 +17,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(FileShare VERSION 0.1.0 LANGUAGES C CXX)
 configure_file(include/FileShareVersion.hpp.in FileShareVersion.hpp)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/include")
+add_subdirectory(lib/libfsp) # Lib FileShare Protocol
+
+file(GLOB LIB_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/lib/*/include")
+file(GLOB LIB_OUTPUTS "${CMAKE_CURRENT_BINARY_DIR}/lib/*")
+
+include_directories(
+  "${CMAKE_CURRENT_BINARY_DIR}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  "${LIB_INCLUDES}"
+  "${LIB_OUTPUTS}"
+  )
 
 add_executable(file-share
   source/Sockets/Socket.cpp
@@ -26,7 +36,7 @@ add_executable(file-share
   source/main.cpp
   )
 
-target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system)
+target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system fsp)
 
 add_custom_target(test
   COMMAND ${CMAKE_COMMAND}
@@ -40,5 +50,3 @@ add_custom_target(test
   COMMAND ${CMAKE_MAKE_PROGRAM}
   -C "${CMAKE_BINARY_DIR}/tests" test
   )
-
-#add_library(libfsp) # Lib FileShare Protocol

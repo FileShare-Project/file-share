@@ -4,3 +4,4 @@ file-share
 compile_commands.json
 
 *.tmp
+*.gch
