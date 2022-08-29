@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Mon Feb 14 19:35:41 2022 Francois Michaut
-## Last update Wed Feb 16 23:17:37 2022 Francois Michaut
+## Last update Sun Aug 28 20:12:02 2022 Francois Michaut
 ##
 ## CMakeLists.txt : CMake building and running tests for FileShare
 ##
@@ -17,24 +17,30 @@ project(FileShare-Tests VERSION 0.1.0 LANGUAGES C CXX)
 
 include(CTest)
 
-create_test_sourcelist (TestFiles test_driver.cpp
-  Sockets/TestSockets.cpp
-  )
+# create_test_sourcelist(TestFiles test_driver.cpp
+#   )
 
-add_executable(unit_tests
-  ../source/Sockets/Address.cpp
-  ../source/Sockets/Socket.cpp
-  ../source/Sockets/IPv4.cpp
-  ${TestFiles}
-  )
+# add_executable(unit_tests
+#   ${TestFiles}
+#   )
 
 foreach (test ${TestFiles})
   if (NOT ${test} STREQUAL test_driver.cpp)
     get_filename_component (DName ${test} DIRECTORY)
     get_filename_component (TName ${test} NAME_WE)
-    add_test (NAME ${DName}/${TName} COMMAND unit_tests ${DName}/${TName})
+    if (DName STREQUAL "")
+      add_test (NAME ${TName} COMMAND unit_tests ${TName})
+    else()
+      add_test (NAME ${DName}/${TName} COMMAND unit_tests ${DName}/${TName})
+    endif()
   endif()
 endforeach ()
+
+file(GLOB LIB_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}/lib/*")
+foreach (LIB_DIRECTORY IN LISTS LIB_DIRECTORIES)
+  cmake_path(GET LIB_DIRECTORY FILENAME LIB_NAME)
+  add_test (NAME ${LIB_NAME}_tests COMMAND ${CMAKE_MAKE_PROGRAM} -C "${LIB_DIRECTORY}" test)
+endforeach()
 
 include_directories(
   "${CMAKE_CURRENT_BINARY_DIR}"
