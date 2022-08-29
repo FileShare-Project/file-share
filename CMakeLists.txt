@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Sat Jan 15 01:19:13 2022 Francois Michaut
-## Last update Sun Aug 28 20:11:14 2022 Francois Michaut
+## Last update Mon Aug 29 20:20:08 2022 Francois Michaut
 ##
 ## CMakeLists.txt : Top level CMake
 ##
@@ -16,12 +16,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # TODO: This currently breaks Apple/Windows builds: find another solution
 set_property(GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS 1)
+set(MAKEFLAGS "--no-print-directory")
 
 project(FileShare VERSION 0.1.0 LANGUAGES C CXX)
 configure_file(include/FileShareVersion.hpp.in FileShareVersion.hpp)
 
 add_subdirectory(lib/libfsp) # Lib FileShare Protocol
-add_subdirectory(lib/libcppsockets) # Lib C++ Sockets
 
 file(GLOB LIB_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/lib/*/include")
 file(GLOB LIB_OUTPUTS "${CMAKE_CURRENT_BINARY_DIR}/lib/*")
