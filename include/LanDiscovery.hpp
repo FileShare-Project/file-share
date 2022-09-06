@@ -4,10 +4,12 @@
 ** Author Francois Michaut
 **
 ** Started on  Sat Jan 15 21:08:44 2022 Francois Michaut
-** Last update Thu Aug 25 22:39:33 2022 Francois Michaut
+** Last update Wed Sep 14 22:26:27 2022 Francois Michaut
 **
 ** LanDiscovery.hpp : Class to discover other pairs on LAN with multicast.
 */
+
+#pragma once
 
 #include <unordered_set>
 

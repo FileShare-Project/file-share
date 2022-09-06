@@ -4,10 +4,12 @@
 ** Author Francois Michaut
 **
 ** Started on  Sat Jan 15 01:25:12 2022 Francois Michaut
-** Last update Sat Jan 15 01:25:15 2022 Francois Michaut
+** Last update Wed Sep 14 22:26:23 2022 Francois Michaut
 **
 ** FileShareVersion.hpp.in : Project version
 */
+
+#pragma once
 
 #define FILE_SHARE_VERSION_MAJOR @FileShare_VERSION_MAJOR@
 #define FILE_SHARE_VERSION_MINOR @FileShare_VERSION_MINOR@
