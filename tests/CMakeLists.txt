@@ -4,13 +4,13 @@
 ## Author Francois Michaut
 ##
 ## Started on  Mon Feb 14 19:35:41 2022 Francois Michaut
-## Last update Sun Aug 28 20:12:02 2022 Francois Michaut
+## Last update Wed May 10 09:47:05 2023 Francois Michaut
 ##
 ## CMakeLists.txt : CMake building and running tests for FileShare
 ##
 
 cmake_minimum_required (VERSION 3.15)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(FileShare-Tests VERSION 0.1.0 LANGUAGES C CXX)
