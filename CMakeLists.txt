@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Sat Jan 15 01:19:13 2022 Francois Michaut
-## Last update Thu May 11 00:25:02 2023 Francois Michaut
+## Last update Wed Jul 19 08:59:15 2023 Francois Michaut
 ##
 ## CMakeLists.txt : Top level CMake
 ##
@@ -20,6 +20,7 @@ set(MAKEFLAGS "--no-print-directory")
 
 set(CMAKE_CXX_FLAGS_DEBUG_INIT "-O0 -DDEBUG -g3")
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O3")
+add_compile_definitions(_GNU_SOURCE)
 
 project(FileShare VERSION 0.1.0 LANGUAGES C CXX)
 configure_file(include/FileShareVersion.hpp.in FileShareVersion.hpp)
