@@ -4,7 +4,7 @@
 ** Author Francois Michaut
 **
 ** Started on  Sat Jan 15 01:26:14 2022 Francois Michaut
-** Last update Sat Jul 22 23:21:45 2023 Francois Michaut
+** Last update Thu Oct 26 21:00:22 2023 Francois Michaut
 **
 ** main.cpp : Main entry point
 */
@@ -23,10 +23,18 @@ void run_server() {
     FileShare::Server::Event e;
 
     while (true) {
+        std::cout << "Nb Clients: " << s.get_clients().size() << std::endl;
         if (s.pull_event(e)) {
             if (e.request().has_value()) {
-                std::cout << "REQUEST !" << std::endl;
-                std::cout << e.request().value().request->to_str() << std::endl;
+                auto &request = e.request().value();
+                std::cout << "REQUEST: " << (int)request.message_id << " " << request.request->debug_str() << std::endl;
+                if (request.code == FileShare::Protocol::CommandCode::SEND_FILE || request.code == FileShare::Protocol::CommandCode::RECEIVE_FILE) {
+                    // We accept the file transfert
+                    e.client()->respond_to_request(request, FileShare::Protocol::StatusCode::STATUS_OK);
+                } else {
+                    // Denying theses requests
+                    e.client()->respond_to_request(request, FileShare::Protocol::StatusCode::FORBIDDEN);
+                }
             } else {
                 // We accept everyone
                 std::cout << "New Client !" << std::endl;
@@ -47,10 +55,12 @@ void run_client() {
     std::cout << "Pull..." << std::endl;
     // client->pull_requests(); // TODO: make it so that it does not block
     std::cout << "Pull done !" << std::endl;
+
     client->list_files();
-    sleep(5);
     client->list_files("/some/path", 2);
-    client->receive_file("/etc/passwd");
+    client->send_file("/tmp/to_send");
+    client->receive_file("/etc/passwd"); // Should get rejected by the server since it is a sensitive file
+
     sleep(2); // TODO: without this, server does not receive the last request... Investigate why and if it is fixable
 }
 

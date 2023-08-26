@@ -77,6 +77,8 @@ add_executable(file-share
   source/main.cpp
 )
 
+target_compile_definitions(file-share PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
+
 target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system fsp)
 
 add_custom_target(test
