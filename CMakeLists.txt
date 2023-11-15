@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Sat Jan 15 01:19:13 2022 Francois Michaut
-## Last update Wed Jul 19 08:59:15 2023 Francois Michaut
+## Last update Sat Nov 11 12:05:42 2023 Francois Michaut
 ##
 ## CMakeLists.txt : Top level CMake
 ##
@@ -13,6 +13,9 @@ cmake_minimum_required (VERSION 3.15)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+include(ExternalProject)
+include(FetchContent)
 
 # TODO: This currently breaks Apple/Windows builds: find another solution
 set_property(GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS 1)
@@ -24,6 +27,13 @@ add_compile_definitions(_GNU_SOURCE)
 
 project(FileShare VERSION 0.1.0 LANGUAGES C CXX)
 configure_file(include/FileShareVersion.hpp.in FileShareVersion.hpp)
+
+FetchContent_Declare(
+    argparse
+    GIT_REPOSITORY  https://github.com/p-ranav/argparse.git
+    GIT_TAG         af442b4da0cd7a07b56fa709bd16571889dc7fda
+)
+FetchContent_MakeAvailable(argparse)
 
 ### BEGIN RECURSIVE LIBRARY INCLUSION ###
 
@@ -78,8 +88,18 @@ add_executable(file-share
 )
 
 target_compile_definitions(file-share PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
-
 target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system fsp)
+
+add_executable(file-share-cli
+  source/cli/main.cpp
+)
+
+target_compile_definitions(file-share-cli PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
+target_link_libraries(file-share-cli argparse fsp)
+target_precompile_headers(file-share-cli
+  PRIVATE
+  "${argparse_SOURCE_DIR}/include/argparse/argparse.hpp"
+)
 
 add_custom_target(test
   COMMAND ${CMAKE_COMMAND} --log-level=WARNING
@@ -92,4 +112,4 @@ add_custom_target(test
   --build "${CMAKE_CURRENT_BINARY_DIR}/tests" -- --quiet
   COMMAND ${CMAKE_MAKE_PROGRAM}
   -C "${CMAKE_CURRENT_BINARY_DIR}/tests" test ARGS=--output-on-failure
-  )
+)

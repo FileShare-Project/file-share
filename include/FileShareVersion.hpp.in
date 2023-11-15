@@ -4,7 +4,7 @@
 ** Author Francois Michaut
 **
 ** Started on  Sat Jan 15 01:25:12 2022 Francois Michaut
-** Last update Wed Sep 14 22:26:23 2022 Francois Michaut
+** Last update Sat Nov 11 11:26:59 2023 Francois Michaut
 **
 ** FileShareVersion.hpp.in : Project version
 */
@@ -14,3 +14,8 @@
 #define FILE_SHARE_VERSION_MAJOR @FileShare_VERSION_MAJOR@
 #define FILE_SHARE_VERSION_MINOR @FileShare_VERSION_MINOR@
 #define FILE_SHARE_VERSION_PATCH @FileShare_VERSION_PATCH@
+
+#define STR_HELPER(x) #x
+#define STR(x) STR_HELPER(x)
+
+#define FILE_SHARE_VERSION STR(FILE_SHARE_VERSION_MAJOR) "." STR(FILE_SHARE_VERSION_MINOR) "." STR(FILE_SHARE_VERSION_PATCH)

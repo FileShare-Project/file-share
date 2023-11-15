@@ -1,7 +1,9 @@
 build/
 
 file-share
+file-share-cli
 compile_commands.json
 
 *.tmp
 *.gch
+vgcore.*

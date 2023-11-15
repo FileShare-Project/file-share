@@ -4,7 +4,7 @@
 ** Author Francois Michaut
 **
 ** Started on  Sat Jan 15 01:26:14 2022 Francois Michaut
-** Last update Thu Oct 26 21:00:22 2023 Francois Michaut
+** Last update Thu Nov 23 23:08:43 2023 Francois Michaut
 **
 ** main.cpp : Main entry point
 */
@@ -60,8 +60,6 @@ void run_client() {
     client->list_files("/some/path", 2);
     client->send_file("/tmp/to_send");
     client->receive_file("/etc/passwd"); // Should get rejected by the server since it is a sensitive file
-
-    sleep(2); // TODO: without this, server does not receive the last request... Investigate why and if it is fixable
 }
 
 int main(int ac, char **av)
