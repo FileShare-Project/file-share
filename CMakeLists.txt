@@ -101,6 +101,7 @@ include_directories(
 
 add_executable(file-share
   source/main.cpp
+  source/Application.cpp
 )
 
 target_compile_definitions(file-share PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
