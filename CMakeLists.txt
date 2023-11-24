@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Sat Jan 15 01:19:13 2022 Francois Michaut
-## Last update Sat Nov 11 12:05:42 2023 Francois Michaut
+## Last update Fri Nov 24 10:00:00 2023 Francois Michaut
 ##
 ## CMakeLists.txt : Top level CMake
 ##
@@ -29,11 +29,27 @@ project(FileShare VERSION 0.1.0 LANGUAGES C CXX)
 configure_file(include/FileShareVersion.hpp.in FileShareVersion.hpp)
 
 FetchContent_Declare(
-    argparse
-    GIT_REPOSITORY  https://github.com/p-ranav/argparse.git
-    GIT_TAG         af442b4da0cd7a07b56fa709bd16571889dc7fda
+  argparse
+  GIT_REPOSITORY  https://github.com/p-ranav/argparse.git
+  GIT_TAG         af442b4da0cd7a07b56fa709bd16571889dc7fda
 )
-FetchContent_MakeAvailable(argparse)
+FetchContent_Declare(
+  SFML
+  GIT_REPOSITORY https://github.com/SFML/SFML
+  GIT_TAG 69ea0cd863aed1d4092b970b676924a716ff718b
+  FIND_PACKAGE_ARGS COMPONENTS graphics window system
+)
+
+set(TGUI_BACKEND "SFML_GRAPHICS")
+set(TGUI_BUILD_FRAMEWORK FALSE)
+FetchContent_Declare(
+  tgui
+  GIT_REPOSITORY  https://github.com/texus/TGUI
+  GIT_TAG         23e44772b37587c3fbf58712ae8410f1e90b995d
+  FIND_PACKAGE_ARGS NAMES TGUI
+)
+
+FetchContent_MakeAvailable(argparse SFML tgui)
 
 ### BEGIN RECURSIVE LIBRARY INCLUSION ###
 
@@ -96,10 +112,12 @@ add_executable(file-share-cli
 
 target_compile_definitions(file-share-cli PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
 target_link_libraries(file-share-cli argparse fsp)
-target_precompile_headers(file-share-cli
-  PRIVATE
-  "${argparse_SOURCE_DIR}/include/argparse/argparse.hpp"
-)
+if (!APPLE)
+  target_precompile_headers(file-share-cli
+    PRIVATE
+    "${argparse_SOURCE_DIR}/include/argparse/argparse.hpp"
+  )
+endif()
 
 add_custom_target(test
   COMMAND ${CMAKE_COMMAND} --log-level=WARNING
