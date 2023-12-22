@@ -17,6 +17,13 @@ namespace FileShare::GUI {
         window(sf::VideoMode(800, 600), "FileShare"),
         gui(window)
     {
+        tgui::Panel::Ptr sider = this->buildSider();
+        this->gui.add(sider);
+        this->gui.add(this->buildSiderButton(sider));
+
+        // tgui::Panel::Ptr content = this->buildContent();
+        // content->setPosition({tgui::bindRight(sider), "0"});
+        // this->gui.add(content);
     }
 
     Application::~Application()
@@ -25,17 +32,6 @@ namespace FileShare::GUI {
     void Application::loop()
     {
         gui.mainLoop();
-    }
-
-    void Application::init()
-    {
-        tgui::Panel::Ptr sider = this->buildSider();
-        this->gui.add(sider);
-        this->gui.add(this->buildSiderButton(sider));
-
-        // tgui::Panel::Ptr content = this->buildContent();
-        // content->setPosition({tgui::bindRight(sider), "0"});
-        // this->gui.add(content);
     }
 
     tgui::Panel::Ptr Application::buildSider()
@@ -102,28 +98,15 @@ namespace FileShare::GUI {
         button->setPosition({ "0", "95%" });
         button->onPress([=]() {
             if (sider->isVisible()) {
-                std::cout << "HIDE" << std::endl;
                 sider->moveWithAnimation({ "-width", "0" }, sf::milliseconds(ANIMATION_DURATION));
                 button->resizeWithAnimation({ "64", button->getSize().y }, sf::milliseconds(ANIMATION_DURATION));
 
-                /*
-                unsigned int signalId = sider->onAnimationFinish([=]() {
-                    sider->setVisible(false);
-                    sider->onAnimationFinish.disconnect(signalId);
-                    std::cout << "Animation finished with id " << signalId << std::endl;
-                });
-                /*/
                 std::shared_ptr<unsigned int> signalIdPtr = std::make_shared<unsigned int>(0);
                 *signalIdPtr = sider->onAnimationFinish([=]() {
                     sider->setVisible(false);
                     sider->onAnimationFinish.disconnect(*signalIdPtr);
-                    std::cout << "Animation finished with id " << *signalIdPtr << std::endl;
                 });
-                //*/
-
-                std::cout << "Animation started with id " << *signalIdPtr << std::endl;
             } else {
-                std::cout << "SHOW" << std::endl;
                 sider->setVisible(true);
                 sider->moveWithAnimation({ "0", "0" }, sf::milliseconds(ANIMATION_DURATION));
                 button->resizeWithAnimation({ "20%", button->getSize().y }, sf::milliseconds(ANIMATION_DURATION));

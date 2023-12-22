@@ -22,7 +22,6 @@ namespace FileShare::GUI {
             Application();
             ~Application();
 
-            void init();
             void loop();
 
         private:
