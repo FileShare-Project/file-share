@@ -2,11 +2,11 @@
 
 int main()
 {
-    FileShare::GUI::Application app;
+    FileShare::GUI::Application* app = nullptr;
 
     try
     {
-        app.init();
+        app = new FileShare::GUI::Application();
     }
     catch (const tgui::Exception& e)
     {
