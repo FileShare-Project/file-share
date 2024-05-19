@@ -10,85 +10,31 @@
 */
 
 #include "Application.hpp"
+#include "DeviceList.hpp"
 #include <TGUI/TGUI.hpp>
 
 namespace FileShare::GUI {
-    Application::Application() :
-        window(sf::VideoMode(800, 600), "FileShare"),
-        gui(window)
+    Application::Application()
+        : window(sf::VideoMode(800, 600), "FileShare")
+        , gui(window)
     {
-        tgui::Panel::Ptr sider = this->buildSider();
+        DeviceList::Ptr sider = DeviceList::create();
+        sider->setWidth("20%");
+        sider->setAutoLayout(tgui::AutoLayout::Leftmost);
+        sider->setAutoLayoutUpdateEnabled(true);
         this->gui.add(sider);
         this->gui.add(this->buildSiderButton(sider));
 
-        // tgui::Panel::Ptr content = this->buildContent();
-        // content->setPosition({tgui::bindRight(sider), "0"});
-        // this->gui.add(content);
+        tgui::Panel::Ptr content = this->buildContent();
+        content->setAutoLayout(tgui::AutoLayout::Fill);
+        this->gui.add(content);
     }
 
-    Application::~Application()
-    {}
+    Application::~Application() {}
 
     void Application::loop()
     {
         gui.mainLoop();
-    }
-
-    tgui::Panel::Ptr Application::buildSider()
-    {
-        tgui::ScrollablePanel::Ptr panel = tgui::ScrollablePanel::create();
-        panel->setSize({ "20%", "95%" });
-        panel->setVerticalScrollbarPolicy(tgui::Scrollbar::Policy::Automatic);
-
-        panel->add(this->buildSiderSection("LAN", { "Sister", "Father" }));
-        panel->add(this->buildSiderSection("Own devices", { "My device 1", "My device 2" }));
-        panel->add(this->buildSiderSection("Contacts", { "Alexandre", "Bart", "Caroline", "Didier" }));
-        return panel;
-    }
-
-    tgui::Panel::Ptr Application::buildSiderSection(std::string name, std::vector<std::string> options)
-    {
-        int optionHeight = 32;
-        int optionPadding = 8;
-
-        tgui::Panel::Ptr panel = tgui::Panel::create();
-        panel->setSize({ "100%", (options.size() + 1) * optionHeight });
-        panel->setAutoLayout(tgui::AutoLayout::Top);
-
-        tgui::Label::Ptr labelName = tgui::Label::create(name);
-        labelName->setSize({ "100% - " + tgui::String::fromNumber(2 * optionPadding), optionHeight - 2 * optionPadding });
-        labelName->setPosition({ optionPadding, optionPadding });
-        labelName->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
-        labelName->setScrollbarPolicy(tgui::Scrollbar::Policy::Never);
-        panel->add(labelName);
-
-        for (ushort i = 0; i < options.size(); i += 1) {
-            tgui::Group::Ptr groupOption = tgui::Group::create();
-            groupOption->setPosition({ 0, (i + 1) * optionHeight });
-            groupOption->setSize({ "100%", optionHeight });
-            panel->add(groupOption);
-
-            tgui::Picture::Ptr pictureOption = tgui::Picture::create("assets/images/button-red.png", true);
-            pictureOption->setPosition({ optionPadding, optionPadding * 1.5f });
-            pictureOption->setSize({ 8, 8 });
-            groupOption->add(pictureOption);
-
-            tgui::Label::Ptr labelOption = tgui::Label::create(options[i]);
-            labelOption->setPosition({ 24, optionPadding });
-            labelOption->setSize({ "100% - " + tgui::String::fromNumber(optionPadding + 24), optionHeight - 2 * optionPadding });
-            labelOption->setScrollbarPolicy(tgui::Scrollbar::Policy::Never);
-            groupOption->add(labelOption);
-
-            tgui::ClickableWidget::Ptr buttonOption = tgui::ClickableWidget::create();
-            buttonOption->setPosition({ 0, 0 });
-            buttonOption->setSize({ "100%", "100%" });
-            buttonOption->onClick([=]() {
-                std::cout << "Option " << options[i] << " pressed" << std::endl;
-            });
-            groupOption->add(buttonOption);
-        }
-
-        return panel;
     }
 
     tgui::Button::Ptr Application::buildSiderButton(tgui::Panel::Ptr sider)

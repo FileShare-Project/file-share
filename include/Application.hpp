@@ -25,8 +25,6 @@ namespace FileShare::GUI {
             void loop();
 
         private:
-            tgui::Panel::Ptr buildSider();
-            tgui::Panel::Ptr buildSiderSection(std::string name, std::vector<std::string> options);
             tgui::Button::Ptr buildSiderButton(tgui::Panel::Ptr sider);
             tgui::Panel::Ptr buildContent();
 
