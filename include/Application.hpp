@@ -13,6 +13,7 @@
 
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
+#include "DeviceList/Controller.hpp"
 
 namespace FileShare::GUI {
     #define ANIMATION_DURATION 250
@@ -22,6 +23,7 @@ namespace FileShare::GUI {
             Application();
             ~Application();
 
+            void init();
             void loop();
 
         private:
@@ -30,5 +32,6 @@ namespace FileShare::GUI {
 
             sf::RenderWindow window;
             tgui::Gui gui;
+            std::unique_ptr<DeviceList::Controller> deviceListController;
     };
 }

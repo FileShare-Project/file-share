@@ -10,27 +10,30 @@
 */
 
 #include "Application.hpp"
-#include "DeviceList.hpp"
-#include <TGUI/TGUI.hpp>
 
 namespace FileShare::GUI {
     Application::Application()
         : window(sf::VideoMode(800, 600), "FileShare")
         , gui(window)
     {
-        DeviceList::Ptr sider = DeviceList::create();
-        sider->setWidth("20%");
-        sider->setAutoLayout(tgui::AutoLayout::Leftmost);
-        sider->setAutoLayoutUpdateEnabled(true);
-        this->gui.add(sider);
-        this->gui.add(this->buildSiderButton(sider));
+    }
+
+    Application::~Application() {}
+
+    void Application::init()
+    {
+        this->deviceListController = std::make_unique<DeviceList::Controller>();
+        DeviceList::View::Ptr deviceListView = this->deviceListController->getView();
+        deviceListView->setWidth("20%");
+        deviceListView->setAutoLayout(tgui::AutoLayout::Leftmost);
+        deviceListView->setAutoLayoutUpdateEnabled(true);
+        this->gui.add(deviceListView);
+        this->gui.add(this->buildSiderButton(deviceListView));
 
         tgui::Panel::Ptr content = this->buildContent();
         content->setAutoLayout(tgui::AutoLayout::Fill);
         this->gui.add(content);
     }
-
-    Application::~Application() {}
 
     void Application::loop()
     {
