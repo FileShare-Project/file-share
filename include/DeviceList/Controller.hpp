@@ -19,10 +19,10 @@ namespace FileShare::GUI::DeviceList {
             Controller();
             ~Controller();
 
-            View::Ptr getView() { return this->view; }
+            View::Ptr getView() const { return this->view; }
 
-            void onSelectDevice(const std::string& device);
-            void onToggleDevice();
+            void handleSelectDevice(const std::string& device);
+            void handleToggleDevice();
 
         private:
             Model model;

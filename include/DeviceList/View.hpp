@@ -20,26 +20,26 @@ namespace FileShare::GUI::DeviceList {
             View();
             ~View();
 
-			typedef std::shared_ptr<View> Ptr;
-			typedef std::shared_ptr<const View> ConstPtr;
+            typedef std::shared_ptr<View> Ptr;
+            typedef std::shared_ptr<const View> ConstPtr;
 
-			static View::Ptr create() { return std::make_shared<View>(); }
-			static View::Ptr copy(View::ConstPtr widget) { return widget ? std::static_pointer_cast<View>(widget->clone()) : nullptr; }
+            static View::Ptr create() { return std::make_shared<View>(); }
+            static View::Ptr copy(View::ConstPtr widget) { return widget ? std::static_pointer_cast<View>(widget->clone()) : nullptr; }
 
             tgui::Signal& getSignal(tgui::String signalName) override;
 
             void addDeviceList(const std::string& title, const std::vector<std::string>& devices) { this->createSection(title, devices); }
-			void setCurrentDevice(std::string& device);
-			void setCurrentDeviceConnected(bool connected);
+            void setCurrentDevice(std::string& device);
+            void setCurrentDeviceConnected(bool connected);
 
             tgui::SignalTyped<const std::string&> onSelectDevice = { "onSelectDevice" };
             tgui::Signal onToggleDevice = { "onToggleDevice" };
 
-		protected:
-			tgui::Widget::Ptr clone() const override { return std::make_shared<View>(*this); }
+        protected:
+            tgui::Widget::Ptr clone() const override { return std::make_shared<View>(*this); }
 
         private:
-			void createCurrentDeviceSection();
+            void createCurrentDeviceSection();
             void createSection(const std::string& title, const std::vector<std::string>& options);
     };
 }

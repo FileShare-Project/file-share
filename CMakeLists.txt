@@ -101,13 +101,20 @@ include_directories(
 
 set(executables "")
 
-function(add_mvc_executable name)
-  set(executables
-    "source/${name}/View.cpp"
-    "source/${name}/Model.cpp"
-    "source/${name}/Controller.cpp"
-    PARENT_SCOPE
-  )
+function(add_mvc_executable)
+  set(local_executables ${executables})
+
+  foreach(name IN LISTS ARGN)
+    set(new_executables
+      "source/${name}/View.cpp"
+      "source/${name}/Model.cpp"
+      "source/${name}/Controller.cpp"
+    )
+
+    set(local_executables ${local_executables} ${new_executables})
+  endforeach()
+
+  set(executables ${local_executables} PARENT_SCOPE)
 endfunction()
 
 add_mvc_executable(DeviceList)

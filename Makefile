@@ -1,6 +1,6 @@
 define printSection
-	$(eval SIZE=$(shell echo -n $1 | wc -c))
-	$(eval BORDER=$(shell printf '\*%.0s' $$(seq 1 $(SIZE))))
+    $(eval SIZE=$(shell expr $$(printf $1 | wc -m) + 4))
+	$(eval BORDER=$(shell printf '\*%.0s' {1..$(SIZE)}))
 	@echo "\033[1;36m"
 	@echo $(BORDER)
 	@echo "* $1 *"
@@ -31,7 +31,7 @@ run r:
 
 .PHONY: build-run br
 build-run br: build
-	$(call printSection,"Build completé. Lancement du programme...")
+	$(call printSection,"Build completed. Running Program...")
 	@$(MAKE) run
 
 .PHONY: clean c

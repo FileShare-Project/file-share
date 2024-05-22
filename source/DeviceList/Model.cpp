@@ -20,11 +20,15 @@ namespace FileShare::GUI::DeviceList {
 
     Model::~Model() {}
 
-    std::vector<std::string> Model::getSections() {
+    void Model::setCurrentDeviceConnected(bool connected) {
+        this->currentDeviceConnected = connected;
+    }
+
+    std::vector<std::string> Model::getSections() const {
         return { "LAN", "Own", "Contacts" };
     }
 
-    std::vector<std::string> Model::getDevicesInSection(const std::string& section) {
+    std::vector<std::string> Model::getDevicesInSection(const std::string& section) const {
         if (section == "LAN") return this->lanDevices;
         else if (section == "Own") return this->ownDevices;
         else if (section == "Contacts") return this->contactDevices;

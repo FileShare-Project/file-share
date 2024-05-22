@@ -23,11 +23,11 @@ namespace FileShare::GUI::DeviceList {
             void setCurrentDevice(const std::string& device) { this->currentDevice = device; }
             std::string getCurrentDevice() { return this->currentDevice; }
 
-            void toggleCurrentDeviceConnected() { this->currentDeviceConnected = !this->currentDeviceConnected; }
-            bool isCurrentDeviceConnected() { return this->currentDeviceConnected; }
+            void setCurrentDeviceConnected(bool connected);
+            bool isCurrentDeviceConnected() const { return this->currentDeviceConnected; }
 
-            std::vector<std::string> getSections();
-            std::vector<std::string> getDevicesInSection(const std::string& section);
+            std::vector<std::string> getSections() const;
+            std::vector<std::string> getDevicesInSection(const std::string& section) const;
 
         private:
             std::vector<std::string> lanDevices;

@@ -15,10 +15,10 @@ namespace FileShare::GUI::DeviceList {
     Controller::Controller() {
         this->view = View::create();
         this->view->onSelectDevice.connect([this](const std::string& device) {
-            this->onSelectDevice(device);
+            this->handleSelectDevice(device);
         });
         this->view->onToggleDevice.connect([this]() {
-            this->onToggleDevice();
+            this->handleToggleDevice();
         });
 
         for (auto section : this->model.getSections()) {
@@ -28,15 +28,17 @@ namespace FileShare::GUI::DeviceList {
 
     Controller::~Controller() {}
 
-    void Controller::onSelectDevice(const std::string& device) {
+    void Controller::handleSelectDevice(const std::string& device) {
         this->model.setCurrentDevice(device);
 
         auto currentDevice = this->model.getCurrentDevice();
         this->view->setCurrentDevice(currentDevice);
     }
 
-    void Controller::onToggleDevice() {
-        this->model.toggleCurrentDeviceConnected();
-        this->view->setCurrentDeviceConnected(this->model.isCurrentDeviceConnected());
+    void Controller::handleToggleDevice() {
+        auto connected = !this->model.isCurrentDeviceConnected();
+
+        this->model.setCurrentDeviceConnected(connected);
+        this->view->setCurrentDeviceConnected(connected);
     }
 }
