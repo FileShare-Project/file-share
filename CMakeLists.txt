@@ -101,7 +101,7 @@ include_directories(
 
 set(executables "")
 
-function(add_mvc_executable)
+function(add_mvc_source)
   set(local_executables ${executables})
 
   foreach(name IN LISTS ARGN)
@@ -117,8 +117,7 @@ function(add_mvc_executable)
   set(executables ${local_executables} PARENT_SCOPE)
 endfunction()
 
-add_mvc_executable(DeviceList)
-
+add_mvc_source(DeviceList)
 add_executable(file-share
   source/main.cpp
   source/Application.cpp
