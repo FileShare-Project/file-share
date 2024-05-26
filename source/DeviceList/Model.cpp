@@ -28,7 +28,7 @@ namespace FileShare::GUI::DeviceList {
         return { "LAN", "Own", "Contacts" };
     }
 
-    std::vector<std::string> Model::getDevicesInSection(const std::string& section) const {
+    std::vector<std::string> Model::getDevicesInSection(const std::string &section) const {
         if (section == "LAN") return this->lanDevices;
         else if (section == "Own") return this->ownDevices;
         else if (section == "Contacts") return this->contactDevices;

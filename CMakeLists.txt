@@ -55,10 +55,15 @@ function(add_mvc_source)
   set(executables ${local_executables} PARENT_SCOPE)
 endfunction()
 
-add_mvc_source(DeviceList)
+add_mvc_source(DeviceList Settings)
 add_executable(file-share
   source/main.cpp
   source/Application.cpp
+  source/Debug.cpp
+  source/Components/Button.cpp
+  source/Components/Foldout.cpp
+  source/Components/List.cpp
+  source/Components/ListMenu.cpp
   ${executables}
 )
 

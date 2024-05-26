@@ -12,12 +12,13 @@
 #pragma once
 
 #include "Model.hpp"
+#include "Components/ListMenu.hpp"
 #include <TGUI/TGUI.hpp>
 
 namespace FileShare::GUI::DeviceList {
     class View : public tgui::ScrollablePanel {
         public:
-            View();
+            View(const char* typeName = "DeviceList::View", bool initRenderer = true);
             ~View();
 
             typedef std::shared_ptr<View> Ptr;
@@ -26,20 +27,22 @@ namespace FileShare::GUI::DeviceList {
             static View::Ptr create() { return std::make_shared<View>(); }
             static View::Ptr copy(View::ConstPtr widget) { return widget ? std::static_pointer_cast<View>(widget->clone()) : nullptr; }
 
-            tgui::Signal& getSignal(tgui::String signalName) override;
-
-            void addDeviceList(const std::string& title, const std::vector<std::string>& devices) { this->createSection(title, devices); }
-            void setCurrentDevice(std::string& device);
-            void setCurrentDeviceConnected(bool connected);
+            tgui::Signal &getSignal(tgui::String signalName) override;
 
             tgui::SignalTyped<const std::string&> onSelectDevice = { "onSelectDevice" };
             tgui::Signal onToggleDevice = { "onToggleDevice" };
+
+            void addDeviceList(const std::string &title, const std::vector<std::string> &devices) { this->createSection(title, devices); }
+            void setCurrentDevice(std::string &device);
+            void setCurrentDeviceConnected(bool connected);
 
         protected:
             tgui::Widget::Ptr clone() const override { return std::make_shared<View>(*this); }
 
         private:
             void createCurrentDeviceSection();
-            void createSection(const std::string& title, const std::vector<std::string>& options);
+            void createSection(const std::string &title, const std::vector<std::string> &options);
+
+            Components::ListMenu::Ptr menu;
     };
 }
