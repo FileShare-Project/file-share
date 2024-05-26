@@ -8,7 +8,7 @@ int main()
     {
         app.init();
     }
-    catch (const tgui::Exception& e)
+    catch (const tgui::Exception &e)
     {
         std::cerr << "Failed to load TGUI widgets: " << e.what() << std::endl;
         return 1;
