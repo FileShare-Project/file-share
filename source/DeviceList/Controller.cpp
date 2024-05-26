@@ -14,12 +14,8 @@
 namespace FileShare::GUI::DeviceList {
     Controller::Controller() {
         this->view = View::create();
-        this->view->onSelectDevice.connect([this](const std::string& device) {
-            this->handleSelectDevice(device);
-        });
-        this->view->onToggleDevice.connect([this]() {
-            this->handleToggleDevice();
-        });
+        this->view->onSelectDevice(&Controller::handleSelectDevice, this);
+        this->view->onToggleDevice(&Controller::handleToggleDevice, this);
 
         for (auto section : this->model.getSections()) {
             this->view->addDeviceList(section, this->model.getDevicesInSection(section));
@@ -28,7 +24,7 @@ namespace FileShare::GUI::DeviceList {
 
     Controller::~Controller() {}
 
-    void Controller::handleSelectDevice(const std::string& device) {
+    void Controller::handleSelectDevice(const std::string &device) {
         this->model.setCurrentDevice(device);
 
         auto currentDevice = this->model.getCurrentDevice();

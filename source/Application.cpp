@@ -22,13 +22,21 @@ namespace FileShare::GUI {
 
     void Application::init()
     {
+        // tgui::Theme::setDefault("assets/themes/Black.txt");
+
         this->deviceListController = std::make_unique<DeviceList::Controller>();
+        this->settingsController = std::make_unique<Settings::Controller>();
+
         DeviceList::View::Ptr deviceListView = this->deviceListController->getView();
         deviceListView->setWidth("20%");
         deviceListView->setAutoLayout(tgui::AutoLayout::Leftmost);
-        deviceListView->setAutoLayoutUpdateEnabled(true);
         this->gui.add(deviceListView);
         this->gui.add(this->buildSiderButton(deviceListView));
+
+        Settings::View::Ptr settingsView = this->settingsController->getView();
+        settingsView->setWidth("20%");
+        settingsView->setAutoLayout(tgui::AutoLayout::Rightmost);
+        this->gui.add(settingsView);
 
         tgui::Panel::Ptr content = this->buildContent();
         content->setAutoLayout(tgui::AutoLayout::Fill);
@@ -40,7 +48,7 @@ namespace FileShare::GUI {
         gui.mainLoop();
     }
 
-    tgui::Button::Ptr Application::buildSiderButton(tgui::Panel::Ptr sider)
+    tgui::Button::Ptr Application::buildSiderButton(tgui::Widget::Ptr sider)
     {
         tgui::Button::Ptr button = tgui::Button::create("X");
         button->setSize({ "20%", "5%" });
@@ -68,12 +76,16 @@ namespace FileShare::GUI {
     tgui::Panel::Ptr Application::buildContent()
     {
         tgui::ScrollablePanel::Ptr panel = tgui::ScrollablePanel::create();
-        panel->getRenderer()->setBackgroundColor(sf::Color::Blue);
 
         tgui::VerticalLayout::Ptr layout = tgui::VerticalLayout::create();
         layout->add(tgui::Label::create("Content"));
         panel->add(layout);
 
         return panel;
+
+        // TODO:
+        // - File/folder picker
+        // - Création d'un dossier virtuel
+        // - En haut: chemin complet du dossier actuel -> au click, revenir en arrière
     }
 }
