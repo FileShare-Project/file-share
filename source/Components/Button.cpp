@@ -12,30 +12,157 @@
 #include "Components/Button.hpp"
 #include "Debug.hpp"
 
-// TODO: Don't inherit from BitmapButton in order to set the text and image positions wherever we want and set a real image size instead of a ratio (which can be done too)
-
 namespace FileShare::GUI::Components {
     Button::Button(const char* typeName, bool initRenderer)
         : tgui::BitmapButton(typeName, initRenderer)
     {
-        this->updateAligment();
-        this->updateStyle();
-
-        this->onClick(&Button::setFocused, this, false);
+        for (const auto &component : this->m_backgroundComponent->getComponents()) {
+            auto imageComponent = std::dynamic_pointer_cast<tgui::priv::dev::ImageComponent>(component);
+            if (imageComponent) {
+                this->imageComponent = imageComponent;
+                break;
+            }
+        }
 
         this->setHeight(24);
-        this->setImageScaling(0.5f);
+        this->setImageSize(18);
+        this->updateAligment();
+        this->updateStyle();
+        this->onClick(&Button::setFocused, this, false);
     }
 
     Button::~Button() {}
 
+    void Button::setSize(const tgui::Layout2d& size)
+    {
+        if (this->getImageScaling() >= 0) {
+            tgui::BitmapButton::updateSize();
+            return;
+        }
+
+        tgui::Button::setSize(size);
+        this->recalculateGlyphSize();
+    }
+
+    void Button::updateSize()
+    {
+        if (this->getImageScaling() >= 0) {
+            tgui::BitmapButton::updateSize();
+            return;
+        }
+
+        if (!this->imageComponent->isVisible()) {
+            tgui::Button::updateSize();
+            return;
+        }
+
+        if (this->m_autoSize)
+        {
+            this->m_autoLayout = tgui::AutoLayout::Manual;
+
+            const tgui::Outline &borders = this->m_backgroundComponent->getBorders();
+
+            Widget::setSize({
+                this->getSize().x,
+                std::round(this->m_textComponent->getLineHeight() * 1.25f) + borders.getTop() + borders.getBottom()
+            });
+
+            this->recalculateGlyphSize();
+
+            if (this->m_string.empty())
+            {
+                const tgui::Vector2f innerSize = this->m_backgroundComponent->getClientSize();
+
+                Widget::setSize({
+                    this->imageComponent->getSize().x + (innerSize.y - this->imageComponent->getSize().y) + borders.getLeft() + borders.getRight(),
+                    this->getSize().y
+                });
+            } else {
+                const float spaceAroundImageAndText = this->m_textComponent->getLineHeight();
+
+                Widget::setSize({
+                    this->imageComponent->getSize().x + this->distanceBetweenTextAndImage + this->m_textComponent->getSize().x + spaceAroundImageAndText + borders.getLeft() + borders.getRight(),
+                    this->getSize().y
+                });
+            }
+
+            this->m_backgroundComponent->setSize(this->getSize());
+        } else {
+            this->m_backgroundComponent->setSize(this->getSize());
+            this->recalculateGlyphSize();
+        }
+
+        this->updateTextPosition();
+    }
+
+    void Button::updateTextPosition()
+    {
+        if (this->getImageScaling() >= 0) {
+            tgui::BitmapButton::updateTextPosition();
+            return;
+        }
+
+        if (!this->imageComponent->isVisible()) {
+            return;
+        }
+
+        const tgui::Vector2f innerSize = this->m_backgroundComponent->getClientSize();
+        tgui::Vector2f contentSize = this->imageComponent->getSize();
+        if (!this->m_string.empty())
+        {
+            contentSize.x += this->distanceBetweenTextAndImage + this->m_textComponent->getSize().x;
+            contentSize.y = std::max(contentSize.y, this->m_textComponent->getSize().y);
+        }
+
+        this->m_textPosition.x.updateParentSize(innerSize.x);
+        this->m_textPosition.y.updateParentSize(innerSize.y);
+
+        auto offsetX = 6 + this->offset;
+        if (this->alignment == Alignment::Center) offsetX = 0;
+        if (this->alignment == Alignment::Right) offsetX = -offsetX;
+
+        this->imageComponent->setPosition({
+            this->m_textPosition.x.getValue() - this->m_textOrigin.x * contentSize.x + offsetX,
+            this->m_textPosition.y.getValue() - this->m_textOrigin.y * contentSize.y + (contentSize.y - this->imageComponent->getSize().y) / 2.f
+        });
+        this->m_textComponent->setPosition({
+            this->imageComponent->getPosition().x + this->imageComponent->getSize().x + distanceBetweenTextAndImage,
+            this->m_textPosition.y.getValue() - this->m_textOrigin.y * contentSize.y + (contentSize.y - this->m_textComponent->getSize().y) / 2.f
+        });
+    }
+
+    void Button::recalculateGlyphSize()
+    {
+        if (!this->imageComponent->isVisible()) {
+            return;
+        }
+
+        auto imageScaling = this->getImageScaling();
+
+        if (imageScaling >= 0) {
+            auto imageSize = this->getImage().getImageSize();
+
+            if (imageScaling == 0) {
+                this->imageComponent->setSize(tgui::Vector2f{imageSize});
+            } else {
+                const tgui::Vector2f innerSize = this->m_backgroundComponent->getClientSize();
+                this->imageComponent->setSize({
+                    (imageScaling * innerSize.y) * imageSize.x / imageSize.y,
+                    (imageScaling * innerSize.y)
+                });
+            }
+        } else {
+            this->imageComponent->setSize(this->imageSize);
+        }
+    }
+
     void Button::updateAligment() {
         if (alignment == Alignment::Left) {
-            this->setTextPosition({ 6 + this->offset, "50%" }, { 0.f, 0.5f });
+            this->setTextPosition({ "0%", "50%" }, { 0.f, 0.5f });
         } else if (alignment == Alignment::Center) {
             this->setTextPosition({ "50%", "50%" }, { 0.5f, 0.5f });
         } else if (alignment == Alignment::Right) {
-            this->setTextPosition({ "95%", "50%" }, { 1.f, 0.5f });
+            this->setTextPosition({ "100%", "50%" }, { 1.f, 0.5f });
         }
     }
 
