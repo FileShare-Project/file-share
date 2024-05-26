@@ -9,6 +9,7 @@
 ** List.cpp : Implementation of List class
 */
 
+#include <algorithm>
 #include "Components/List.hpp"
 
 namespace FileShare::GUI::Components {
@@ -34,24 +35,32 @@ namespace FileShare::GUI::Components {
     void List::add(const tgui::Widget::Ptr &item, const tgui::String &widgetName)
     {
         tgui::Panel::add(item, widgetName);
+
         auto widgetIndex = this->getWidgets().size() - 1;
 
         item->setWidth("100%");
-        item->onSizeChange.connect([this, widgetIndex]() {
-            this->updateItemsPosition(widgetIndex);
-            this->updateHeight();
-        });
+        this->onSizeChangeSignals.push_back(
+            item->onSizeChange.connect([this, widgetIndex]() {
+                this->updateItemsPosition(widgetIndex);
+                this->updateHeight();
+            })
+        );
         this->updateItemsPosition(widgetIndex);
         this->updateHeight();
     }
 
     bool List::remove(const Widget::Ptr &widget)
     {
+        auto widgets = this->getWidgets();
+        auto widgetIndex = std::find(widgets.begin(), widgets.end(), widget) - widgets.begin();
+
         auto success = tgui::Panel::remove(widget);
 
         if (success) {
-            widget->onSizeChange.disconnectAll(); // TODO: Find another way, some other widgets might be disconnected
+            widget->onSizeChange.disconnect(this->onSizeChangeSignals[widgetIndex]);
+            this->onSizeChangeSignals.erase(this->onSizeChangeSignals.begin() + widgetIndex);
             this->updateItemsPosition();
+            this->updateHeight();
         }
 
         return success;

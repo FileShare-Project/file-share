@@ -38,10 +38,17 @@ namespace FileShare::GUI::Components {
 			static Button::Ptr create() { return std::make_shared<Button>(); }
 			static Button::Ptr copy(Button::ConstPtr widget) { return widget ? std::static_pointer_cast<Button>(widget->clone()) : nullptr; }
 
+            void setImageSize(float size) { this->imageSize = {size, size}; this->setImageScaling(-1); }
+            void setImageSize(const tgui::Vector2f &size) { this->imageSize = size; this->setImageScaling(-1); }
+            tgui::Vector2f getImageSize() const { return this->imageSize; }
+
+            void setDistanceBetweenTextAndImage(float distance) { this->distanceBetweenTextAndImage = distance; this->updateSize(); }
+            float getDistanceBetweenTextAndImage() const { return this->distanceBetweenTextAndImage; }
+
             void setAlignment(Alignment alignment) { this->alignment = alignment; this->updateAligment(); }
             Alignment getAlignment() const { return alignment; }
 
-            void setOffset(int offset) { this->offset = offset; this->updateAligment(); }
+            void setOffset(int offset) { this->offset = offset; this->updateSize(); }
             int getOffset() const { return this->offset; }
 
             void setType(Type type) { this->type = type; this->updateStyle(); }
@@ -53,10 +60,18 @@ namespace FileShare::GUI::Components {
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<Button>(*this); }
 
+            void setSize(const tgui::Layout2d &size) override;
+            void updateSize() override;
+            void updateTextPosition() override;
+            void recalculateGlyphSize();
+
         private:
             void updateAligment();
             void updateStyle();
 
+            std::shared_ptr<tgui::priv::dev::ImageComponent> imageComponent;
+            tgui::Vector2f imageSize;
+            float distanceBetweenTextAndImage = 6;
             Alignment alignment = Alignment::Center;
             int offset = 0;
             Type type = Type::Primary;

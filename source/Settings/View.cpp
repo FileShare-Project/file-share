@@ -64,7 +64,7 @@ namespace FileShare::GUI::Settings {
         logoutButton->setText("Logout");
         logoutButton->setType(Components::Button::Type::Danger);
         logoutButton->onPress([=]() {
-            this->getSignal("logout").emit(this); // TODO: Implement signal
+            this->getSignal("logout").emit(this); // TODO: Implement signal. For now, it's not a bug; it's a feature
         });
         this->menu->add(logoutButton);
     }

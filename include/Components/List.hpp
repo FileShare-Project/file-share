@@ -43,6 +43,7 @@ namespace FileShare::GUI::Components {
             void updateItemsPosition(unsigned int from = 0);
             void updateHeight();
 
+            std::vector<unsigned int> onSizeChangeSignals = {};
             unsigned int space = 0;
             bool autoHeight = false;
     };
