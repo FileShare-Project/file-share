@@ -39,10 +39,11 @@ namespace FileShare::GUI::Components {
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<List>(*this); }
 
-        private:
+            void updateItemsPosition(tgui::Widget::Ptr from) { this->updateItemsPosition(std::find(this->getWidgets().begin(), this->getWidgets().end(), from) - this->getWidgets().begin()); }
             void updateItemsPosition(unsigned int from = 0);
             void updateHeight();
 
+        private:
             std::vector<unsigned int> onSizeChangeSignals = {};
             unsigned int space = 0;
             bool autoHeight = false;

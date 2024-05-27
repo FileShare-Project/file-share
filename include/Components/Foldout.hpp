@@ -27,6 +27,12 @@ namespace FileShare::GUI::Components {
 			static Foldout::Ptr create() { return std::make_shared<Foldout>(); }
 			static Foldout::Ptr copy(Foldout::ConstPtr widget) { return widget ? std::static_pointer_cast<Foldout>(widget->clone()) : nullptr; }
 
+            tgui::Signal &getSignal(tgui::String signalName) override;
+
+            tgui::Signal onClick = { "Clicked" };
+            tgui::Signal onOpen = { "Opened" };
+            tgui::Signal onClose = { "Closed" };
+
             void addToContent(const tgui::Widget::Ptr &item, const tgui::String &widgetName = "");
             bool removeFromContent(const Widget::Ptr &widget);
 
@@ -35,6 +41,13 @@ namespace FileShare::GUI::Components {
 
             void setImage(const tgui::String &image) { this->button->setImage(image); }
             const tgui::Texture &getImage() const { return this->button->getImage(); }
+
+            void setImageSize(float size) { this->button->setImageSize(size); }
+            void setImageSize(const tgui::Vector2f &size) { this->button->setImageSize(size); }
+            tgui::Vector2f getImageSize() const { return this->button->getImageSize(); }
+
+            void setFoldable(bool enable) { this->icon->setVisible(enable); }
+            bool isFoldable() const { return this->icon->isVisible(); }
 
             void open() { this->isOpened = true; this->toggleContent(false); }
             void close() { this->isOpened = false; this->toggleContent(false); }
@@ -46,7 +59,6 @@ namespace FileShare::GUI::Components {
             void build();
             void buildHeader();
 
-            void toggleOpenClose() { this->isOpened = !this->isOpened; this->toggleContent(); }
             void toggleContent(bool useAnim = true);
 
             void updateContentHeight();

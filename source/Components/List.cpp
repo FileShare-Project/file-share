@@ -59,7 +59,7 @@ namespace FileShare::GUI::Components {
         if (success) {
             widget->onSizeChange.disconnect(this->onSizeChangeSignals[widgetIndex]);
             this->onSizeChangeSignals.erase(this->onSizeChangeSignals.begin() + widgetIndex);
-            this->updateItemsPosition();
+            this->updateItemsPosition(widgetIndex - 1);
             this->updateHeight();
         }
 

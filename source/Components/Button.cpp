@@ -56,8 +56,7 @@ namespace FileShare::GUI::Components {
             return;
         }
 
-        if (this->m_autoSize)
-        {
+        if (this->m_autoSize) {
             this->m_autoLayout = tgui::AutoLayout::Manual;
 
             const tgui::Outline &borders = this->m_backgroundComponent->getBorders();
@@ -102,33 +101,36 @@ namespace FileShare::GUI::Components {
             return;
         }
 
-        if (!this->imageComponent->isVisible()) {
-            return;
-        }
-
         const tgui::Vector2f innerSize = this->m_backgroundComponent->getClientSize();
-        tgui::Vector2f contentSize = this->imageComponent->getSize();
+        tgui::Vector2f contentSize = this->m_textComponent->getSize();
         if (!this->m_string.empty())
         {
-            contentSize.x += this->distanceBetweenTextAndImage + this->m_textComponent->getSize().x;
-            contentSize.y = std::max(contentSize.y, this->m_textComponent->getSize().y);
+            contentSize.x += this->distanceBetweenTextAndImage + this->imageComponent->getSize().x;
+            contentSize.y = std::max(contentSize.y, this->imageComponent->getSize().y);
         }
 
         this->m_textPosition.x.updateParentSize(innerSize.x);
         this->m_textPosition.y.updateParentSize(innerSize.y);
 
-        auto offsetX = 6 + this->offset;
+        auto offsetX = 6+ this->offset;
         if (this->alignment == Alignment::Center) offsetX = 0;
         if (this->alignment == Alignment::Right) offsetX = -offsetX;
 
-        this->imageComponent->setPosition({
-            this->m_textPosition.x.getValue() - this->m_textOrigin.x * contentSize.x + offsetX,
-            this->m_textPosition.y.getValue() - this->m_textOrigin.y * contentSize.y + (contentSize.y - this->imageComponent->getSize().y) / 2.f
-        });
-        this->m_textComponent->setPosition({
-            this->imageComponent->getPosition().x + this->imageComponent->getSize().x + distanceBetweenTextAndImage,
-            this->m_textPosition.y.getValue() - this->m_textOrigin.y * contentSize.y + (contentSize.y - this->m_textComponent->getSize().y) / 2.f
-        });
+        if (!this->m_string.empty()) {
+            this->imageComponent->setPosition({
+                this->m_textPosition.x.getValue() - this->m_textOrigin.x * contentSize.x + offsetX,
+                this->m_textPosition.y.getValue() - this->m_textOrigin.y * contentSize.y + (contentSize.y - this->imageComponent->getSize().y) / 2.f
+            });
+            this->m_textComponent->setPosition({
+                this->imageComponent->getPosition().x + this->imageComponent->getSize().x + distanceBetweenTextAndImage,
+                this->m_textPosition.y.getValue() - this->m_textOrigin.y * contentSize.y + (contentSize.y - this->m_textComponent->getSize().y) / 2.f
+            });
+        } else {
+            this->m_textComponent->setPosition({
+                this->m_textPosition.x.getValue() - this->m_textOrigin.x * contentSize.x + offsetX,
+                this->m_textPosition.y.getValue() - this->m_textOrigin.y * contentSize.y + (contentSize.y - this->imageComponent->getSize().y) / 2.f
+            });
+        }
     }
 
     void Button::recalculateGlyphSize()
