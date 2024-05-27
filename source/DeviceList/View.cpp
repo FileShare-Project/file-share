@@ -16,11 +16,12 @@ namespace FileShare::GUI::DeviceList {
         : tgui::ScrollablePanel(typeName, initRenderer)
     {
         this->menu = Components::ListMenu::create();
+        this->menu->setDefaultItemOptions({ .foldable = false });
         this->menu->setAutoLayout(tgui::AutoLayout::Top);
-        this->menu->setSpaceBetweenItems(8);
         this->menu->setAutoHeight(true);
         this->add(this->menu);
 
+        this->getRenderer()->setPadding({6, 6});
         this->createCurrentDeviceSection();
     }
 
@@ -28,7 +29,7 @@ namespace FileShare::GUI::DeviceList {
 
     tgui::Signal &View::getSignal(tgui::String signalName)
     {
-        std::vector<tgui::Signal*> signals = { &onSelectDevice, &onToggleDevice };
+        std::vector<tgui::Signal*> signals = { &this->onSelectDevice, &this->onToggleDevice };
 
         for (auto signal : signals) {
             if (signal->getName() == signalName) {
@@ -90,44 +91,14 @@ namespace FileShare::GUI::DeviceList {
 
     void View::createSection(const std::string &title, const std::vector<std::string> &options)
     {
-        Components::List::Ptr list = Components::List::create();
-        list->setSpaceBetweenItems(4);
-        list->setAutoHeight(true);
-
-        tgui::Label::Ptr labelTitle = tgui::Label::create(title);
-        labelTitle->setHeight(32);
-        labelTitle->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
-        labelTitle->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
-        labelTitle->getRenderer()->setPadding({ 8, 0 });
-        list->add(labelTitle);
-
+        this->menu->addTitle(title);
         for (ushort i = 0; i < options.size(); i += 1) {
-            tgui::Group::Ptr group = tgui::Group::create();
-            group->setHeight(24);
-            group->getRenderer()->setPadding({ 8, 0 });
-            list->add(group);
+            auto option = options[i];
+            auto item = this->menu->addItem("assets/images/button-red.png", option);
 
-            tgui::Picture::Ptr picture = tgui::Picture::create("assets/images/button-red.png", true);
-            picture->setPosition({ 0, 6 });
-            picture->setSize({ 12, 12 });
-            group->add(picture);
-
-            tgui::Label::Ptr label = tgui::Label::create(options[i]);
-            label->setPosition({ 0, 0 });
-            label->setSize({ "100%", "100%" });
-            label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
-            label->getRenderer()->setPadding({ 20, 0 });
-            group->add(label);
-
-            tgui::ClickableWidget::Ptr button = tgui::ClickableWidget::create();
-            button->setPosition({ 0, 0 });
-            button->setSize({ "100%", "100%" });
-            button->onClick([=]() {
-                this->onSelectDevice.emit(this, options[i]);
+            item->getSignal("Clicked").connect([this, option]() {
+                this->onSelectDevice.emit(this, option);
             });
-            group->add(button);
         }
-
-        this->menu->add(list);
     }
 }

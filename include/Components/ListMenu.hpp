@@ -16,22 +16,20 @@
 #include "Components/Foldout.hpp"
 
 namespace FileShare::GUI::Components {
-    struct StyleOptions {
-        tgui::Color textColor = tgui::Color::Black;
+    struct ItemOptions {
+        bool foldable = true;
+        bool defautFolded = false;
         unsigned int textSize = 12;
+        unsigned int iconSize = 12;
     };
 
-    struct IconOptions {
-        tgui::Layout2d iconSize = {18, 18};
+    struct SubItemOptions {
+        unsigned int textSize = 9;
     };
 
-    struct GroupOptions {
-        tgui::Padding padding = {10, 5, 10, 5};
+    struct TitleOptions {
+        unsigned int textSize = 9;
     };
-
-    struct ItemOptions : StyleOptions, IconOptions, GroupOptions {};
-    struct SubItemOptions : StyleOptions { SubItemOptions() { textSize = 9; } };
-    struct TitleOptions : StyleOptions { TitleOptions() { textSize = 9; } };
 
     class ListMenu : public List {
         public:

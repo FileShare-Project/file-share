@@ -10,7 +10,6 @@
 */
 
 #include "Components/Foldout.hpp"
-#include "Debug.hpp"
 
 namespace FileShare::GUI::Components {
     Foldout::Foldout(const char* typeName, bool initRenderer)
@@ -20,6 +19,19 @@ namespace FileShare::GUI::Components {
     }
 
     Foldout::~Foldout() {}
+
+    tgui::Signal &Foldout::getSignal(tgui::String signalName)
+    {
+        std::vector<tgui::Signal*> signals = { &this->onClick, &this->onOpen, &this->onClose };
+
+        for (auto signal : signals) {
+            if (signal->getName() == signalName) {
+                return *signal;
+            }
+        }
+
+        return tgui::Widget::getSignal(signalName);
+    }
 
     void Foldout::addToContent(const tgui::Widget::Ptr &item, const tgui::String &widgetName)
     {
@@ -53,7 +65,11 @@ namespace FileShare::GUI::Components {
         this->add(this->content);
 
         this->setHeight(this->header->getFullSize().y);
-        this->button->onClick(&Foldout::toggleOpenClose, this);
+        this->button->onClick([this]() {
+            this->isOpened = !this->isOpened;
+            this->toggleContent();
+            this->onClick.emit(this);
+        });
     }
 
     void Foldout::buildHeader()
@@ -81,6 +97,10 @@ namespace FileShare::GUI::Components {
 
     void Foldout::toggleContent(bool useAnim)
     {
+        if (!this->isFoldable()) {
+            return;
+        }
+
         if (this->closeAnimationSignalId != -1) {
             this->onAnimationFinish.disconnect(this->closeAnimationSignalId);
             this->closeAnimationSignalId = -1;
@@ -92,8 +112,9 @@ namespace FileShare::GUI::Components {
             if (useAnim) {
                 this->resizeWithAnimation({this->getSize().x, header->getFullSize().y + this->content->getFullSize().y}, sf::milliseconds(200));
             } else {
-                this->setSize({this->getSize().x, header->getFullSize().y + this->content->getFullSize().y});
+                this->setHeight(header->getFullSize().y + this->content->getFullSize().y);
             }
+            this->onOpen.emit(this);
         } else {
             if (useAnim) {
                 this->resizeWithAnimation({this->getSize().x, this->button->getFullSize().y}, sf::milliseconds(200));
@@ -103,9 +124,10 @@ namespace FileShare::GUI::Components {
                     this->closeAnimationSignalId = -1;
                 });
             } else {
-                this->setSize({this->getSize().x, this->button->getFullSize().y});
+                this->setHeight(this->button->getFullSize().y);
                 this->content->setVisible(false);
             }
+            this->onClose.emit(this);
         }
     }
 
@@ -123,5 +145,8 @@ namespace FileShare::GUI::Components {
         }
 
         this->content->setHeight(maxHeight);
+        if (this->isOpened) {
+            this->setHeight(header->getFullSize().y + this->content->getFullSize().y);
+        }
     }
 }

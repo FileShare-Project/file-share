@@ -18,6 +18,7 @@ namespace FileShare::GUI::Settings {
         : tgui::ScrollablePanel(typeName, initRenderer)
     {
         this->menu = Components::ListMenu::create();
+        this->menu->setDefaultItemOptions({ .defautFolded = true });
         this->menu->setAutoLayout(tgui::AutoLayout::Top);
         this->menu->setAutoSeparatorsBeforeTitles();
         this->menu->setAutoHeight(true);
