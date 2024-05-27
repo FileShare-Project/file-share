@@ -23,7 +23,13 @@ namespace FileShare::GUI::Components {
     {
         this->currentFoldout = Components::Foldout::create();
         this->currentFoldout->setText(title);
+        this->currentFoldout->setTextSize(options.textSize);
         this->currentFoldout->setImage(icon);
+        this->currentFoldout->setImageSize(options.iconSize);
+        this->currentFoldout->setFoldable(options.foldable);
+        if (options.defautFolded) {
+            this->currentFoldout->open();
+        }
         this->add(this->currentFoldout, widgetName);
         return this->currentFoldout;
     }
@@ -35,15 +41,13 @@ namespace FileShare::GUI::Components {
         }
 
         auto item = Components::Button::create();
-        auto itemRenderer = item->getRenderer();
-        item->setOffset(18);
+        item->setOffset(12);
         item->setAlignment(Components::Button::Alignment::Left);
         item->setType(Components::Button::Type::Soft);
         item->setGhost(true);
         item->setText(title);
-        item->setTextSize(options.textSize);
-        itemRenderer->setTextColor(options.textColor);
         this->currentFoldout->addToContent(item, widgetName);
+        item->setTextSize(options.textSize);
 
         return item;
     }
@@ -53,12 +57,10 @@ namespace FileShare::GUI::Components {
         this->currentFoldout = nullptr;
 
         auto label = tgui::Label::create();
-        auto labelRenderer = label->getRenderer();
         label->setHeight(24);
         label->setText(title);
         label->setTextSize(options.textSize);
         label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
-        labelRenderer->setTextColor(options.textColor);
         this->add(label, widgetName);
 
         return label;
