@@ -38,6 +38,8 @@ namespace FileShare::GUI::Components {
 
         auto widgetIndex = this->getWidgets().size() - 1;
 
+        item->setAutoLayout(tgui::AutoLayout::Manual);
+        item->setAutoLayoutUpdateEnabled(false);
         item->setWidth("100%");
         this->onSizeChangeSignals.push_back(
             item->onSizeChange.connect([this, widgetIndex]() {
@@ -124,6 +126,6 @@ namespace FileShare::GUI::Components {
         auto padding = this->getRenderer()->getPadding();
         height += padding.getTop() + padding.getBottom();
 
-        this->setSize(this->getSize().x, height);
+        this->setHeight(height);
     }
 }

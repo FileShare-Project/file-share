@@ -62,6 +62,7 @@ add_executable(file-share
   source/Debug.cpp
   source/Components/Button.cpp
   source/Components/Foldout.cpp
+  source/Components/InputFileDialog.cpp
   source/Components/List.cpp
   source/Components/ListMenu.cpp
   ${executables}

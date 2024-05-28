@@ -36,5 +36,11 @@ namespace FileShare::GUI::Settings {
 
         private:
             void createSettings();
+            tgui::Widget::Ptr createApplicationSettings();
+            tgui::Widget::Ptr createDevicesSettings();
+            tgui::Widget::Ptr createAccountSettings();
+
+            tgui::Widget::Ptr createSection(const tgui::String &title, std::vector<tgui::Widget::Ptr> contents);
+            tgui::Widget::Ptr createSectionInput(const tgui::Widget::Ptr &input, const tgui::String &label = "");
     };
 }
