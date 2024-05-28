@@ -10,6 +10,7 @@
 */
 
 #include "Application.hpp"
+#include "Debug.hpp"
 
 namespace FileShare::GUI {
     Application::Application()
@@ -24,68 +25,56 @@ namespace FileShare::GUI {
     {
         // tgui::Theme::setDefault("assets/themes/Black.txt");
 
+        tgui::ScrollablePanel::Ptr content = tgui::ScrollablePanel::create();
+        content->setAutoLayout(tgui::AutoLayout::Fill);
+        this->gui.add(content);
+
         this->deviceListController = std::make_unique<DeviceList::Controller>();
         this->settingsController = std::make_unique<Settings::Controller>();
 
-        DeviceList::View::Ptr deviceListView = this->deviceListController->getView();
-        deviceListView->setWidth("20%");
-        deviceListView->setAutoLayout(tgui::AutoLayout::Leftmost);
-        this->gui.add(deviceListView);
-        this->gui.add(this->buildSiderButton(deviceListView));
+        tgui::ScrollablePanel::Ptr sider = tgui::ScrollablePanel::create();
+        sider->setWidth("20%");
+        sider->setAutoLayout(tgui::AutoLayout::Leftmost);
+        this->gui.add(sider);
 
-        Settings::View::Ptr settingsView = this->settingsController->getView();
-        settingsView->setWidth("20%");
-        settingsView->setAutoLayout(tgui::AutoLayout::Rightmost);
-        this->gui.add(settingsView);
+        auto deviceListView = this->deviceListController->getView();
+        deviceListView->setAutoLayout(tgui::AutoLayout::Top);
+        sider->add(deviceListView);
 
-        tgui::Panel::Ptr content = this->buildContent();
-        content->setAutoLayout(tgui::AutoLayout::Fill);
-        this->gui.add(content);
+        auto settingsView = this->settingsController->getView();
+        settingsView->setAutoLayout(tgui::AutoLayout::Top);
+        settingsView->onSettingsClicked.connect([=](tgui::Widget::Ptr widget) {
+            content->removeAllWidgets();
+            content->add(widget);
+        });
+
+        Components::Button::Ptr button = Components::Button::create();
+        button->setType(Components::Button::Type::Secondary);
+        button->setText("Settings");
+        button->setAutoLayout(tgui::AutoLayout::Bottom);
+        button->onClick([=]() {
+            auto showSettings = settingsView->getParent() == nullptr;
+
+            if (showSettings) {
+                sider->remove(deviceListView);
+                sider->add(settingsView);
+            } else {
+                sider->remove(settingsView);
+                sider->add(deviceListView);
+            }
+            button->setText(showSettings ? "Back" : "Settings");
+        });
+        sider->add(button);
     }
 
     void Application::loop()
     {
+        // Debug::debug(this->gui.getContainer());
         gui.mainLoop();
     }
 
-    tgui::Button::Ptr Application::buildSiderButton(tgui::Widget::Ptr sider)
-    {
-        tgui::Button::Ptr button = tgui::Button::create("X");
-        button->setSize({ "20%", "5%" });
-        button->setPosition({ "0", "95%" });
-        button->onPress([=]() {
-            if (sider->isVisible()) {
-                sider->moveWithAnimation({ "-width", "0" }, sf::milliseconds(ANIMATION_DURATION));
-                button->resizeWithAnimation({ "64", button->getSize().y }, sf::milliseconds(ANIMATION_DURATION));
-
-                std::shared_ptr<unsigned int> signalIdPtr = std::make_shared<unsigned int>(0);
-                *signalIdPtr = sider->onAnimationFinish([=]() {
-                    sider->setVisible(false);
-                    sider->onAnimationFinish.disconnect(*signalIdPtr);
-                });
-            } else {
-                sider->setVisible(true);
-                sider->moveWithAnimation({ "0", "0" }, sf::milliseconds(ANIMATION_DURATION));
-                button->resizeWithAnimation({ "20%", button->getSize().y }, sf::milliseconds(ANIMATION_DURATION));
-            }
-        });
-
-        return button;
-    }
-
-    tgui::Panel::Ptr Application::buildContent()
-    {
-        tgui::ScrollablePanel::Ptr panel = tgui::ScrollablePanel::create();
-
-        tgui::VerticalLayout::Ptr layout = tgui::VerticalLayout::create();
-        layout->add(tgui::Label::create("Content"));
-        panel->add(layout);
-
-        return panel;
-
-        // TODO:
-        // - File/folder picker
-        // - Création d'un dossier virtuel
-        // - En haut: chemin complet du dossier actuel -> au click, revenir en arrière
-    }
+    // TODO:
+    // - File/folder picker
+    // - Création d'un dossier virtuel
+    // - En haut: chemin complet du dossier actuel -> au click, revenir en arrière
 }

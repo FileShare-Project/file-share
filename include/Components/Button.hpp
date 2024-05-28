@@ -29,6 +29,12 @@ namespace FileShare::GUI::Components {
                 Danger,
             };
 
+            enum Size {
+                Small,
+                Normal,
+                Large
+            };
+
             Button(const char* typeName = "Components::Button", bool initRenderer = true);
             ~Button();
 
@@ -57,6 +63,9 @@ namespace FileShare::GUI::Components {
             void setGhost(bool ghost) { this->ghost = ghost; this->updateStyle(); }
             bool isGhost() const { return ghost; }
 
+            void setSize(Size size);
+            Size getSize() const { return size; }
+
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<Button>(*this); }
 
@@ -76,5 +85,6 @@ namespace FileShare::GUI::Components {
             int offset = 0;
             Type type = Type::Primary;
             bool ghost = false;
+            Size size = Size::Normal;
     };
 }

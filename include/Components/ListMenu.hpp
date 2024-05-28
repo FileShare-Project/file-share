@@ -19,16 +19,6 @@ namespace FileShare::GUI::Components {
     struct ItemOptions {
         bool foldable = true;
         bool defautFolded = false;
-        unsigned int textSize = 12;
-        unsigned int iconSize = 12;
-    };
-
-    struct SubItemOptions {
-        unsigned int textSize = 9;
-    };
-
-    struct TitleOptions {
-        unsigned int textSize = 9;
     };
 
     class ListMenu : public List {
@@ -44,17 +34,13 @@ namespace FileShare::GUI::Components {
 
             void setAutoSeparatorsBeforeTitles(bool enable = true) { this->autoSeparators = enable; }
             void setDefaultItemOptions(const ItemOptions &options) { this->defaultItemOptions = options; }
-            void setDefaultSubItemOptions(const SubItemOptions &options) { this->defaultSubItemOptions = options; }
-            void setDefaultTitleOptions(const TitleOptions &options) { this->defaultTitleOptions = options; }
 
             tgui::Widget::Ptr addItem(const tgui::String &icon, const tgui::String &title, const tgui::String &widgetName = "") { return this->addItem(icon, title, this->defaultItemOptions, widgetName); }
             tgui::Widget::Ptr addItem(const tgui::String &icon, const tgui::String &title, const ItemOptions &options, const tgui::String &widgetName = "");
 
-            tgui::Widget::Ptr addSubItem(const tgui::String &title, const tgui::String &widgetName = "") { return this->addSubItem(title, this->defaultSubItemOptions, widgetName); }
-            tgui::Widget::Ptr addSubItem(const tgui::String &title, const SubItemOptions &options, const tgui::String &widgetName = "");
+            tgui::Widget::Ptr addSubItem(const tgui::String &title, const tgui::String &widgetName = "");
 
-            tgui::Widget::Ptr addTitle(const tgui::String &title, const tgui::String &widgetName = "") { return this->addTitle(title, this->defaultTitleOptions, widgetName); }
-            tgui::Widget::Ptr addTitle(const tgui::String &title, const TitleOptions &options, const tgui::String &widgetName = "");
+            tgui::Widget::Ptr addTitle(const tgui::String &title, const tgui::String &widgetName = "");
 
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<ListMenu>(*this); }
@@ -62,8 +48,6 @@ namespace FileShare::GUI::Components {
         private:
             bool autoSeparators = false;
             ItemOptions defaultItemOptions;
-            SubItemOptions defaultSubItemOptions;
-            TitleOptions defaultTitleOptions;
             Components::Foldout::Ptr currentFoldout;
     };
 }

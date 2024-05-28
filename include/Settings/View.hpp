@@ -16,7 +16,7 @@
 #include <TGUI/TGUI.hpp>
 
 namespace FileShare::GUI::Settings {
-    class View : public tgui::ScrollablePanel {
+    class View : public Components::ListMenu {
         public:
             View(const char* typeName = "Settings::View", bool initRenderer = true);
             ~View();
@@ -29,15 +29,12 @@ namespace FileShare::GUI::Settings {
 
             tgui::Signal &getSignal(tgui::String signalName) override;
 
-            tgui::SignalTyped<const std::string&> onSelectDevice = { "onSelectDevice" };
-            tgui::Signal onToggleDevice = { "onToggleDevice" };
+            tgui::SignalTyped<tgui::Widget::Ptr> onSettingsClicked = { "onSettingsClicked" };
 
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<View>(*this); }
 
         private:
             void createSettings();
-
-            Components::ListMenu::Ptr menu;
     };
 }
