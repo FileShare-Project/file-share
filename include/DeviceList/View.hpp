@@ -16,7 +16,7 @@
 #include <TGUI/TGUI.hpp>
 
 namespace FileShare::GUI::DeviceList {
-    class View : public tgui::ScrollablePanel {
+    class View : public Components::ListMenu {
         public:
             View(const char* typeName = "DeviceList::View", bool initRenderer = true);
             ~View();
@@ -42,7 +42,5 @@ namespace FileShare::GUI::DeviceList {
         private:
             void createCurrentDeviceSection();
             void createSection(const std::string &title, const std::vector<std::string> &options);
-
-            Components::ListMenu::Ptr menu;
     };
 }

@@ -23,9 +23,7 @@ namespace FileShare::GUI::Components {
     {
         this->currentFoldout = Components::Foldout::create();
         this->currentFoldout->setText(title);
-        this->currentFoldout->setTextSize(options.textSize);
         this->currentFoldout->setImage(icon);
-        this->currentFoldout->setImageSize(options.iconSize);
         this->currentFoldout->setFoldable(options.foldable);
         if (options.defautFolded) {
             this->currentFoldout->open();
@@ -34,32 +32,38 @@ namespace FileShare::GUI::Components {
         return this->currentFoldout;
     }
 
-    tgui::Widget::Ptr ListMenu::addSubItem(const tgui::String &title, const SubItemOptions &options, const tgui::String &widgetName)
+    tgui::Widget::Ptr ListMenu::addSubItem(const tgui::String &title, const tgui::String &widgetName)
     {
         if (!this->currentFoldout) {
             return nullptr;
         }
 
         auto item = Components::Button::create();
-        item->setOffset(12);
+        item->setSize(Components::Button::Size::Small);
+        item->setOffset(15);
         item->setAlignment(Components::Button::Alignment::Left);
         item->setType(Components::Button::Type::Soft);
         item->setGhost(true);
         item->setText(title);
         this->currentFoldout->addToContent(item, widgetName);
-        item->setTextSize(options.textSize);
 
         return item;
     }
 
-    tgui::Widget::Ptr ListMenu::addTitle(const tgui::String &title, const TitleOptions &options, const tgui::String &widgetName)
+    tgui::Widget::Ptr ListMenu::addTitle(const tgui::String &title, const tgui::String &widgetName)
     {
+        if (this->autoSeparators && this->getWidgets().size() > 0) {
+            this->addSpacer(6);
+            this->addSeparator();
+            this->addSpacer(6);
+        }
+
         this->currentFoldout = nullptr;
 
         auto label = tgui::Label::create();
         label->setHeight(24);
         label->setText(title);
-        label->setTextSize(options.textSize);
+        label->setTextSize(16);
         label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
         this->add(label, widgetName);
 
