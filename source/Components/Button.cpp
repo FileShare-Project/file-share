@@ -24,8 +24,7 @@ namespace FileShare::GUI::Components {
             }
         }
 
-        this->setHeight(24);
-        this->setImageSize(18);
+        this->setSize(Size::Normal);
         this->updateAligment();
         this->updateStyle();
         this->onClick(&Button::setFocused, this, false);
@@ -33,10 +32,28 @@ namespace FileShare::GUI::Components {
 
     Button::~Button() {}
 
+    void Button::setSize(Size size)
+    {
+        this->size = size;
+        if (size == Size::Small) {
+            this->setHeight(24);
+            this->setImageSize(12);
+            this->setTextSize(10);
+        } else if (size == Size::Normal) {
+            this->setHeight(36);
+            this->setImageSize(15);
+            this->setTextSize(12);
+        } else if (size == Size::Large) {
+            this->setHeight(48);
+            this->setImageSize(18);
+            this->setTextSize(15);
+        }
+    }
+
     void Button::setSize(const tgui::Layout2d& size)
     {
         if (this->getImageScaling() >= 0) {
-            tgui::BitmapButton::updateSize();
+            tgui::BitmapButton::setSize(size);
             return;
         }
 
@@ -56,13 +73,14 @@ namespace FileShare::GUI::Components {
             return;
         }
 
+        auto size = tgui::BitmapButton::getSize();
         if (this->m_autoSize) {
             this->m_autoLayout = tgui::AutoLayout::Manual;
 
             const tgui::Outline &borders = this->m_backgroundComponent->getBorders();
 
             Widget::setSize({
-                this->getSize().x,
+                size.x,
                 std::round(this->m_textComponent->getLineHeight() * 1.25f) + borders.getTop() + borders.getBottom()
             });
 
@@ -74,20 +92,20 @@ namespace FileShare::GUI::Components {
 
                 Widget::setSize({
                     this->imageComponent->getSize().x + (innerSize.y - this->imageComponent->getSize().y) + borders.getLeft() + borders.getRight(),
-                    this->getSize().y
+                    size.y
                 });
             } else {
                 const float spaceAroundImageAndText = this->m_textComponent->getLineHeight();
 
                 Widget::setSize({
                     this->imageComponent->getSize().x + this->distanceBetweenTextAndImage + this->m_textComponent->getSize().x + spaceAroundImageAndText + borders.getLeft() + borders.getRight(),
-                    this->getSize().y
+                    size.y
                 });
             }
 
-            this->m_backgroundComponent->setSize(this->getSize());
+            this->m_backgroundComponent->setSize(size);
         } else {
-            this->m_backgroundComponent->setSize(this->getSize());
+            this->m_backgroundComponent->setSize(size);
             this->recalculateGlyphSize();
         }
 

@@ -28,11 +28,9 @@ namespace FileShare::GUI {
             void loop();
 
         private:
-            tgui::Button::Ptr buildSiderButton(tgui::Widget::Ptr sider);
-            tgui::Panel::Ptr buildContent();
-
             sf::RenderWindow window;
             tgui::Gui gui;
+
             std::unique_ptr<DeviceList::Controller> deviceListController;
             std::unique_ptr<Settings::Controller> settingsController;
     };

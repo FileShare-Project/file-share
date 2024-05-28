@@ -13,15 +13,13 @@
 
 namespace FileShare::GUI::DeviceList {
     View::View(const char* typeName, bool initRenderer)
-        : tgui::ScrollablePanel(typeName, initRenderer)
+        : Components::ListMenu(typeName, initRenderer)
     {
-        this->menu = Components::ListMenu::create();
-        this->menu->setDefaultItemOptions({ .foldable = false });
-        this->menu->setAutoLayout(tgui::AutoLayout::Top);
-        this->menu->setAutoHeight(true);
-        this->add(this->menu);
-
+        this->setDefaultItemOptions({ .foldable = false });
+        this->setAutoLayout(tgui::AutoLayout::Top);
+        this->setAutoHeight(true);
         this->getRenderer()->setPadding({6, 6});
+
         this->createCurrentDeviceSection();
     }
 
@@ -86,15 +84,15 @@ namespace FileShare::GUI::DeviceList {
         label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
         panel->add(label);
 
-        this->menu->add(panel);
+        this->add(panel);
     }
 
     void View::createSection(const std::string &title, const std::vector<std::string> &options)
     {
-        this->menu->addTitle(title);
+        this->addTitle(title);
         for (ushort i = 0; i < options.size(); i += 1) {
             auto option = options[i];
-            auto item = this->menu->addItem("assets/images/button-red.png", option);
+            auto item = this->addItem("assets/images/button-red.png", option);
 
             item->getSignal("Clicked").connect([this, option]() {
                 this->onSelectDevice.emit(this, option);

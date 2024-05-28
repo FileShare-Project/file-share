@@ -117,6 +117,13 @@ namespace FileShare::GUI::Components {
 
         auto lastItem = items[items.size() - 1];
         auto height = lastItem->getPosition().y + lastItem->getFullSize().y;
+
+        auto borders = this->getRenderer()->getBorders();
+        height += borders.getTop() + borders.getBottom();
+
+        auto padding = this->getRenderer()->getPadding();
+        height += padding.getTop() + padding.getBottom();
+
         this->setSize(this->getSize().x, height);
     }
 }

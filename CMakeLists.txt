@@ -68,7 +68,7 @@ add_executable(file-share
 )
 
 target_compile_definitions(file-share PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
-target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system fsp)
+target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system sqlite_orm::sqlite_orm fsp)
 target_compile_options(file-share PRIVATE
   $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>
   $<$<CXX_COMPILER_ID:MSVC>:/W4>

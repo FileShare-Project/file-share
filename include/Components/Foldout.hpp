@@ -36,6 +36,9 @@ namespace FileShare::GUI::Components {
             void addToContent(const tgui::Widget::Ptr &item, const tgui::String &widgetName = "");
             bool removeFromContent(const Widget::Ptr &widget);
 
+            void setButtonSize(Components::Button::Size size) { this->button->setSize(size); }
+            Components::Button::Size getButtonSize() const { return this->button->getSize(); }
+
             void setText(const tgui::String &text) { this->button->setText(text); }
             const tgui::String &getText() const { return this->button->getText(); }
 

@@ -11,20 +11,17 @@
 
 #include "Settings/View.hpp"
 #include "Components/Button.hpp"
-#include "Components/Foldout.hpp"
 
 namespace FileShare::GUI::Settings {
     View::View(const char* typeName, bool initRenderer)
-        : tgui::ScrollablePanel(typeName, initRenderer)
+        : Components::ListMenu(typeName, initRenderer)
     {
-        this->menu = Components::ListMenu::create();
-        this->menu->setDefaultItemOptions({ .defautFolded = true });
-        this->menu->setAutoLayout(tgui::AutoLayout::Top);
-        this->menu->setAutoSeparatorsBeforeTitles();
-        this->menu->setAutoHeight(true);
-        this->add(this->menu);
-
+        this->setDefaultItemOptions({ .foldable = false });
+        this->setAutoLayout(tgui::AutoLayout::Top);
+        this->setAutoSeparatorsBeforeTitles();
+        this->setAutoHeight(true);
         this->getRenderer()->setPadding({6, 6});
+
         this->createSettings();
     }
 
@@ -32,7 +29,7 @@ namespace FileShare::GUI::Settings {
 
     tgui::Signal &View::getSignal(tgui::String signalName)
     {
-        std::vector<tgui::Signal*> signals = {};
+        std::vector<tgui::Signal*> signals = { &this->onSettingsClicked };
 
         for (auto signal : signals) {
             if (signal->getName() == signalName) {
@@ -45,21 +42,33 @@ namespace FileShare::GUI::Settings {
 
     void View::createSettings()
     {
-        this->menu->addTitle("Application settings");
+        tgui::Label::Ptr label = tgui::Label::create("Application settings");
+        this->addItem("assets/images/settings_black.svg", "Application settings")->getSignal("Clicked").connect([=]() {
+            this->onSettingsClicked.emit(this, label);
+        });
 
-        this->menu->addTitle("Devices settings");
-        this->menu->addItem("assets/images/settings_black.svg", "General");
-        this->menu->addSubItem("Device name");
-        this->menu->addSubItem("Download folder");
-        this->menu->addSubItem("Allow connections");
-        this->menu->addItem("assets/images/virtual_folder_black.svg", "Virtual folder");
-        this->menu->addItem("assets/images/advanced_black.svg", "Advanced");
-        this->menu->addSubItem("Virtual root name");
-        this->menu->addSubItem("Private key directory");
-        this->menu->addSubItem("Private key name");
-        this->menu->addSubItem("Transport mode");
+        tgui::Label::Ptr label2 = tgui::Label::create("Devices settings");
+        this->addItem("assets/images/settings_device_black.svg", "Devices settings")->getSignal("Clicked").connect([=]() {
+            this->onSettingsClicked.emit(this, label2);
+        });
 
-        this->menu->addTitle("Account");
+        tgui::Label::Ptr label3 = tgui::Label::create("Account");
+        this->addItem("assets/images/account_black.svg", "Account")->getSignal("Clicked").connect([=]() {
+            this->onSettingsClicked.emit(this, label3);
+        });
+
+        /*
+        this->addItem("assets/images/settings_black.svg", "General");
+        this->addSubItem("Device name");
+        this->addSubItem("Download folder");
+        this->addSubItem("Allow connections");
+        this->addItem("assets/images/virtual_folder_black.svg", "Virtual folder");
+        this->addItem("assets/images/advanced_black.svg", "Advanced");
+        this->addSubItem("Virtual root name");
+        this->addSubItem("Private key directory");
+        this->addSubItem("Private key name");
+        this->addSubItem("Transport mode");
+        */
 
         auto logoutButton = Components::Button::create();
         logoutButton->setText("Logout");
@@ -67,6 +76,6 @@ namespace FileShare::GUI::Settings {
         logoutButton->onPress([=]() {
             this->getSignal("logout").emit(this); // TODO: Implement signal. For now, it's not a bug; it's a feature
         });
-        this->menu->add(logoutButton);
+        this->add(logoutButton);
     }
 }
