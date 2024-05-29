@@ -15,7 +15,6 @@ namespace FileShare::GUI::DeviceList {
     View::View(const char* typeName, bool initRenderer)
         : Components::ListMenu(typeName, initRenderer)
     {
-        this->setDefaultItemOptions({ .foldable = false });
         this->setAutoLayout(tgui::AutoLayout::Top);
         this->setAutoHeight(true);
         this->getRenderer()->setPadding({6, 6});

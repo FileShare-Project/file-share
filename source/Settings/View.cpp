@@ -17,11 +17,12 @@ namespace FileShare::GUI::Settings {
     View::View(const char* typeName, bool initRenderer)
         : Components::ListMenu(typeName, initRenderer)
     {
-        this->setDefaultItemOptions({ .foldable = false });
+        this->setActiveMode(Components::ListMenu::ActiveMode::AlwaysOne);
         this->setAutoLayout(tgui::AutoLayout::Top);
         this->setAutoSeparatorsBeforeTitles();
         this->setAutoHeight(true);
         this->getRenderer()->setPadding({6, 6});
+        this->onSelectionChanged.connect(&View::handleMenuSelectionChanged, this);
 
         this->createSettings();
     }
@@ -30,7 +31,7 @@ namespace FileShare::GUI::Settings {
 
     tgui::Signal &View::getSignal(tgui::String signalName)
     {
-        std::vector<tgui::Signal*> signals = { &this->onSettingsClicked };
+        std::vector<tgui::Signal*> signals = { &this->onMenuChange };
 
         for (auto signal : signals) {
             if (signal->getName() == signalName) {
@@ -43,33 +44,19 @@ namespace FileShare::GUI::Settings {
 
     void View::createSettings()
     {
-        auto applicationSettings = this->createApplicationSettings();
-        this->addItem("assets/images/settings_black.svg", "Application settings")->getSignal("Clicked").connect([=]() {
-            this->onSettingsClicked.emit(this, applicationSettings);
-        });
+        this->menuItems["Application settings"] = this->createApplicationSettings();
+        this->addItem("assets/images/settings_black.svg", "Application settings");
 
-        auto devicesSettings = this->createDevicesSettings();
-        this->addItem("assets/images/settings_device_black.svg", "Devices settings")->getSignal("Clicked").connect([=]() {
-            this->onSettingsClicked.emit(this, devicesSettings);
-        });
+        this->addItem("assets/images/settings_device_black.svg", "Devices settings");
+        this->menuItems["General"] = this->createDevicesGeneralSettings();
+        this->addSubItem("General");
+        this->menuItems["Virtual folder"] = this->createDevicesVirtualFolderSettings();
+        this->addSubItem("Virtual folder");
+        this->menuItems["Advanced"] = this->createDevicesAdvancedSettings();
+        this->addSubItem("Advanced");
 
-        auto accountSettings = this->createAccountSettings();
-        this->addItem("assets/images/account_black.svg", "Account")->getSignal("Clicked").connect([=]() {
-            this->onSettingsClicked.emit(this, accountSettings);
-        });
-
-        /*
-        this->addItem("assets/images/settings_black.svg", "General");
-        this->addSubItem("Device name");
-        this->addSubItem("Download folder");
-        this->addSubItem("Allow connections");
-        this->addItem("assets/images/virtual_folder_black.svg", "Virtual folder");
-        this->addItem("assets/images/advanced_black.svg", "Advanced");
-        this->addSubItem("Virtual root name");
-        this->addSubItem("Private key directory");
-        this->addSubItem("Private key name");
-        this->addSubItem("Transport mode");
-        */
+        this->menuItems["Account"] = this->createAccountSettings();
+        this->addItem("assets/images/account_black.svg", "Account");
 
         auto logoutButton = Components::Button::create();
         logoutButton->setText("Logout");
@@ -82,29 +69,11 @@ namespace FileShare::GUI::Settings {
 
     tgui::Widget::Ptr View::createApplicationSettings()
     {
-        Components::List::Ptr list = Components::List::create();
-        list->setAutoLayout(tgui::AutoLayout::Top);
-        list->setAutoHeight(true);
-        list->setSpaceBetweenItems(24);
-        list->getRenderer()->setPadding({6, 6});
-
-        tgui::Label::Ptr label = tgui::Label::create("Application settings");
-        label->getRenderer()->setTextColor(tgui::Color::Black);
-        label->getRenderer()->setTextSize(20);
-        list->add(label);
-
-        return list;
+        return this->createSection("Application settings", {});
     }
 
-    tgui::Widget::Ptr View::createDevicesSettings()
+    tgui::Widget::Ptr View::createDevicesGeneralSettings()
     {
-        Components::List::Ptr list = Components::List::create();
-        list->setAutoLayout(tgui::AutoLayout::Top);
-        list->setAutoHeight(true);
-        list->setSpaceBetweenItems(24);
-        list->getRenderer()->setPadding({6, 6});
-
-        // GENERAL
         auto deviceNameInput = tgui::EditBox::create();
         deviceNameInput->setWidth("50%");
 
@@ -116,16 +85,20 @@ namespace FileShare::GUI::Settings {
         allowConnectionsInput->setText("Allow connections");        
         allowConnectionsInput->getRenderer()->setTextDistanceRatio(0.5f);
 
-        list->add(this->createSection("General", {
+        return this->createSection("Devices settings - General", {
             this->createSectionInput(deviceNameInput, "Device name"),
             this->createSectionInput(downloadFolderInput, "Download folder"),
             this->createSectionInput(allowConnectionsInput)
-        }));
+        });
+    }
 
-        // Virtual folder
-        list->add(this->createSection("Virtual folder", {}));
+    tgui::Widget::Ptr View::createDevicesVirtualFolderSettings()
+    {
+        return this->createSection("Devices settings - Virtual folder", {});
+    }
 
-        // Advanced
+    tgui::Widget::Ptr View::createDevicesAdvancedSettings()
+    {
         auto virtualRootNameInput = tgui::EditBox::create();
         virtualRootNameInput->setWidth("50%");
 
@@ -142,34 +115,23 @@ namespace FileShare::GUI::Settings {
         transportModeInput->addItem("Automatic");
         transportModeInput->setSelectedItem("Automatic");
 
-        list->add(this->createSection("Advanced", {
+        return this->createSection("Devices settings - Advanced", {
             this->createSectionInput(virtualRootNameInput, "Virtual root name"),
             this->createSectionInput(privateKeyDirectoryInput, "Private key directory"),
             this->createSectionInput(privateKeyNameInput, "Private key name"),
             this->createSectionInput(transportModeInput, "Transport mode")
-        }));
-
-        return list;
+        });
     }
 
     tgui::Widget::Ptr View::createAccountSettings()
     {
-        Components::List::Ptr list = Components::List::create();
-        list->setAutoLayout(tgui::AutoLayout::Top);
-        list->setAutoHeight(true);
-        list->setSpaceBetweenItems(24);
-
-        tgui::Label::Ptr label = tgui::Label::create("Account settings");
-        label->getRenderer()->setTextColor(tgui::Color::Black);
-        label->getRenderer()->setTextSize(20);
-        list->add(label);
-
-        return list;
+        return this->createSection("Account settings", {});
     }
 
     tgui::Widget::Ptr View::createSection(const tgui::String &title, std::vector<tgui::Widget::Ptr> contents)
     {
         Components::List::Ptr list = Components::List::create();
+        list->setAutoLayout(tgui::AutoLayout::Top);
         list->setAutoHeight(true);
         list->setSpaceBetweenItems(6);
         list->getRenderer()->setPadding({6, 6});
@@ -209,5 +171,23 @@ namespace FileShare::GUI::Settings {
 
         group->add(input);
         return group;
+    }
+
+    void View::handleMenuSelectionChanged(const std::vector<const tgui::String> selection)
+    {
+        this->currentMenuContent = nullptr;
+
+        for (auto menuItem : this->menuItems) {
+            if (std::find(selection.begin(), selection.end(), menuItem.first) != selection.end()) {
+                this->currentMenuContent = menuItem.second;
+                break;
+            }
+        }
+
+        if (!this->currentMenuContent) {
+            throw std::runtime_error("A menu item was selected but not found");
+        }
+
+        this->onMenuChange.emit(this, this->currentMenuContent);
     }
 }

@@ -35,9 +35,13 @@ namespace FileShare::GUI::Components {
 
             void addToContent(const tgui::Widget::Ptr &item, const tgui::String &widgetName = "");
             bool removeFromContent(const Widget::Ptr &widget);
+            const std::vector<tgui::Widget::Ptr> &getContentWidgets() const { return this->content->getWidgets(); }
 
             void setButtonSize(Components::Button::Size size) { this->button->setSize(size); }
             Components::Button::Size getButtonSize() const { return this->button->getSize(); }
+
+            void buttonCanBeActive(bool active) { this->button->canBeActive(active, false); }
+            bool buttonCanBeActive() const { return this->button->canBeActive(); }
 
             void setText(const tgui::String &text) { this->button->setText(text); }
             const tgui::String &getText() const { return this->button->getText(); }
@@ -49,11 +53,15 @@ namespace FileShare::GUI::Components {
             void setImageSize(const tgui::Vector2f &size) { this->button->setImageSize(size); }
             tgui::Vector2f getImageSize() const { return this->button->getImageSize(); }
 
-            void setFoldable(bool enable) { this->icon->setVisible(enable); }
-            bool isFoldable() const { return this->icon->isVisible(); }
+            void setFoldable(bool enable) { this->foldable = enable; this->setFoldImageVisible(enable); }
+            bool isFoldable() const { return foldable; }
 
-            void open() { this->isOpened = true; this->toggleContent(false); }
-            void close() { this->isOpened = false; this->toggleContent(false); }
+            void setFoldImageVisible(bool visible) { this->icon->setVisible(visible); }
+            bool isFoldImageVisible() const { return this->icon->isVisible(); }
+
+            void open(bool useAnim = false) { this->isOpened = true; this->toggleContent(useAnim); }
+            void close(bool useAnim = false) { this->isOpened = false; this->toggleContent(useAnim); }
+            bool isOpen() const { return this->isOpened; }
 
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<Foldout>(*this); }
@@ -71,6 +79,7 @@ namespace FileShare::GUI::Components {
             tgui::Picture::Ptr icon;
 
             Components::List::Ptr content;
+            bool foldable = true;
             bool isOpened = false;
             int closeAnimationSignalId = -1;
     };
