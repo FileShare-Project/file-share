@@ -29,7 +29,9 @@ namespace FileShare::GUI::Settings {
 
             tgui::Signal &getSignal(tgui::String signalName) override;
 
-            tgui::SignalTyped<tgui::Widget::Ptr> onSettingsClicked = { "onSettingsClicked" };
+            tgui::SignalTyped<tgui::Widget::Ptr> onMenuChange = { "MenuChanged" };
+
+            const tgui::Widget::Ptr &getCurrentMenuContent() const { return this->currentMenuContent; }
 
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<View>(*this); }
@@ -37,10 +39,17 @@ namespace FileShare::GUI::Settings {
         private:
             void createSettings();
             tgui::Widget::Ptr createApplicationSettings();
-            tgui::Widget::Ptr createDevicesSettings();
+            tgui::Widget::Ptr createDevicesGeneralSettings();
+            tgui::Widget::Ptr createDevicesVirtualFolderSettings();
+            tgui::Widget::Ptr createDevicesAdvancedSettings();
             tgui::Widget::Ptr createAccountSettings();
 
             tgui::Widget::Ptr createSection(const tgui::String &title, std::vector<tgui::Widget::Ptr> contents);
             tgui::Widget::Ptr createSectionInput(const tgui::Widget::Ptr &input, const tgui::String &label = "");
+
+            std::map<tgui::String, tgui::Widget::Ptr> menuItems;
+            tgui::Widget::Ptr currentMenuContent = nullptr;
+
+            void handleMenuSelectionChanged(const std::vector<const tgui::String> selection);
     };
 }

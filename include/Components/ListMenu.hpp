@@ -16,13 +16,16 @@
 #include "Components/Foldout.hpp"
 
 namespace FileShare::GUI::Components {
-    struct ItemOptions {
-        bool foldable = true;
-        bool defautFolded = false;
-    };
-
     class ListMenu : public List {
         public:
+            enum ActiveMode {
+                None,
+                Single,
+                AlwaysOne,
+                AtLeastOne,
+                Multiple,
+            };
+
             ListMenu(const char* typeName = "Components::ListMenu", bool initRenderer = true);
             ~ListMenu();
 
@@ -32,22 +35,35 @@ namespace FileShare::GUI::Components {
 			static ListMenu::Ptr create() { return std::make_shared<ListMenu>(); }
 			static ListMenu::Ptr copy(ListMenu::ConstPtr widget) { return widget ? std::static_pointer_cast<ListMenu>(widget->clone()) : nullptr; }
 
+            tgui::Signal &getSignal(tgui::String signalName) override;
+
+            tgui::SignalString onMenuClicked = { "MenuClicked" };
+            tgui::SignalString onMenuActive = { "MenuActived" };
+            tgui::SignalString onMenuInactive = { "MenuInactived" };
+            tgui::SignalTyped<const std::vector<const tgui::String>> onSelectionChanged = { "SelectionChanged" };
+
             void setAutoSeparatorsBeforeTitles(bool enable = true) { this->autoSeparators = enable; }
-            void setDefaultItemOptions(const ItemOptions &options) { this->defaultItemOptions = options; }
 
-            tgui::Widget::Ptr addItem(const tgui::String &icon, const tgui::String &title, const tgui::String &widgetName = "") { return this->addItem(icon, title, this->defaultItemOptions, widgetName); }
-            tgui::Widget::Ptr addItem(const tgui::String &icon, const tgui::String &title, const ItemOptions &options, const tgui::String &widgetName = "");
+            void setActiveMode(ActiveMode mode) { this->activeMode = mode; }
+            ActiveMode getActiveMode() const { return this->activeMode; }
 
+            tgui::Widget::Ptr addItem(const tgui::String &icon, const tgui::String &title, const tgui::String &widgetName = "");
             tgui::Widget::Ptr addSubItem(const tgui::String &title, const tgui::String &widgetName = "");
-
             tgui::Widget::Ptr addTitle(const tgui::String &title, const tgui::String &widgetName = "");
 
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<ListMenu>(*this); }
 
         private:
+            void handleItemClicked(Components::Foldout::Ptr item);
+            void handleSubItemClicked(Components::Button::Ptr subItem);
+            void emitSelectionChanged();
+
             bool autoSeparators = false;
-            ItemOptions defaultItemOptions;
+            ActiveMode activeMode = ActiveMode::Single;
+
             Components::Foldout::Ptr currentFoldout;
+            std::vector<Components::Foldout::Ptr> activeItems;
+            std::vector<Components::Button::Ptr> activeSubItems;
     };
 }

@@ -32,6 +32,23 @@ namespace FileShare::GUI::Components {
 
     Button::~Button() {}
 
+    void Button::canBeActive(bool active, bool automatic)
+    {
+        if (active == this->isActive()) {
+            return;
+        }
+
+        if (active) {
+            this->activeSignalId = automatic ? this->onClick(&Button::toggleActive, this) : 1;
+        } else {
+            if (this->activeSignalId > 1) {
+                this->onClick.disconnect(this->activeSignalId);
+            }
+
+            this->activeSignalId = 0;
+        }
+    }
+
     void Button::setSize(Size size)
     {
         this->size = size;
@@ -191,10 +208,15 @@ namespace FileShare::GUI::Components {
         renderer->setRoundedBorderRadius(4.f);
 
         if (type == Type::Primary) {
-            renderer->setBackgroundColor(this->ghost ? tgui::Color::White : tgui::Color("#007BFF"));
-            renderer->setTextColor(this->ghost ? tgui::Color("#007BFF") : tgui::Color::White);
-            renderer->setBorderColor(tgui::Color("#0056b3"));
             renderer->setBorders({1, 1, 1, 1});
+
+            this->backgroundColor = this->ghost ? tgui::Color::White : tgui::Color("#007BFF");
+            this->textColor = this->ghost ? tgui::Color("#007BFF") : tgui::Color::White;
+            this->borderColor = tgui::Color("#0056b3");
+
+            this->backgroundColorActive = this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#0056b3");
+            this->textColorActive = this->ghost ? tgui::Color("#0056b3") : tgui::Color::White;
+            this->borderColorActive = tgui::Color("#003f7f");
 
             renderer->setBackgroundColorFocused(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#0056b3"));
             renderer->setTextColorFocused(this->ghost ? tgui::Color("#0056b3") : tgui::Color::White);
@@ -212,10 +234,15 @@ namespace FileShare::GUI::Components {
             renderer->setTextColorDisabled(this->ghost ? tgui::Color("#525252") : tgui::Color("#525252"));
             renderer->setBorderColorDisabled(tgui::Color("#A1A1A1"));
         } else if (type == Type::Secondary) {
-            renderer->setBackgroundColor(this->ghost ? tgui::Color::White : tgui::Color("#6C757D"));
-            renderer->setTextColor(this->ghost ? tgui::Color("#6C757D") : tgui::Color::White);
-            renderer->setBorderColor(tgui::Color("#545B62"));
             renderer->setBorders({1, 1, 1, 1});
+
+            this->backgroundColor = this->ghost ? tgui::Color::White : tgui::Color("#6C757D");
+            this->textColor = this->ghost ? tgui::Color("#6C757D") : tgui::Color::White;
+            this->borderColor = tgui::Color("#545B62");
+
+            this->backgroundColorActive = this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#5A6268");
+            this->textColorActive = this->ghost ? tgui::Color("#5A6268") : tgui::Color::White;
+            this->borderColorActive = tgui::Color("#3A3F44");
 
             renderer->setBackgroundColorFocused(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#5A6268"));
             renderer->setTextColorFocused(this->ghost ? tgui::Color("#5A6268") : tgui::Color::White);
@@ -233,10 +260,15 @@ namespace FileShare::GUI::Components {
             renderer->setTextColorDisabled(this->ghost ? tgui::Color("#525252") : tgui::Color("#525252"));
             renderer->setBorderColorDisabled(tgui::Color("#A1A1A1"));
         } else if (type == Type::Soft) {
-            renderer->setBackgroundColor(this->ghost ? tgui::Color::Transparent : tgui::Color("#F9F9F9"));
-            renderer->setTextColor(tgui::Color("#333333"));
-            renderer->setBorderColor(tgui::Color("#CCCCCC"));
             renderer->setBorders({0, 0, 0, 0});
+
+            this->backgroundColor = this->ghost ? tgui::Color::Transparent : tgui::Color("#F9F9F9");
+            this->textColor = tgui::Color("#333333");
+            this->borderColor = tgui::Color("#CCCCCC");
+
+            this->backgroundColorActive = this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#F9F9F9");
+            this->textColorActive = tgui::Color("#333333");
+            this->borderColorActive = tgui::Color("#CCCCCC");
 
             renderer->setBackgroundColorHover(tgui::Color("#DDDDDD"));
             renderer->setTextColorHover(tgui::Color("#333333"));
@@ -254,10 +286,15 @@ namespace FileShare::GUI::Components {
             renderer->setTextColorDisabled(tgui::Color("#525252"));
             renderer->setBorderColorDisabled(tgui::Color("#A1A1A1"));
         } else if (type == Type::Danger) {
-            renderer->setBackgroundColor(this->ghost ? tgui::Color::White : tgui::Color("#DC3545"));
-            renderer->setTextColor(this->ghost ? tgui::Color("#DC3545") : tgui::Color::White);
-            renderer->setBorderColor(tgui::Color("#C82333"));
             renderer->setBorders({1, 1, 1, 1});
+
+            this->backgroundColor = this->ghost ? tgui::Color::White : tgui::Color("#DC3545");
+            this->textColor = this->ghost ? tgui::Color("#DC3545") : tgui::Color::White;
+            this->borderColor = tgui::Color("#C82333");
+
+            this->backgroundColorActive = this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#DC3545");
+            this->textColorActive = this->ghost ? tgui::Color("#DC3545") : tgui::Color::White;
+            this->borderColorActive = tgui::Color("#8B1A25");
 
             renderer->setBackgroundColorFocused(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#B02A37"));
             renderer->setTextColorFocused(this->ghost ? tgui::Color("#B02A37") : tgui::Color::White);
@@ -275,5 +312,17 @@ namespace FileShare::GUI::Components {
             renderer->setTextColorDisabled(this->ghost ? tgui::Color("#525252") : tgui::Color("#525252"));
             renderer->setBorderColorDisabled(tgui::Color("#A1A1A1"));
         }
+
+        this->updateActiveStyle();
+    }
+
+    void Button::updateActiveStyle()
+    {
+        auto renderer = this->getRenderer();
+        auto isActive = this->isActive();
+
+        renderer->setBackgroundColor(isActive ? this->backgroundColorActive : this->backgroundColor);
+        renderer->setTextColor(isActive ? this->textColorActive : this->textColor);
+        renderer->setBorderColor(isActive ? this->borderColorActive : this->borderColor);
     }
 }
