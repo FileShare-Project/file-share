@@ -66,6 +66,12 @@ namespace FileShare::GUI::Components {
             void setSize(Size size);
             Size getSize() const { return size; }
 
+            void canBeActive(bool active, bool automatic = true);
+            bool canBeActive() const { return this->activeSignalId > 0; }
+
+            void setActive(bool active) { this->active = active; this->updateActiveStyle(); }
+            bool isActive() const { return this->canBeActive() ? active : false; }
+
 		protected:
 			tgui::Widget::Ptr clone() const override { return std::make_shared<Button>(*this); }
 
@@ -73,10 +79,12 @@ namespace FileShare::GUI::Components {
             void updateSize() override;
             void updateTextPosition() override;
             void recalculateGlyphSize();
+            void toggleActive() { this->setActive(!this->isActive()); }
 
         private:
             void updateAligment();
             void updateStyle();
+            void updateActiveStyle();
 
             std::shared_ptr<tgui::priv::dev::ImageComponent> imageComponent;
             tgui::Vector2f imageSize;
@@ -86,5 +94,15 @@ namespace FileShare::GUI::Components {
             Type type = Type::Primary;
             bool ghost = false;
             Size size = Size::Normal;
+            unsigned int activeSignalId = 0;
+            bool active = false;
+
+            tgui::Color backgroundColor;
+            tgui::Color textColor;
+            tgui::Color borderColor;
+
+            tgui::Color backgroundColorActive;
+            tgui::Color textColorActive;
+            tgui::Color borderColorActive;
     };
 }

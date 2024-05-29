@@ -43,7 +43,7 @@ namespace FileShare::GUI {
 
         auto settingsView = this->settingsController->getView();
         settingsView->setAutoLayout(tgui::AutoLayout::Top);
-        settingsView->onSettingsClicked.connect([=](tgui::Widget::Ptr widget) {
+        settingsView->onMenuChange.connect([=](tgui::Widget::Ptr widget) {
             content->removeAllWidgets();
             content->add(widget);
         });
@@ -55,9 +55,11 @@ namespace FileShare::GUI {
         button->onClick([=]() {
             auto showSettings = settingsView->getParent() == nullptr;
 
+            content->removeAllWidgets();
             if (showSettings) {
                 sider->remove(deviceListView);
                 sider->add(settingsView);
+                content->add(settingsView->getCurrentMenuContent());
             } else {
                 sider->remove(settingsView);
                 sider->add(deviceListView);

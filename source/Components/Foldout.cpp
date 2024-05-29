@@ -97,6 +97,10 @@ namespace FileShare::GUI::Components {
 
     void Foldout::toggleContent(bool useAnim)
     {
+        if (this->button->isActive() != this->isOpened) {
+            this->button->setActive(this->isOpened);
+        }
+
         if (!this->isFoldable()) {
             return;
         }
@@ -107,6 +111,7 @@ namespace FileShare::GUI::Components {
         }
 
         this->icon->setRotation(this->isOpened ? 0 : 180, {0.5f, 0.5f});
+        this->finishAllAnimations();
         if (this->isOpened) {
             this->content->setVisible(true);
             if (useAnim) {
