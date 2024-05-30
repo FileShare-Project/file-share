@@ -99,9 +99,29 @@ include_directories(
   "${LIB_INCLUDES}"
 )
 
+set(executables "")
+
+function(add_mvc_source)
+  set(local_executables ${executables})
+
+  foreach(name IN LISTS ARGN)
+    set(new_executables
+      "source/${name}/View.cpp"
+      "source/${name}/Model.cpp"
+      "source/${name}/Controller.cpp"
+    )
+
+    set(local_executables ${local_executables} ${new_executables})
+  endforeach()
+
+  set(executables ${local_executables} PARENT_SCOPE)
+endfunction()
+
+add_mvc_source(DeviceList)
 add_executable(file-share
   source/main.cpp
   source/Application.cpp
+  ${executables}
 )
 
 target_compile_definitions(file-share PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
