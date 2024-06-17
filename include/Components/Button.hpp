@@ -39,12 +39,12 @@ namespace FileShare::GUI::Components {
             ~Button();
 
             typedef std::shared_ptr<Button> Ptr;
-			typedef std::shared_ptr<const Button> ConstPtr;
+            typedef std::shared_ptr<const Button> ConstPtr;
 
-			static Button::Ptr create() { return std::make_shared<Button>(); }
-			static Button::Ptr copy(Button::ConstPtr widget) { return widget ? std::static_pointer_cast<Button>(widget->clone()) : nullptr; }
+            static Button::Ptr create() { return std::make_shared<Button>(); }
+            static Button::Ptr copy(Button::ConstPtr widget) { return widget ? std::static_pointer_cast<Button>(widget->clone()) : nullptr; }
 
-            void setImageSize(float size) { this->imageSize = {size, size}; this->setImageScaling(-1); }
+            void setImageSize(float size) { this->setImageSize({size, size}); }
             void setImageSize(const tgui::Vector2f &size) { this->imageSize = size; this->setImageScaling(-1); }
             tgui::Vector2f getImageSize() const { return this->imageSize; }
 
@@ -72,8 +72,8 @@ namespace FileShare::GUI::Components {
             void setActive(bool active) { this->active = active; this->updateActiveStyle(); }
             bool isActive() const { return this->canBeActive() ? active : false; }
 
-		protected:
-			tgui::Widget::Ptr clone() const override { return std::make_shared<Button>(*this); }
+        protected:
+            tgui::Widget::Ptr clone() const override { return std::make_shared<Button>(*this); }
 
             void setSize(const tgui::Layout2d &size) override;
             void updateSize() override;
