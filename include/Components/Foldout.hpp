@@ -22,10 +22,10 @@ namespace FileShare::GUI::Components {
             ~Foldout();
 
             typedef std::shared_ptr<Foldout> Ptr;
-			typedef std::shared_ptr<const Foldout> ConstPtr;
+            typedef std::shared_ptr<const Foldout> ConstPtr;
 
-			static Foldout::Ptr create() { return std::make_shared<Foldout>(); }
-			static Foldout::Ptr copy(Foldout::ConstPtr widget) { return widget ? std::static_pointer_cast<Foldout>(widget->clone()) : nullptr; }
+            static Foldout::Ptr create() { return std::make_shared<Foldout>(); }
+            static Foldout::Ptr copy(Foldout::ConstPtr widget) { return widget ? std::static_pointer_cast<Foldout>(widget->clone()) : nullptr; }
 
             tgui::Signal &getSignal(tgui::String signalName) override;
 
@@ -59,17 +59,18 @@ namespace FileShare::GUI::Components {
             void setFoldImageVisible(bool visible) { this->icon->setVisible(visible); }
             bool isFoldImageVisible() const { return this->icon->isVisible(); }
 
-            void open(bool useAnim = false) { this->isOpened = true; this->toggleContent(useAnim); }
-            void close(bool useAnim = false) { this->isOpened = false; this->toggleContent(useAnim); }
+            void open(bool useAnim = false) { this->openClose(true, useAnim); }
+            void close(bool useAnim = false) { this->openClose(false, useAnim); }
             bool isOpen() const { return this->isOpened; }
 
-		protected:
-			tgui::Widget::Ptr clone() const override { return std::make_shared<Foldout>(*this); }
+        protected:
+            tgui::Widget::Ptr clone() const override { return std::make_shared<Foldout>(*this); }
 
         private:
             void build();
             void buildHeader();
 
+            void openClose(bool isOpened, bool useAnim) { this->isOpened = isOpened; this->toggleContent(useAnim); }
             void toggleContent(bool useAnim = true);
 
             void updateContentHeight();

@@ -25,16 +25,16 @@ namespace FileShare::GUI::Components {
             ~InputFileDialog();
 
             typedef std::shared_ptr<InputFileDialog> Ptr;
-			typedef std::shared_ptr<const InputFileDialog> ConstPtr;
+            typedef std::shared_ptr<const InputFileDialog> ConstPtr;
 
-			static InputFileDialog::Ptr create() { return std::make_shared<InputFileDialog>(); }
-			static InputFileDialog::Ptr copy(InputFileDialog::ConstPtr widget) { return widget ? std::static_pointer_cast<InputFileDialog>(widget->clone()) : nullptr; }
+            static InputFileDialog::Ptr create() { return std::make_shared<InputFileDialog>(); }
+            static InputFileDialog::Ptr copy(InputFileDialog::ConstPtr widget) { return widget ? std::static_pointer_cast<InputFileDialog>(widget->clone()) : nullptr; }
 
             void setMode(FileMode mode) { this->mode = mode; }
             FileMode getMode() const { return this->mode; }
 
-		protected:
-			tgui::Widget::Ptr clone() const override { return std::make_shared<InputFileDialog>(*this); }
+        protected:
+            tgui::Widget::Ptr clone() const override { return std::make_shared<InputFileDialog>(*this); }
 
         private:
             void openFileDialog();
