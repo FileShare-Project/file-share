@@ -107,7 +107,7 @@ namespace FileShare::GUI::Components {
         label->setHeight(24);
         label->setText(title);
         label->setTextSize(16);
-        label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+        label->setVerticalAlignment(tgui::VerticalAlignment::Center);
         this->add(label, widgetName);
 
         return label;

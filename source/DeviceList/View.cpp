@@ -72,15 +72,15 @@ namespace FileShare::GUI::DeviceList {
         title->setPosition({ 20, 0 });
         title->setSize({ "100%", "50%" });
         title->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
-        title->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+        title->setVerticalAlignment(tgui::VerticalAlignment::Center);
         panel->add(title);
 
         tgui::Label::Ptr label = tgui::Label::create();
         label->setPosition({ 0, "50%" });
         label->setSize({ "100%", "50%" });
         label->setWidgetName("CurrentDevice::label");
-        label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Center);
-        label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+        label->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+        label->setVerticalAlignment(tgui::VerticalAlignment::Center);
         panel->add(label);
 
         this->add(panel);
@@ -89,8 +89,7 @@ namespace FileShare::GUI::DeviceList {
     void View::createSection(const std::string &title, const std::vector<std::string> &options)
     {
         this->addTitle(title);
-        for (ushort i = 0; i < options.size(); i += 1) {
-            auto option = options[i];
+        for (auto option : options) {
             auto item = this->addItem("assets/images/button-red.png", option);
 
             item->getSignal("Clicked").connect([this, option]() {
