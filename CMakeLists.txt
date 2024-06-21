@@ -39,6 +39,11 @@ FetchContent_Declare(
   GIT_TAG 69ea0cd863aed1d4092b970b676924a716ff718b
   FIND_PACKAGE_ARGS COMPONENTS graphics window system
 )
+FetchContent_Declare(
+  sqlite_orm
+  GIT_REPOSITORY https://github.com/fnc12/sqlite_orm
+  GIT_TAG ff7c878af872f7987b62d825284fb25d6043af10
+)
 
 set(TGUI_BACKEND "SFML_GRAPHICS")
 set(TGUI_BUILD_FRAMEWORK FALSE)
@@ -49,7 +54,7 @@ FetchContent_Declare(
   FIND_PACKAGE_ARGS NAMES TGUI
 )
 
-FetchContent_MakeAvailable(argparse SFML tgui)
+FetchContent_MakeAvailable(argparse SFML sqlite_orm tgui)
 
 ### BEGIN RECURSIVE LIBRARY INCLUSION ###
 
@@ -117,15 +122,21 @@ function(add_mvc_source)
   set(executables ${local_executables} PARENT_SCOPE)
 endfunction()
 
-add_mvc_source(DeviceList)
+add_mvc_source(DeviceList Settings)
 add_executable(file-share
   source/main.cpp
   source/Application.cpp
+  source/Debug.cpp
+  source/Components/Button.cpp
+  source/Components/Foldout.cpp
+  source/Components/InputFileDialog.cpp
+  source/Components/List.cpp
+  source/Components/ListMenu.cpp
   ${executables}
 )
 
 target_compile_definitions(file-share PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
-target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system fsp)
+target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system sqlite_orm::sqlite_orm fsp)
 
 add_executable(file-share-cli
   source/cli/main.cpp
