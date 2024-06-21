@@ -21,11 +21,11 @@ namespace FileShare::GUI::Settings {
             View(const char* typeName = "Settings::View", bool initRenderer = true);
             ~View();
 
-			typedef std::shared_ptr<View> Ptr;
-			typedef std::shared_ptr<const View> ConstPtr;
+            typedef std::shared_ptr<View> Ptr;
+            typedef std::shared_ptr<const View> ConstPtr;
 
-			static View::Ptr create() { return std::make_shared<View>(); }
-			static View::Ptr copy(View::ConstPtr widget) { return widget ? std::static_pointer_cast<View>(widget->clone()) : nullptr; }
+            static View::Ptr create() { return std::make_shared<View>(); }
+            static View::Ptr copy(View::ConstPtr widget) { return widget ? std::static_pointer_cast<View>(widget->clone()) : nullptr; }
 
             tgui::Signal &getSignal(tgui::String signalName) override;
 
@@ -33,8 +33,8 @@ namespace FileShare::GUI::Settings {
 
             const tgui::Widget::Ptr &getCurrentMenuContent() const { return this->currentMenuContent; }
 
-		protected:
-			tgui::Widget::Ptr clone() const override { return std::make_shared<View>(*this); }
+        protected:
+            tgui::Widget::Ptr clone() const override { return std::make_shared<View>(*this); }
 
         private:
             void createSettings();

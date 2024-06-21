@@ -29,11 +29,11 @@ namespace FileShare::GUI::Components {
             ListMenu(const char* typeName = "Components::ListMenu", bool initRenderer = true);
             ~ListMenu();
 
-			typedef std::shared_ptr<ListMenu> Ptr;
-			typedef std::shared_ptr<const ListMenu> ConstPtr;
+            typedef std::shared_ptr<ListMenu> Ptr;
+            typedef std::shared_ptr<const ListMenu> ConstPtr;
 
-			static ListMenu::Ptr create() { return std::make_shared<ListMenu>(); }
-			static ListMenu::Ptr copy(ListMenu::ConstPtr widget) { return widget ? std::static_pointer_cast<ListMenu>(widget->clone()) : nullptr; }
+            static ListMenu::Ptr create() { return std::make_shared<ListMenu>(); }
+            static ListMenu::Ptr copy(ListMenu::ConstPtr widget) { return widget ? std::static_pointer_cast<ListMenu>(widget->clone()) : nullptr; }
 
             tgui::Signal &getSignal(tgui::String signalName) override;
 
@@ -51,8 +51,8 @@ namespace FileShare::GUI::Components {
             tgui::Widget::Ptr addSubItem(const tgui::String &title, const tgui::String &widgetName = "");
             tgui::Widget::Ptr addTitle(const tgui::String &title, const tgui::String &widgetName = "");
 
-		protected:
-			tgui::Widget::Ptr clone() const override { return std::make_shared<ListMenu>(*this); }
+        protected:
+            tgui::Widget::Ptr clone() const override { return std::make_shared<ListMenu>(*this); }
 
         private:
             void handleItemClicked(Components::Foldout::Ptr item);

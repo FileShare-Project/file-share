@@ -91,7 +91,7 @@ namespace FileShare::GUI::Components {
         this->icon->setSize({24, 24});
         this->icon->setPosition({"100% - width", "50% - height / 2"});
         this->icon->setRotation(180, {0.5f, 0.5f});
-        this->icon->ignoreMouseEvents(true);
+        this->icon->setIgnoreMouseEvents(true);
         this->header->add(this->icon);
     }
 

@@ -18,7 +18,7 @@ namespace FileShare::GUI {
         public:
             static void debug(tgui::Widget::Ptr widget) { Debug::debug(widget.get()); }
             static void debug(tgui::Widget *widget) { Debug::debug(widget, 0); }
-            template <typename T> static void debug(const tgui::Vector2<T> &vector, const tgui::String &prefix = "");
+            template <typename T> static void debug(const tgui::Vector2<T> &vector, const tgui::String &prefix = "") { std::cout << Debug::getLog(vector, prefix) << std::endl; }
 
         private:
             static void debug(tgui::Widget *widget, int depth);
