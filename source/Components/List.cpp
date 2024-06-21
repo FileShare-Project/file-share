@@ -91,7 +91,7 @@ namespace FileShare::GUI::Components {
     void List::updateItemsPosition(unsigned int from)
     {
         auto items = this->getWidgets();
-        if (items.size() == 0) {
+        if (from >= items.size()) {
             return;
         }
 

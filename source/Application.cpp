@@ -74,9 +74,4 @@ namespace FileShare::GUI {
         // Debug::debug(this->gui.getContainer());
         gui.mainLoop();
     }
-
-    // TODO:
-    // - File/folder picker
-    // - Création d'un dossier virtuel
-    // - En haut: chemin complet du dossier actuel -> au click, revenir en arrière
 }

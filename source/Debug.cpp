@@ -33,10 +33,4 @@ namespace FileShare::GUI {
             }
         }
     }
-
-    template <typename T>
-    void Debug::debug(const tgui::Vector2<T> &vector, const tgui::String &prefix)
-    {
-        std::cout << Debug::getLog(vector, prefix) << std::endl;
-    }
 }
