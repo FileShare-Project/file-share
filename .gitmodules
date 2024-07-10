@@ -1,3 +1,0 @@
-[submodule "lib/libfsp"]
-	path = lib/libfsp
-	url = git@github.com:FileShare-Project/libfsp.git
