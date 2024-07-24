@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sun Feb 13 22:03:32 2022 Léo Lhuile
-** Last update Mon Aug 29 20:45:51 2022 Léo Lhuile
+** Started on  Thu May 30 08:59:00 2024 Léo Lhuile
+** Last update Thu May 30 08:59:00 2024 Léo Lhuile
 **
 ** DeviceList/View.cpp : Implementation of DeviceList/View class
 */
