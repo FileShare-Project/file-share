@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sun Feb 13 22:03:32 2022 Léo Lhuile
-** Last update Mon Aug 29 20:45:51 2022 Léo Lhuile
+** Started on  Thu May 30 08:59:00 2024 Léo Lhuile
+** Last update Thu May 30 08:59:00 2024 Léo Lhuile
 **
 ** DeviceList/Model.cpp : Implementation of DeviceList/Model class
 */
@@ -28,7 +28,7 @@ namespace FileShare::GUI::DeviceList {
         return { "LAN", "Own", "Contacts" };
     }
 
-    std::vector<std::string> Model::getDevicesInSection(const std::string& section) const {
+    std::vector<std::string> Model::getDevicesInSection(const std::string &section) const {
         if (section == "LAN") return this->lanDevices;
         else if (section == "Own") return this->ownDevices;
         else if (section == "Contacts") return this->contactDevices;

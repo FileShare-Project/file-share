@@ -55,15 +55,21 @@ function(add_mvc_source)
   set(executables ${local_executables} PARENT_SCOPE)
 endfunction()
 
-add_mvc_source(DeviceList)
+add_mvc_source(DeviceList Settings)
 add_executable(file-share
   source/main.cpp
   source/Application.cpp
+  source/Debug.cpp
+  source/Components/Button.cpp
+  source/Components/Foldout.cpp
+  source/Components/InputFileDialog.cpp
+  source/Components/List.cpp
+  source/Components/ListMenu.cpp
   ${executables}
 )
 
 target_compile_definitions(file-share PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
-target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system fsp)
+target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system sqlite_orm::sqlite_orm fsp)
 target_compile_options(file-share PRIVATE
   $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>
   $<$<CXX_COMPILER_ID:MSVC>:/W4>

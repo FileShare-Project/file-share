@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sun Feb 13 22:03:32 2022 Léo Lhuile
-** Last update Mon Aug 29 20:45:51 2022 Léo Lhuile
+** Started on  Thu May 30 08:59:00 2024 Léo Lhuile
+** Last update Thu May 30 08:59:00 2024 Léo Lhuile
 **
 ** DeviceList/Controller.cpp : Implementation of DeviceList/Controller class
 */
@@ -14,12 +14,8 @@
 namespace FileShare::GUI::DeviceList {
     Controller::Controller() {
         this->view = View::create();
-        this->view->onSelectDevice.connect([this](const std::string& device) {
-            this->handleSelectDevice(device);
-        });
-        this->view->onToggleDevice.connect([this]() {
-            this->handleToggleDevice();
-        });
+        this->view->onSelectDevice(&Controller::handleSelectDevice, this);
+        this->view->onToggleDevice(&Controller::handleToggleDevice, this);
 
         for (auto section : this->model.getSections()) {
             this->view->addDeviceList(section, this->model.getDevicesInSection(section));
@@ -28,7 +24,7 @@ namespace FileShare::GUI::DeviceList {
 
     Controller::~Controller() {}
 
-    void Controller::handleSelectDevice(const std::string& device) {
+    void Controller::handleSelectDevice(const std::string &device) {
         this->model.setCurrentDevice(device);
 
         auto currentDevice = this->model.getCurrentDevice();
