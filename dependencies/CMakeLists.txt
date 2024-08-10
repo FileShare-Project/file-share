@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Wed Jul 10 10:27:39 2024 Francois Michaut
-## Last update Wed Jul 10 18:56:37 2024 Francois Michaut
+## Last update Sat Aug 10 09:39:35 2024 Francois Michaut
 ##
 ## CMakeLists.txt : CMake to fetch and build the dependecies of the FileShare executable
 ##
@@ -35,7 +35,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   fsp
   GIT_REPOSITORY  https://github.com/FileShare-Project/libfsp.git
-  GIT_TAG         34cd26b7b2f09838126550a06672714dc69b85ed
+  GIT_TAG         b2272f6740ff1458751d5e09812a2da28afd37b8
 )
 
 FetchContent_MakeAvailable(fsp argparse SFML tgui)
