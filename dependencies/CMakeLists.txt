@@ -22,13 +22,18 @@ FetchContent_Declare(
   GIT_TAG 69ea0cd863aed1d4092b970b676924a716ff718b
   FIND_PACKAGE_ARGS COMPONENTS graphics window system
 )
+FetchContent_Declare(
+  sqlite_orm
+  GIT_REPOSITORY https://github.com/fnc12/sqlite_orm
+  GIT_TAG ff7c878af872f7987b62d825284fb25d6043af10
+)
 
 set(TGUI_BACKEND "SFML_GRAPHICS")
 set(TGUI_BUILD_FRAMEWORK FALSE)
 FetchContent_Declare(
   tgui
   GIT_REPOSITORY  https://github.com/texus/TGUI
-  GIT_TAG         9fe2d5d408627965beda66e0a042ae1f0d86268d
+  GIT_TAG         002ec9d21111d5a42ded92e589b8fb485933b3f9
   FIND_PACKAGE_ARGS NAMES TGUI
 )
 
@@ -38,4 +43,4 @@ FetchContent_Declare(
   GIT_TAG         b2272f6740ff1458751d5e09812a2da28afd37b8
 )
 
-FetchContent_MakeAvailable(fsp argparse SFML tgui)
+FetchContent_MakeAvailable(fsp argparse SFML sqlite_orm tgui)
