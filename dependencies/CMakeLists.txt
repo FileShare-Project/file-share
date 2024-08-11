@@ -33,7 +33,7 @@ set(TGUI_BUILD_FRAMEWORK FALSE)
 FetchContent_Declare(
   tgui
   GIT_REPOSITORY  https://github.com/texus/TGUI
-  GIT_TAG         9fe2d5d408627965beda66e0a042ae1f0d86268d
+  GIT_TAG         002ec9d21111d5a42ded92e589b8fb485933b3f9
   FIND_PACKAGE_ARGS NAMES TGUI
 )
 
