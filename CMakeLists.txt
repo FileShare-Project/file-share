@@ -60,6 +60,7 @@ add_executable(file-share
   source/main.cpp
   source/Application.cpp
   source/Debug.cpp
+  source/ThemeManager.cpp
   source/Components/Button.cpp
   source/Components/Foldout.cpp
   source/Components/InputFileDialog.cpp

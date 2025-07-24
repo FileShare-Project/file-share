@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sat Jan 15 21:08:44 2022 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2022 Léo Lhuile
+** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
+** Last update Thu Jul 24 15:44:13 2025 Léo Lhuile
 **
 ** Button.hpp : Class to manage a button with icon and extra informations.
 */
@@ -69,7 +69,7 @@ namespace FileShare::GUI::Components {
             void canBeActive(bool active, bool automatic = true);
             bool canBeActive() const { return this->activeSignalId > 0; }
 
-            void setActive(bool active) { this->active = active; this->updateActiveStyle(); }
+            void setActive(bool active) { this->active = active; this->updateStyle(); }
             bool isActive() const { return this->canBeActive() ? active : false; }
 
         protected:
@@ -84,7 +84,6 @@ namespace FileShare::GUI::Components {
         private:
             void updateAligment();
             void updateStyle();
-            void updateActiveStyle();
 
             std::shared_ptr<tgui::priv::dev::ImageComponent> imageComponent;
             tgui::Vector2f imageSize;
@@ -96,13 +95,5 @@ namespace FileShare::GUI::Components {
             Size size = Size::Normal;
             unsigned int activeSignalId = 0;
             bool active = false;
-
-            tgui::Color backgroundColor;
-            tgui::Color textColor;
-            tgui::Color borderColor;
-
-            tgui::Color backgroundColorActive;
-            tgui::Color textColorActive;
-            tgui::Color borderColorActive;
     };
 }

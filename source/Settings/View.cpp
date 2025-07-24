@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sun May 26 15:18:37 2024 Léo Lhuile
+** Last update Thu Jul 24 15:44:13 2025 Léo Lhuile
 **
 ** Settings/View.cpp : Implementation of Settings/View class
 */
@@ -12,6 +12,7 @@
 #include "Settings/View.hpp"
 #include "Components/Button.hpp"
 #include "Components/InputFileDialog.hpp"
+#include "ThemeManager.hpp"
 
 namespace FileShare::GUI::Settings {
     View::View(const char* typeName, bool initRenderer)
@@ -21,7 +22,7 @@ namespace FileShare::GUI::Settings {
         this->setAutoLayout(tgui::AutoLayout::Top);
         this->setAutoSeparatorsBeforeTitles();
         this->setAutoHeight(true);
-        this->getRenderer()->setPadding({6, 6});
+        this->getRenderer()->setPadding({ 6, 6 });
         this->onSelectionChanged.connect(&View::handleMenuSelectionChanged, this);
 
         this->createSettings();
@@ -44,10 +45,12 @@ namespace FileShare::GUI::Settings {
 
     void View::createSettings()
     {
-        this->menuItems["Application settings"] = this->createApplicationSettings();
-        this->addItem("assets/images/settings_black.svg", "Application settings");
+        auto iconThemeSuffix = ThemeManager::getInstance().getIconThemeSuffix();
 
-        this->addItem("assets/images/settings_device_black.svg", "Devices settings");
+        this->menuItems["Application settings"] = this->createApplicationSettings();
+        this->addItem("assets/images/settings" + iconThemeSuffix + ".svg", "Application settings");
+
+        this->addItem("assets/images/settings_device" + iconThemeSuffix + ".svg", "Devices settings");
         this->menuItems["General"] = this->createDevicesGeneralSettings();
         this->addSubItem("General");
         this->menuItems["Virtual folder"] = this->createDevicesVirtualFolderSettings();
@@ -56,14 +59,14 @@ namespace FileShare::GUI::Settings {
         this->addSubItem("Advanced");
 
         this->menuItems["Account"] = this->createAccountSettings();
-        this->addItem("assets/images/account_black.svg", "Account");
+        this->addItem("assets/images/account" + iconThemeSuffix + ".svg", "Account");
 
         auto logoutButton = Components::Button::create();
         logoutButton->setText("Logout");
         logoutButton->setType(Components::Button::Type::Danger);
-        logoutButton->onPress([=]() {
+        logoutButton->onPress([this]() {
             this->getSignal("logout").emit(this); // TODO: Implement signal. For now, it's not a bug; it's a feature
-        });
+            });
         this->add(logoutButton);
     }
 
@@ -82,7 +85,7 @@ namespace FileShare::GUI::Settings {
         downloadFolderInput->setMode(Components::InputFileDialog::FileMode::Directory);
 
         auto allowConnectionsInput = tgui::CheckBox::create();
-        allowConnectionsInput->setText("Allow connections");        
+        allowConnectionsInput->setText("Allow connections");
         allowConnectionsInput->getRenderer()->setTextDistanceRatio(0.5f);
 
         return this->createSection("Devices settings - General", {
@@ -134,10 +137,9 @@ namespace FileShare::GUI::Settings {
         list->setAutoLayout(tgui::AutoLayout::Top);
         list->setAutoHeight(true);
         list->setSpaceBetweenItems(6);
-        list->getRenderer()->setPadding({6, 6});
+        list->getRenderer()->setPadding({ 6, 6 });
 
         tgui::Label::Ptr label = tgui::Label::create(title);
-        label->getRenderer()->setTextColor(tgui::Color::Black);
         label->getRenderer()->setTextSize(18);
         label->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
         list->add(label);
@@ -159,7 +161,6 @@ namespace FileShare::GUI::Settings {
 
         if (!label.empty()) {
             tgui::Label::Ptr labelWidget = tgui::Label::create(label);
-            labelWidget->getRenderer()->setTextColor(tgui::Color::Black);
             labelWidget->getRenderer()->setTextSize(14);
             group->add(labelWidget);
 
@@ -173,12 +174,13 @@ namespace FileShare::GUI::Settings {
         return group;
     }
 
-    void View::handleMenuSelectionChanged(const std::vector<const tgui::String> selection)
+    void View::handleMenuSelectionChanged(const std::vector<tgui::String> &selection)
     {
         this->currentMenuContent = nullptr;
 
-        for (auto menuItem : this->menuItems) {
-            if (std::find(selection.begin(), selection.end(), menuItem.first) != selection.end()) {
+        for (const auto &menuItem : this->menuItems) {
+            const tgui::String &menuKey = menuItem.first;
+            if (std::find(selection.begin(), selection.end(), menuKey) != selection.end()) {
                 this->currentMenuContent = menuItem.second;
                 break;
             }

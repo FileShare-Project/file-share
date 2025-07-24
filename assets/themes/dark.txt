@@ -1,0 +1,353 @@
+TextColor         = rgb(240, 240, 240);
+TextColorHover    = rgb(255, 255, 255);
+TextColorDisabled = rgb(140, 140, 140);
+SelectedTextColor = White;
+BorderColor       = rgb(70, 70, 70);
+BackgroundColor   = rgb(45, 45, 45);
+BackgroundColorHover = rgb(60, 60, 60);
+SelectedBackgroundColor = rgb(0, 122, 255);
+SelectedBackgroundColorHover = rgb(30, 145, 255);
+
+Button {
+    Texture         = "dark.png" Part(140, 53, 45, 50) Middle(10, 0) Smooth;
+    TextureHover    = "dark.png" Part(140, 1, 45, 50) Middle(10, 0) Smooth;
+    TextureDown     = "dark.png" Part(125, 105, 45, 50) Middle(10, 0) Smooth;
+    TextureFocused  = "dark.png" Part(93, 53, 45, 50) Middle(10, 0) Smooth;
+}
+
+ChatBox {
+    TextureBackground = "dark.png" Part(63, 146, 48, 48) Middle(16) Smooth;
+    TextColor         = rgb(240, 240, 240);
+    Padding           = (3, 3, 3, 3);
+}
+
+CheckBox {
+    TextureUnchecked        = "dark.png" Part(125, 209, 32, 32) Smooth;
+    TextureChecked          = "dark.png" Part(219, 171, 32, 32) Smooth;
+    TextureUncheckedHover   = "dark.png" Part(221, 35, 32, 32) Smooth;
+    TextureCheckedHover     = "dark.png" Part(221, 1, 32, 32) Smooth;
+    TextureUncheckedFocused = "dark.png" Part(216, 209, 32, 32) Smooth;
+    TextureCheckedFocused   = "dark.png" Part(221, 69, 32, 32) Smooth;
+}
+
+ChildWindow {
+    TextureTitleBar        = "dark.png" Part(1, 85, 75, 25) Middle(25, 0) Smooth;
+    Borders                = (1, 1, 1, 1);
+    DistanceToSide         = 5;
+    PaddingBetweenButtons  = 2;
+    ShowTextOnTitleButtons = false;
+    CloseButton = {
+        Texture       = "dark.png" Part(79, 238, 15, 15) Smooth;
+        TextureHover  = "dark.png" Part(255, 40, 15, 15) Smooth;
+        TextureDown   = "dark.png" Part(45, 230, 15, 15) Smooth;
+    };
+    MaximizeButton = {
+        Texture       = "dark.png" Part(255, 23, 15, 15) Smooth;
+        TextureHover  = "dark.png" Part(267, 239, 15, 15) Smooth;
+        TextureDown   = "dark.png" Part(62, 238, 15, 15) Smooth;
+    };
+    MinimizeButton = {
+        Texture       = "dark.png" Part(255, 57, 15, 15) Smooth;
+        TextureHover  = "dark.png" Part(250, 239, 15, 15) Smooth;
+        TextureDown   = "dark.png" Part(96, 238, 15, 15) Smooth;
+    };
+}
+
+ComboBox {
+    TextureBackground = "dark.png" Part(63, 146, 48, 48) Middle(16) Smooth;
+    TextureArrow      = "dark.png" Part(250, 205, 32, 32) Smooth;
+    TextureArrowHover = "dark.png" Part(219, 103, 32, 32) Smooth;
+    TextColor         = rgb(240, 240, 240);
+    Padding           = (3, 3, 3, 3);
+}
+
+EditBox {
+    Texture        = "dark.png" Part(1, 154, 60, 40) Middle(15, 0) Smooth;
+    TextureHover   = "dark.png" Part(63, 196, 60, 40) Middle(15, 0) Smooth;
+    TextureFocused = "dark.png" Part(1, 112, 60, 40) Middle(15, 0) Smooth;
+
+    DefaultTextColor = rgb(180, 180, 180);
+    CaretColor       = rgb(110, 110, 255);
+    Padding          = (6, 4, 6, 4);
+}
+
+Knob {
+    Borders = (2, 2, 2, 2);
+}
+
+ListBox {
+    TextureBackground = "dark.png" Part(63, 146, 48, 48) Middle(16) Smooth;
+    TextColor         = rgb(240, 240, 240);
+    Padding           = (3, 3, 3, 3);
+}
+
+ListView {
+    HeaderBackgroundColor = rgb( 95,  95,  95);
+    HeaderTextColor       = rgb(240, 240, 240);
+    TextColor             = rgb(240, 240, 240);
+    Borders               = (1, 1, 1, 1);
+}
+
+MenuBar {
+    TextureBackground             = "dark.png" Part(45, 247, 8, 6) Middle(2, 2) NoSmooth;
+    TextureItemBackground         = "dark.png" Part(78, 105, 8, 4) Middle(2, 0, 4, 2) NoSmooth;
+    TextureSelectedItemBackground = "dark.png" Part(113, 238, 8, 6) Middle(2, 2) NoSmooth;
+    DistanceToSide                = 5;
+}
+
+ProgressBar {
+    TextureBackground = "dark.png" Part(1, 1, 90, 40) Middle(20, 0) Smooth;
+    TextureFill       = "dark.png" Part(1, 43, 90, 40) Middle(16, 0) Smooth;
+    TextColorFilled   = rgb(250, 250, 250);
+}
+
+RadioButton {
+    TextureUnchecked        = "dark.png" Part(219, 137, 32, 32) Smooth;
+    TextureChecked          = "dark.png" Part(187, 35, 32, 32) Smooth;
+    TextureUncheckedHover   = "dark.png" Part(187, 69, 32, 32) Smooth;
+    TextureCheckedHover     = "dark.png" Part(253, 137, 32, 32) Smooth;
+    TextureUncheckedFocused = "dark.png" Part(253, 103, 32, 32) Smooth;
+    TextureCheckedFocused   = "dark.png" Part(187, 1, 32, 32) Smooth;
+}
+
+Scrollbar {
+    TextureTrack          = "dark.png" Part(255, 1, 20, 20) Smooth;
+    TextureTrackHover     = "dark.png" Part(284, 203, 20, 20) Smooth;
+    TextureThumb          = "dark.png" Part(23, 230, 20, 20) Smooth;
+    TextureThumbHover     = "dark.png" Part(306, 193, 20, 20) Smooth;
+    TextureArrowUp        = "dark.png" Part(284, 225, 20, 20) Middle(0, 0, 20, 19) Smooth;
+    TextureArrowUpHover   = "dark.png" Part(285, 171, 20, 20) Middle(0, 0, 20, 19) Smooth;
+    TextureArrowDown      = "dark.png" Part(1, 230, 20, 20) Middle(0, 1, 20, 19) Smooth;
+    TextureArrowDownHover = "dark.png" Part(306, 225, 20, 20) Middle(0, 1, 20, 19) Smooth;
+}
+
+Slider {
+    TextureTrack      = "dark.png" Part(172, 209, 20, 45) Middle(0, 15) Smooth;
+    TextureTrackHover = "dark.png" Part(194, 209, 20, 45) Middle(0, 15) Smooth;
+    TextureThumb      = "dark.png" Part(253, 171, 30, 30) Smooth;
+}
+
+SpinButton {
+    TextureArrowUp        = "dark.png" Part(284, 225, 20, 20) Middle(0, 0, 20, 19) Smooth;
+    TextureArrowUpHover   = "dark.png" Part(285, 171, 20, 20) Middle(0, 0, 20, 19) Smooth;
+    TextureArrowDown      = "dark.png" Part(1, 230, 20, 20) Middle(0, 1, 20, 19) Smooth;
+    TextureArrowDownHover = "dark.png" Part(306, 225, 20, 20) Middle(0, 1, 20, 19) Smooth;
+    BorderBetweenArrows    = 0;
+}
+
+Tabs {
+    TextureTab         = "dark.png" Part(1, 196, 60, 32) Middle(16, 0) Smooth;
+    TextureSelectedTab = "dark.png" Part(63, 112, 60, 32) Middle(16, 0) Smooth;
+    DistanceToSide     = 8;
+}
+
+TextArea {
+    TextureBackground = "dark.png" Part(63, 146, 48, 48) Middle(16) Smooth;
+    TextColor         = rgb(240, 240, 240);
+    CaretColor        = rgb(110, 110, 255);
+    Padding           = (3, 3, 3, 3);
+}
+
+ToolTip {
+    BackgroundColor = rgb(80, 80, 80);
+    TextColor       = rgb(240, 240, 240);
+    Borders         = (1, 1, 1, 1);
+    Padding         = (2, 2, 2, 2);
+}
+
+ToggleButton {
+    Texture     = "dark.png" Part(140, 53, 45, 50) Middle(10, 0) Smooth;
+    TextureDown = "dark.png" Part(125, 105, 45, 50) Middle(10, 0) Smooth;
+}
+
+ButtonPrimaryBase {
+    Borders             = (1);
+
+    BorderColor         = rgb(10, 132, 255);
+    BorderColorHover    = rgb(0, 76, 145);
+    BorderColorDown     = rgb(0, 39, 82);
+    BorderColorFocused  = rgb(0, 63, 127);
+    BorderColorDisabled = rgb(161, 161, 161);
+}
+
+ButtonPrimary : ButtonPrimaryBase {
+    TextColor               = rgb(255, 255, 255);
+    TextColorHover          = rgb(255, 255, 255);
+    TextColorDown           = rgb(255, 255, 255);
+    TextColorFocused        = rgb(255, 255, 255);
+    TextColorDisabled       = rgb(140, 140, 140);
+
+    BackgroundColor         = rgb(10, 132, 255);
+    BackgroundColorHover    = rgb(0, 105, 217);
+    BackgroundColorDown     = rgb(0, 64, 133);
+    BackgroundColorFocused  = rgb(0, 86, 179);
+    BackgroundColorDisabled = rgb(125, 162, 191);
+}
+ButtonPrimaryActive : ButtonPrimary {
+    BackgroundColor = rgb(0, 86, 179);
+    TextColor       = rgb(255, 255, 255);
+    BorderColor     = rgb(0, 63, 127);
+}
+
+ButtonPrimaryGhost : ButtonPrimaryBase {
+    TextColor               = rgb(10, 132, 255);
+    TextColorHover          = rgb(100, 170, 255);
+    TextColorDown           = rgb(150, 200, 255);
+    TextColorFocused        = rgb(100, 170, 255);
+    TextColorDisabled       = rgb(140, 140, 140);
+
+    BackgroundColor         = Transparent;
+    BackgroundColorHover    = rgba(10, 132, 255, 50);
+    BackgroundColorDown     = rgba(10, 132, 255, 80);
+    BackgroundColorFocused  = rgba(10, 132, 255, 40);
+    BackgroundColorDisabled = rgba(100, 100, 100, 30);
+}
+ButtonPrimaryGhostActive : ButtonPrimaryGhost {
+    BackgroundColor = rgba(10, 132, 255, 60);
+    TextColor       = rgb(150, 200, 255);
+    BorderColor     = rgb(0, 63, 127);
+}
+
+ButtonSecondaryBase {
+    Borders             = (1);
+
+    BorderColor         = rgb(72, 72, 74);
+    BorderColorHover    = rgb(58, 63, 68);
+    BorderColorDown     = rgb(26, 28, 31);
+    BorderColorFocused  = rgb(58, 63, 68);
+    BorderColorDisabled = rgb(161, 161, 161);
+}
+
+ButtonSecondary : ButtonSecondaryBase {
+    TextColor               = rgb(242, 242, 247);
+    TextColorHover          = rgb(255, 255, 255);
+    TextColorDown           = rgb(255, 255, 255);
+    TextColorFocused        = rgb(255, 255, 255);
+    TextColorDisabled       = rgb(140, 140, 140);
+
+    BackgroundColor         = rgb(72, 72, 74);
+    BackgroundColorHover    = rgb(84, 91, 98);
+    BackgroundColorDown     = rgb(58, 63, 68);
+    BackgroundColorFocused  = rgb(90, 98, 104);
+    BackgroundColorDisabled = rgb(176, 176, 176);
+}
+ButtonSecondaryActive : ButtonSecondary {
+    BackgroundColor = rgb(58, 63, 68);
+    TextColor       = rgb(255, 255, 255);
+    BorderColor     = rgb(26, 28, 31);
+}
+
+ButtonSecondaryGhost : ButtonSecondaryBase {
+    TextColor               = rgb(200, 200, 200);
+    TextColorHover          = rgb(255, 255, 255);
+    TextColorDown           = rgb(255, 255, 255);
+    TextColorFocused        = rgb(240, 240, 240);
+    TextColorDisabled       = rgb(140, 140, 140);
+
+    BackgroundColor         = Transparent;
+    BackgroundColorHover    = rgba(200, 200, 200, 50);
+    BackgroundColorDown     = rgba(200, 200, 200, 70);
+    BackgroundColorFocused  = rgba(200, 200, 200, 40);
+    BackgroundColorDisabled = rgba(100, 100, 100, 30);
+}
+ButtonSecondaryGhostActive : ButtonSecondaryGhost {
+    BackgroundColor = rgba(200, 200, 200, 80);
+    TextColor       = rgb(255, 255, 255);
+    BorderColor     = rgb(58, 63, 68);
+}
+
+ButtonSoftBase {
+    Borders             = (0);
+
+    BorderColor         = rgb(140, 140, 140);
+    BorderColorHover    = rgb(180, 180, 180);
+    BorderColorDown     = rgb(200, 200, 200);
+    BorderColorFocused  = rgb(180, 180, 180);
+    BorderColorDisabled = rgb(100, 100, 100);
+}
+
+ButtonSoft : ButtonSoftBase {
+    TextColor               = rgb(240, 240, 240);
+    TextColorHover          = rgb(255, 255, 255);
+    TextColorDown           = rgb(255, 255, 255);
+    TextColorFocused        = rgb(255, 255, 255);
+    TextColorDisabled       = rgb(140, 140, 140);
+
+    BackgroundColor         = rgba(240, 240, 240, 30);
+    BackgroundColorHover    = rgba(240, 240, 240, 60);
+    BackgroundColorDown     = rgba(240, 240, 240, 80);
+    BackgroundColorFocused  = rgba(240, 240, 240, 70);
+    BackgroundColorDisabled = rgba(140, 140, 140, 50);
+}
+ButtonSoftActive : ButtonSoft {
+    BackgroundColor = rgba(240, 240, 240, 90);
+    TextColor       = rgb(255, 255, 255);
+    BorderColor     = rgb(200, 200, 200);
+}
+
+ButtonSoftGhost : ButtonSoftBase {
+    TextColor               = rgb(240, 240, 240);
+    TextColorHover          = rgb(255, 255, 255);
+    TextColorDown           = rgb(255, 255, 255);
+    TextColorFocused        = rgb(255, 255, 255);
+    TextColorDisabled       = rgb(140, 140, 140);
+
+    BackgroundColor         = Transparent;
+    BackgroundColorHover    = rgba(240, 240, 240, 40);
+    BackgroundColorDown     = rgba(240, 240, 240, 50);
+    BackgroundColorFocused  = rgba(240, 240, 240, 40);
+    BackgroundColorDisabled = rgba(100, 100, 100, 30);
+}
+ButtonSoftGhostActive : ButtonSoftGhost {
+    BackgroundColor = rgba(240, 240, 240, 60);
+    TextColor       = rgb(255, 255, 255);
+    BorderColor     = rgb(200, 200, 200);
+}
+
+ButtonDangerBase {
+    Borders             = (1);
+
+    BorderColor         = rgb(200, 35, 51);
+    BorderColorHover    = rgb(169, 29, 47);
+    BorderColorDown     = rgb(122, 24, 35);
+    BorderColorFocused  = rgb(139, 26, 37);
+    BorderColorDisabled = rgb(161, 161, 161);
+}
+
+ButtonDanger : ButtonDangerBase {
+    TextColor               = rgb(255, 255, 255);
+    TextColorHover          = rgb(255, 255, 255);
+    TextColorDown           = rgb(255, 255, 255);
+    TextColorFocused        = rgb(255, 255, 255);
+    TextColorDisabled       = rgb(140, 140, 140);
+
+    BackgroundColor         = rgb(220, 53, 69);
+    BackgroundColorHover    = rgb(200, 35, 51);
+    BackgroundColorDown     = rgb(155, 28, 40);
+    BackgroundColorFocused  = rgb(176, 42, 55);
+    BackgroundColorDisabled = rgb(214, 168, 168);
+}
+ButtonDangerActive : ButtonDanger {
+    BackgroundColor = rgb(155, 28, 40);
+    TextColor       = rgb(255, 255, 255);
+    BorderColor     = rgb(139, 26, 37);
+}
+
+ButtonDangerGhost : ButtonDangerBase {
+    TextColor               = rgb(255, 100, 120);
+    TextColorHover          = rgb(255, 160, 180);
+    TextColorDown           = rgb(255, 180, 200);
+    TextColorFocused        = rgb(255, 140, 160);
+    TextColorDisabled       = rgb(140, 140, 140);
+
+    BackgroundColor         = Transparent;
+    BackgroundColorHover    = rgba(220, 53, 69, 50);
+    BackgroundColorDown     = rgba(220, 53, 69, 80);
+    BackgroundColorFocused  = rgba(220, 53, 69, 40);
+    BackgroundColorDisabled = rgba(100, 100, 100, 30);
+}
+ButtonDangerGhostActive : ButtonDangerGhost {
+    BackgroundColor = rgba(220, 53, 69, 60);
+    TextColor       = rgb(255, 180, 200);
+    BorderColor     = rgb(139, 26, 37);
+}

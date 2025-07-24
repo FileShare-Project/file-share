@@ -10,6 +10,7 @@
 */
 
 #include "Components/Foldout.hpp"
+#include "ThemeManager.hpp"
 
 namespace FileShare::GUI::Components {
     Foldout::Foldout(const char* typeName, bool initRenderer)
@@ -87,7 +88,8 @@ namespace FileShare::GUI::Components {
         this->header->add(this->button);
         this->header->setHeight(this->button->getFullSize().y);
 
-        this->icon = tgui::Picture::create("assets/images/arrow_down_black.svg");
+        auto iconThemeSuffix = ThemeManager::getInstance().getIconThemeSuffix();
+        this->icon = tgui::Picture::create(tgui::String("assets/images/arrow_down" + iconThemeSuffix + ".svg"));
         this->icon->setSize({24, 24});
         this->icon->setPosition({"100% - width", "50% - height / 2"});
         this->icon->setRotation(180, {0.5f, 0.5f});
@@ -123,7 +125,7 @@ namespace FileShare::GUI::Components {
         } else {
             if (useAnim) {
                 this->resizeWithAnimation({this->getSize().x, this->button->getFullSize().y}, sf::milliseconds(200));
-                this->closeAnimationSignalId = this->onAnimationFinish([=]() {
+                this->closeAnimationSignalId = this->onAnimationFinish([this]() {
                     this->content->setVisible(false);
                     this->onAnimationFinish.disconnect(this->closeAnimationSignalId);
                     this->closeAnimationSignalId = -1;

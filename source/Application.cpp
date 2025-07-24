@@ -4,17 +4,18 @@
 ** Author Léo Lhuile
 **
 ** Started on  Thu Dec 28 21:54:14 2023 Léo Lhuile
-** Last update Thu May 30 08:59:00 2024 Léo Lhuile
+** Last update Thu Jul 24 15:44:13 2025 Léo Lhuile
 **
 ** Application.cpp : Implementation of Application class
 */
 
 #include "Application.hpp"
 #include "Debug.hpp"
+#include "ThemeManager.hpp"
 
 namespace FileShare::GUI {
     Application::Application()
-        : window(sf::VideoMode(800, 600), "FileShare")
+        : window(sf::VideoMode(1200, 800), "FileShare")
         , gui(window)
     {
     }
@@ -23,18 +24,26 @@ namespace FileShare::GUI {
 
     void Application::init()
     {
-        // tgui::Theme::setDefault("assets/themes/Black.txt");
+        auto &themeManager = ThemeManager::getInstance();
 
         tgui::ScrollablePanel::Ptr content = tgui::ScrollablePanel::create();
         content->setAutoLayout(tgui::AutoLayout::Fill);
+        if (themeManager.getCurrentTheme() == "dark") {
+            content->getRenderer()->setBackgroundColor(tgui::Color(35, 35, 35));
+        }
+        content->getRenderer()->setPadding(tgui::Padding(20, 20, 20, 20));
         this->gui.add(content);
 
         this->deviceListController = std::make_unique<DeviceList::Controller>();
         this->settingsController = std::make_unique<Settings::Controller>();
 
         tgui::ScrollablePanel::Ptr sider = tgui::ScrollablePanel::create();
-        sider->setWidth("20%");
+        sider->setWidth("25%");
         sider->setAutoLayout(tgui::AutoLayout::Leftmost);
+        if (themeManager.getCurrentTheme() == "dark") {
+            sider->getRenderer()->setBackgroundColor(tgui::Color(45, 45, 45));
+        }
+        sider->getRenderer()->setPadding(tgui::Padding(15, 15, 15, 15));
         this->gui.add(sider);
 
         auto deviceListView = this->deviceListController->getView();
@@ -49,9 +58,10 @@ namespace FileShare::GUI {
         });
 
         Components::Button::Ptr button = Components::Button::create();
-        button->setType(Components::Button::Type::Secondary);
+        button->setType(Components::Button::Type::Primary);
         button->setText("Settings");
         button->setAutoLayout(tgui::AutoLayout::Bottom);
+        button->setSize(Components::Button::Size::Large);
         button->onClick([=]() {
             auto showSettings = settingsView->getParent() == nullptr;
 
@@ -74,4 +84,5 @@ namespace FileShare::GUI {
         // Debug::debug(this->gui.getContainer());
         gui.mainLoop();
     }
+
 }

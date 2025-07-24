@@ -211,7 +211,7 @@ namespace FileShare::GUI::Components {
         size_t activeItemsSize = this->activeItems.size();
         size_t activeSubItemsSize = this->activeSubItems.size();
 
-        std::vector<const tgui::String> selection;
+        std::vector<tgui::String> selection;
         selection.reserve(activeItemsSize + activeSubItemsSize);
 
         for (size_t i = 0; i < activeItemsSize; i++) {
