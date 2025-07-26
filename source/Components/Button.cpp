@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Thu Jul 24 15:44:13 2025 Léo Lhuile
+** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
 **
 ** Button.cpp : Implementation of Button class
 */
@@ -13,9 +13,8 @@
 #include "Debug.hpp"
 
 namespace FileShare::GUI::Components {
-    Button::Button(const char* typeName, bool initRenderer)
-        : tgui::BitmapButton(typeName, initRenderer)
-    {
+    Button::Button(const char *typeName, bool initRenderer)
+        : tgui::BitmapButton(typeName, initRenderer) {
         for (const auto &component : this->m_backgroundComponent->getComponents()) {
             auto imageComponent = std::dynamic_pointer_cast<tgui::priv::dev::ImageComponent>(component);
             if (imageComponent) {
@@ -32,8 +31,7 @@ namespace FileShare::GUI::Components {
 
     Button::~Button() {}
 
-    void Button::canBeActive(bool active, bool automatic)
-    {
+    void Button::canBeActive(bool active, bool automatic) {
         if (active == this->isActive()) {
             return;
         }
@@ -49,8 +47,7 @@ namespace FileShare::GUI::Components {
         }
     }
 
-    void Button::setSize(Size size)
-    {
+    void Button::setSize(Size size) {
         this->size = size;
         if (size == Size::Small) {
             this->setHeight(24);
@@ -67,8 +64,7 @@ namespace FileShare::GUI::Components {
         }
     }
 
-    void Button::setSize(const tgui::Layout2d &size)
-    {
+    void Button::setSize(const tgui::Layout2d &size) {
         if (this->getImageScaling() >= 0) {
             tgui::BitmapButton::setSize(size);
             return;
@@ -78,8 +74,7 @@ namespace FileShare::GUI::Components {
         this->recalculateGlyphSize();
     }
 
-    void Button::updateSize()
-    {
+    void Button::updateSize() {
         if (this->getImageScaling() >= 0) {
             tgui::BitmapButton::updateSize();
             return;
@@ -103,8 +98,7 @@ namespace FileShare::GUI::Components {
 
             this->recalculateGlyphSize();
 
-            if (this->m_string.empty())
-            {
+            if (this->m_string.empty()) {
                 const tgui::Vector2f innerSize = this->m_backgroundComponent->getClientSize();
 
                 Widget::setSize({
@@ -129,8 +123,7 @@ namespace FileShare::GUI::Components {
         this->updateTextPosition();
     }
 
-    void Button::updateTextPosition()
-    {
+    void Button::updateTextPosition() {
         if (this->getImageScaling() >= 0) {
             tgui::BitmapButton::updateTextPosition();
             return;
@@ -138,8 +131,7 @@ namespace FileShare::GUI::Components {
 
         const tgui::Vector2f innerSize = this->m_backgroundComponent->getClientSize();
         tgui::Vector2f contentSize = this->m_textComponent->getSize();
-        if (!this->m_string.empty())
-        {
+        if (!this->m_string.empty()) {
             contentSize.x += this->distanceBetweenTextAndImage + this->imageComponent->getSize().x;
             contentSize.y = std::max(contentSize.y, this->imageComponent->getSize().y);
         }
@@ -147,7 +139,7 @@ namespace FileShare::GUI::Components {
         this->m_textPosition.x.updateParentSize(innerSize.x);
         this->m_textPosition.y.updateParentSize(innerSize.y);
 
-        auto offsetX = 6+ this->offset;
+        auto offsetX = 6 + this->offset;
         if (this->alignment == Alignment::Center) offsetX = 0;
         if (this->alignment == Alignment::Right) offsetX = -offsetX;
 
@@ -168,8 +160,7 @@ namespace FileShare::GUI::Components {
         }
     }
 
-    void Button::recalculateGlyphSize()
-    {
+    void Button::recalculateGlyphSize() {
         if (!this->imageComponent->isVisible()) {
             return;
         }
@@ -195,16 +186,16 @@ namespace FileShare::GUI::Components {
 
     void Button::updateAligment() {
         if (alignment == Alignment::Left) {
-            this->setTextPosition({ "0%", "50%" }, { 0.f, 0.5f });
+            this->setTextPosition({"0%", "50%"}, {0.f, 0.5f});
         } else if (alignment == Alignment::Center) {
-            this->setTextPosition({ "50%", "50%" }, { 0.5f, 0.5f });
+            this->setTextPosition({"50%", "50%"}, {0.5f, 0.5f});
         } else if (alignment == Alignment::Right) {
-            this->setTextPosition({ "100%", "50%" }, { 1.f, 0.5f });
+            this->setTextPosition({"100%", "50%"}, {1.f, 0.5f});
         }
     }
 
     void Button::updateStyle() {
-        static const std::array<std::string, 4> baseNames = { "ButtonPrimary", "ButtonSecondary", "ButtonSoft", "ButtonDanger" };
+        static const std::array<std::string, 4> baseNames = {"ButtonPrimary", "ButtonSecondary", "ButtonSoft", "ButtonDanger"};
 
         std::string themeSection = baseNames[static_cast<int>(type)];
         if (ghost) {

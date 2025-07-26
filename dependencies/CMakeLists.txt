@@ -25,7 +25,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   sqlite_orm
   GIT_REPOSITORY https://github.com/fnc12/sqlite_orm
-  GIT_TAG ff7c878af872f7987b62d825284fb25d6043af10
+  GIT_TAG v1.9.1
 )
 
 set(TGUI_BACKEND "SFML_GRAPHICS")

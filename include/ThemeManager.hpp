@@ -14,15 +14,25 @@
 #include <string>
 #include <TGUI/TGUI.hpp>
 
+#ifdef _WIN32
+#include <windows.h>
+#include <winreg.h>
+#elif __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
+#elif __linux__
+#include <cstdlib>
+#include <fstream>
+#include <algorithm>
+#endif
+
 namespace FileShare::GUI {
     class ThemeManager {
         public:
             static ThemeManager &getInstance();
 
-            void setTheme(const std::string &theme);
-            std::string getCurrentTheme() const { return this->currentTheme; }
-
-            std::string getIconThemeSuffix() const { return this->currentTheme == "light" ? "_black" : "_white"; }
+            static void setTheme(const std::string &theme);
+            static std::string getCurrentTheme() { return getInstance().currentTheme; }
+            static std::string getThemedAssetPath(const std::string &filename) { return "assets/images/" + getInstance().currentTheme + "/" + filename; }
 
         private:
             ThemeManager();
@@ -30,6 +40,9 @@ namespace FileShare::GUI {
             ThemeManager(const ThemeManager&) = delete;
             ThemeManager &operator=(const ThemeManager&) = delete;
 
-            std::string currentTheme = "dark";
+            static std::string detectSystemTheme();
+            void initializeTheme();
+
+            std::string currentTheme = "system";
         };
 }

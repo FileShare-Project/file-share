@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sun May 26 15:18:37 2024 Léo Lhuile
+** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
 **
 ** Debug.cpp : Implementation of Debug class
 */
@@ -12,8 +12,7 @@
 #include "Debug.hpp"
 
 namespace FileShare::GUI {
-    void Debug::debug(tgui::Widget *widget, int depth)
-    {
+    void Debug::debug(tgui::Widget *widget, int depth) {
         tgui::String indent = "";
         for (int i = 0; i < depth; i++) {
             indent += "  ";
@@ -26,7 +25,7 @@ namespace FileShare::GUI {
             << std::endl;
 
         if (widget->isContainer()) {
-            auto container = (tgui::Container*)(widget);
+            auto container = (tgui::Container *)(widget);
 
             for (const auto &child : container->getWidgets()) {
                 Debug::debug(child.get(), depth + 1);

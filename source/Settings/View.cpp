@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Thu Jul 24 15:44:13 2025 Léo Lhuile
+** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
 **
 ** Settings/View.cpp : Implementation of Settings/View class
 */
@@ -15,14 +15,13 @@
 #include "ThemeManager.hpp"
 
 namespace FileShare::GUI::Settings {
-    View::View(const char* typeName, bool initRenderer)
-        : Components::ListMenu(typeName, initRenderer)
-    {
+    View::View(const char *typeName, bool initRenderer)
+        : Components::ListMenu(typeName, initRenderer) {
         this->setActiveMode(Components::ListMenu::ActiveMode::AlwaysOne);
         this->setAutoLayout(tgui::AutoLayout::Top);
         this->setAutoSeparatorsBeforeTitles();
         this->setAutoHeight(true);
-        this->getRenderer()->setPadding({ 6, 6 });
+        this->getRenderer()->setPadding({6, 6});
         this->onSelectionChanged.connect(&View::handleMenuSelectionChanged, this);
 
         this->createSettings();
@@ -30,9 +29,8 @@ namespace FileShare::GUI::Settings {
 
     View::~View() {}
 
-    tgui::Signal &View::getSignal(tgui::String signalName)
-    {
-        std::vector<tgui::Signal*> signals = { &this->onMenuChange };
+    tgui::Signal &View::getSignal(tgui::String signalName) {
+        std::vector<tgui::Signal *> signals = {&this->onMenuChange};
 
         for (auto signal : signals) {
             if (signal->getName() == signalName) {
@@ -43,14 +41,11 @@ namespace FileShare::GUI::Settings {
         return tgui::Widget::getSignal(signalName);
     }
 
-    void View::createSettings()
-    {
-        auto iconThemeSuffix = ThemeManager::getInstance().getIconThemeSuffix();
-
+    void View::createSettings() {
         this->menuItems["Application settings"] = this->createApplicationSettings();
-        this->addItem("assets/images/settings" + iconThemeSuffix + ".svg", "Application settings");
+        this->addItem(ThemeManager::getThemedAssetPath("settings.svg"), "Application settings");
 
-        this->addItem("assets/images/settings_device" + iconThemeSuffix + ".svg", "Devices settings");
+        this->addItem(ThemeManager::getThemedAssetPath("settings_device.svg"), "Devices settings");
         this->menuItems["General"] = this->createDevicesGeneralSettings();
         this->addSubItem("General");
         this->menuItems["Virtual folder"] = this->createDevicesVirtualFolderSettings();
@@ -59,24 +54,22 @@ namespace FileShare::GUI::Settings {
         this->addSubItem("Advanced");
 
         this->menuItems["Account"] = this->createAccountSettings();
-        this->addItem("assets/images/account" + iconThemeSuffix + ".svg", "Account");
+        this->addItem(ThemeManager::getThemedAssetPath("account.svg"), "Account");
 
         auto logoutButton = Components::Button::create();
         logoutButton->setText("Logout");
         logoutButton->setType(Components::Button::Type::Danger);
         logoutButton->onPress([this]() {
             this->getSignal("logout").emit(this); // TODO: Implement signal. For now, it's not a bug; it's a feature
-            });
+        });
         this->add(logoutButton);
     }
 
-    tgui::Widget::Ptr View::createApplicationSettings()
-    {
+    tgui::Widget::Ptr View::createApplicationSettings() {
         return this->createSection("Application settings", {});
     }
 
-    tgui::Widget::Ptr View::createDevicesGeneralSettings()
-    {
+    tgui::Widget::Ptr View::createDevicesGeneralSettings() {
         auto deviceNameInput = tgui::EditBox::create();
         deviceNameInput->setWidth("50%");
 
@@ -95,13 +88,11 @@ namespace FileShare::GUI::Settings {
         });
     }
 
-    tgui::Widget::Ptr View::createDevicesVirtualFolderSettings()
-    {
+    tgui::Widget::Ptr View::createDevicesVirtualFolderSettings() {
         return this->createSection("Devices settings - Virtual folder", {});
     }
 
-    tgui::Widget::Ptr View::createDevicesAdvancedSettings()
-    {
+    tgui::Widget::Ptr View::createDevicesAdvancedSettings() {
         auto virtualRootNameInput = tgui::EditBox::create();
         virtualRootNameInput->setWidth("50%");
 
@@ -126,18 +117,16 @@ namespace FileShare::GUI::Settings {
         });
     }
 
-    tgui::Widget::Ptr View::createAccountSettings()
-    {
+    tgui::Widget::Ptr View::createAccountSettings() {
         return this->createSection("Account settings", {});
     }
 
-    tgui::Widget::Ptr View::createSection(const tgui::String &title, std::vector<tgui::Widget::Ptr> contents)
-    {
+    tgui::Widget::Ptr View::createSection(const tgui::String &title, std::vector<tgui::Widget::Ptr> contents) {
         Components::List::Ptr list = Components::List::create();
         list->setAutoLayout(tgui::AutoLayout::Top);
         list->setAutoHeight(true);
         list->setSpaceBetweenItems(6);
-        list->getRenderer()->setPadding({ 6, 6 });
+        list->getRenderer()->setPadding({6, 6});
 
         tgui::Label::Ptr label = tgui::Label::create(title);
         label->getRenderer()->setTextSize(18);
@@ -155,8 +144,7 @@ namespace FileShare::GUI::Settings {
         return list;
     }
 
-    tgui::Widget::Ptr View::createSectionInput(const tgui::Widget::Ptr &input, const tgui::String &label)
-    {
+    tgui::Widget::Ptr View::createSectionInput(const tgui::Widget::Ptr &input, const tgui::String &label) {
         tgui::Group::Ptr group = tgui::Group::create();
 
         if (!label.empty()) {
@@ -174,8 +162,7 @@ namespace FileShare::GUI::Settings {
         return group;
     }
 
-    void View::handleMenuSelectionChanged(const std::vector<tgui::String> &selection)
-    {
+    void View::handleMenuSelectionChanged(const std::vector<std::reference_wrapper<const tgui::String>> &selection) {
         this->currentMenuContent = nullptr;
 
         for (const auto &menuItem : this->menuItems) {

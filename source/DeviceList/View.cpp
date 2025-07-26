@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Thu May 30 08:59:00 2024 Léo Lhuile
-** Last update Thu May 30 08:59:00 2024 Léo Lhuile
+** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
 **
 ** DeviceList/View.cpp : Implementation of DeviceList/View class
 */
@@ -12,9 +12,8 @@
 #include "DeviceList/View.hpp"
 
 namespace FileShare::GUI::DeviceList {
-    View::View(const char* typeName, bool initRenderer)
-        : Components::ListMenu(typeName, initRenderer)
-    {
+    View::View(const char *typeName, bool initRenderer)
+        : Components::ListMenu(typeName, initRenderer) {
         this->setAutoLayout(tgui::AutoLayout::Top);
         this->setAutoHeight(true);
         this->getRenderer()->setPadding({6, 6});
@@ -24,9 +23,8 @@ namespace FileShare::GUI::DeviceList {
 
     View::~View() {}
 
-    tgui::Signal &View::getSignal(tgui::String signalName)
-    {
-        std::vector<tgui::Signal*> signals = { &this->onSelectDevice, &this->onToggleDevice };
+    tgui::Signal &View::getSignal(tgui::String signalName) {
+        std::vector<tgui::Signal *> signals = {&this->onSelectDevice, &this->onToggleDevice};
 
         for (auto signal : signals) {
             if (signal->getName() == signalName) {
@@ -37,14 +35,12 @@ namespace FileShare::GUI::DeviceList {
         return tgui::Widget::getSignal(signalName);
     }
 
-    void View::setCurrentDevice(std::string &device)
-    {
+    void View::setCurrentDevice(std::string &device) {
         tgui::Label::Ptr label = this->get<tgui::Label>("CurrentDevice::label");
         label->setText(device);
     }
 
-    void View::setCurrentDeviceConnected(bool connected)
-    {
+    void View::setCurrentDeviceConnected(bool connected) {
         tgui::Picture::Ptr picture = this->get<tgui::Picture>("CurrentDevice::picture");
         picture->getRenderer()->setTexture(connected
             ? "assets/images/button-green.png"
@@ -52,11 +48,10 @@ namespace FileShare::GUI::DeviceList {
         );
     }
 
-    void View::createCurrentDeviceSection()
-    {
+    void View::createCurrentDeviceSection() {
         tgui::Panel::Ptr panel = tgui::Panel::create();
         panel->setHeight(64);
-        panel->getRenderer()->setPadding({ 8, 8 });
+        panel->getRenderer()->setPadding({8, 8});
         panel->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
         panel->onClick([this]() {
             this->onToggleDevice.emit(this);
@@ -64,20 +59,20 @@ namespace FileShare::GUI::DeviceList {
 
         tgui::Picture::Ptr picture = tgui::Picture::create("assets/images/button-red.png", true);
         picture->setWidgetName("CurrentDevice::picture");
-        picture->setPosition({ 0, 6 });
-        picture->setSize({ 12, 12 });
+        picture->setPosition({0, 6});
+        picture->setSize({12, 12});
         panel->add(picture);
 
         tgui::Label::Ptr title = tgui::Label::create("Current device:");
-        title->setPosition({ 20, 0 });
-        title->setSize({ "100%", "50%" });
+        title->setPosition({20, 0});
+        title->setSize({"100%", "50%"});
         title->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
         title->setVerticalAlignment(tgui::VerticalAlignment::Center);
         panel->add(title);
 
         tgui::Label::Ptr label = tgui::Label::create();
-        label->setPosition({ 0, "50%" });
-        label->setSize({ "100%", "50%" });
+        label->setPosition({0, "50%"});
+        label->setSize({"100%", "50%"});
         label->setWidgetName("CurrentDevice::label");
         label->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         label->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -86,8 +81,7 @@ namespace FileShare::GUI::DeviceList {
         this->add(panel);
     }
 
-    void View::createSection(const std::string &title, const std::vector<std::string> &options)
-    {
+    void View::createSection(const std::string &title, const std::vector<std::string> &options) {
         this->addTitle(title);
         for (auto option : options) {
             auto item = this->addItem("assets/images/button-red.png", option);

@@ -16,7 +16,7 @@
 namespace FileShare::GUI::Components {
     class List : public tgui::Panel {
         public:
-            List(const char* typeName = "Components::List", bool initRenderer = true);
+            List(const char *typeName = "Components::List", bool initRenderer = true);
             ~List();
 
             typedef std::shared_ptr<List> Ptr;

@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
-** Last update Thu Jul 24 15:44:13 2025 Léo Lhuile
+** Last update Sat Jan 15 21:08:44 2024 Léo Lhuile
 **
 ** Application.hpp : Class to manage the application.
 */

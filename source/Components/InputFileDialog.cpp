@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Tue May 28 23:28:58 2024 Léo Lhuile
-** Last update Tue May 28 23:28:58 2024 Léo Lhuile
+** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
 **
 ** InputFileDialog.cpp : Implementation of InputFileDialog class
 */
@@ -13,9 +13,8 @@
 #include "Components/InputFileDialog.hpp"
 
 namespace FileShare::GUI::Components {
-    InputFileDialog::InputFileDialog(const char* typeName, bool initRenderer)
-        : tgui::EditBox(typeName, initRenderer)
-    {
+    InputFileDialog::InputFileDialog(const char *typeName, bool initRenderer)
+        : tgui::EditBox(typeName, initRenderer) {
         this->setRenderer(tgui::Theme::getDefault()->getRendererNoThrow("EditBox"));
 
         this->setReadOnly(true);
@@ -24,10 +23,9 @@ namespace FileShare::GUI::Components {
 
     InputFileDialog::~InputFileDialog() {}
 
-    void InputFileDialog::openFileDialog()
-    {
-        sf::RenderWindow window = { sf::VideoMode(800, 600), "FileShare - Select folder" };
-        tgui::Gui gui = { window };
+    void InputFileDialog::openFileDialog() {
+        sf::RenderWindow window = {sf::VideoMode(800, 600), "FileShare - Select folder"};
+        tgui::Gui gui = {window};
 
         auto fileDialog = tgui::FileDialog::create("", "Select", true);
         fileDialog->getRenderer()->setTitleBarHeight(0);

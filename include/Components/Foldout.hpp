@@ -18,7 +18,7 @@
 namespace FileShare::GUI::Components {
     class Foldout : public tgui::Group {
         public:
-            Foldout(const char* typeName = "Components::Foldout", bool initRenderer = true);
+            Foldout(const char *typeName = "Components::Foldout", bool initRenderer = true);
             ~Foldout();
 
             typedef std::shared_ptr<Foldout> Ptr;

@@ -18,7 +18,7 @@
 namespace FileShare::GUI::DeviceList {
     class View : public Components::ListMenu {
         public:
-            View(const char* typeName = "DeviceList::View", bool initRenderer = true);
+            View(const char *typeName = "DeviceList::View", bool initRenderer = true);
             ~View();
 
             typedef std::shared_ptr<View> Ptr;

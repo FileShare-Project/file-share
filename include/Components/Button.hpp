@@ -35,7 +35,7 @@ namespace FileShare::GUI::Components {
                 Large
             };
 
-            Button(const char* typeName = "Components::Button", bool initRenderer = true);
+            Button(const char *typeName = "Components::Button", bool initRenderer = true);
             ~Button();
 
             typedef std::shared_ptr<Button> Ptr;

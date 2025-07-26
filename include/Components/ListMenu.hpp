@@ -26,7 +26,7 @@ namespace FileShare::GUI::Components {
                 Multiple,
             };
 
-            ListMenu(const char* typeName = "Components::ListMenu", bool initRenderer = true);
+            ListMenu(const char *typeName = "Components::ListMenu", bool initRenderer = true);
             ~ListMenu();
 
             typedef std::shared_ptr<ListMenu> Ptr;
@@ -40,7 +40,7 @@ namespace FileShare::GUI::Components {
             tgui::SignalString onMenuClicked = { "MenuClicked" };
             tgui::SignalString onMenuActive = { "MenuActived" };
             tgui::SignalString onMenuInactive = { "MenuInactived" };
-            tgui::SignalTyped<const std::vector<tgui::String>&> onSelectionChanged = { "SelectionChanged" };
+            tgui::SignalTyped<const std::vector<std::reference_wrapper<const tgui::String>> &> onSelectionChanged = { "SelectionChanged" };
 
             void setAutoSeparatorsBeforeTitles(bool enable = true) { this->autoSeparators = enable; }
 

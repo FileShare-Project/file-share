@@ -18,7 +18,7 @@
 namespace FileShare::GUI::Settings {
     class View : public Components::ListMenu {
         public:
-            View(const char* typeName = "Settings::View", bool initRenderer = true);
+            View(const char *typeName = "Settings::View", bool initRenderer = true);
             ~View();
 
             typedef std::shared_ptr<View> Ptr;
@@ -50,6 +50,6 @@ namespace FileShare::GUI::Settings {
             std::map<tgui::String, tgui::Widget::Ptr> menuItems;
             tgui::Widget::Ptr currentMenuContent = nullptr;
 
-            void handleMenuSelectionChanged(const std::vector<tgui::String> &selection);
+            void handleMenuSelectionChanged(const std::vector<std::reference_wrapper<const tgui::String>> &selection);
     };
 }

@@ -21,7 +21,7 @@ namespace FileShare::GUI::Components {
                 Directory
             };
 
-            InputFileDialog(const char* typeName = "Components::InputFileDialog", bool initRenderer = true);
+            InputFileDialog(const char *typeName = "Components::InputFileDialog", bool initRenderer = true);
             ~InputFileDialog();
 
             typedef std::shared_ptr<InputFileDialog> Ptr;
