@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** InputFileDialog.hpp : Class to manage an InputFileDialog.
 */
@@ -22,7 +22,7 @@ namespace FileShare::GUI::Components {
             };
 
             InputFileDialog(const char *typeName = "Components::InputFileDialog", bool initRenderer = true);
-            ~InputFileDialog();
+            ~InputFileDialog() = default;
 
             typedef std::shared_ptr<InputFileDialog> Ptr;
             typedef std::shared_ptr<const InputFileDialog> ConstPtr;

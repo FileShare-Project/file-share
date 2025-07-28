@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
-** Last update Thu Jul 24 15:44:13 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** Button.hpp : Class to manage a button with icon and extra informations.
 */
@@ -36,7 +36,7 @@ namespace FileShare::GUI::Components {
             };
 
             Button(const char *typeName = "Components::Button", bool initRenderer = true);
-            ~Button();
+            ~Button() = default;
 
             typedef std::shared_ptr<Button> Ptr;
             typedef std::shared_ptr<const Button> ConstPtr;

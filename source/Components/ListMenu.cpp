@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** ListMenu.cpp : Implementation of ListMenu class
 */
@@ -13,10 +13,8 @@
 
 namespace FileShare::GUI::Components {
     ListMenu::ListMenu(const char *typeName, bool initRenderer)
-        : List(typeName, initRenderer) {
-    }
-
-    ListMenu::~ListMenu() {}
+        : List(typeName, initRenderer)
+    {}
 
     tgui::Signal &ListMenu::getSignal(tgui::String signalName) {
         std::vector<tgui::Signal *> signals = {&this->onMenuClicked, &this->onMenuActive, &this->onMenuInactive, &this->onSelectionChanged};

@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** Button.cpp : Implementation of Button class
 */
@@ -14,7 +14,8 @@
 
 namespace FileShare::GUI::Components {
     Button::Button(const char *typeName, bool initRenderer)
-        : tgui::BitmapButton(typeName, initRenderer) {
+        : tgui::BitmapButton(typeName, initRenderer)
+    {
         for (const auto &component : this->m_backgroundComponent->getComponents()) {
             auto imageComponent = std::dynamic_pointer_cast<tgui::priv::dev::ImageComponent>(component);
             if (imageComponent) {
@@ -28,8 +29,6 @@ namespace FileShare::GUI::Components {
         this->updateStyle();
         this->onClick(&Button::setFocused, this, false);
     }
-
-    Button::~Button() {}
 
     void Button::canBeActive(bool active, bool automatic) {
         if (active == this->isActive()) {

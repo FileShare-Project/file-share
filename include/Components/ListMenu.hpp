@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** ListMenu.hpp : Class to manage a menu rendered as a list.
 */
@@ -27,7 +27,7 @@ namespace FileShare::GUI::Components {
             };
 
             ListMenu(const char *typeName = "Components::ListMenu", bool initRenderer = true);
-            ~ListMenu();
+            ~ListMenu() = default;
 
             typedef std::shared_ptr<ListMenu> Ptr;
             typedef std::shared_ptr<const ListMenu> ConstPtr;

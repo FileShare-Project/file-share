@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Thu Jul 24 15:44:13 2025 Léo Lhuile
-** Last update Thu Jul 24 15:44:13 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** ThemeManager.hpp : Theme management system
 */
@@ -14,15 +14,16 @@
 #include <string>
 #include <TGUI/TGUI.hpp>
 
-#ifdef _WIN32
-#include <windows.h>
-#include <winreg.h>
-#elif __APPLE__
-#include <CoreFoundation/CoreFoundation.h>
-#elif __linux__
-#include <cstdlib>
-#include <fstream>
-#include <algorithm>
+#include <CppSockets/OSDetection.hpp>
+#ifdef OS_WINDOWS
+    #include <windows.h>
+    #include <winreg.h>
+#elif defined(OS_APPLE)
+    #include <CoreFoundation/CoreFoundation.h>
+#elif defined(OS_LINUX)
+    #include <cstdlib>
+    #include <fstream>
+    #include <algorithm>
 #endif
 
 namespace FileShare::GUI {
@@ -35,7 +36,7 @@ namespace FileShare::GUI {
             static std::string getThemedAssetPath(const std::string &filename) { return "assets/images/" + getInstance().currentTheme + "/" + filename; }
 
         private:
-            ThemeManager();
+            ThemeManager() = default;
             ~ThemeManager() = default;
             ThemeManager(const ThemeManager&) = delete;
             ThemeManager &operator=(const ThemeManager&) = delete;

@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Thu Dec 28 21:54:14 2023 Léo Lhuile
-** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** Application.cpp : Implementation of Application class
 */
@@ -16,13 +16,12 @@
 namespace FileShare::GUI {
     Application::Application()
         : window(sf::VideoMode(1200, 800), "FileShare")
-        , gui(window) {
-    }
-
-    Application::~Application() {}
+        , gui(window)
+    {}
 
     void Application::init() {
         auto &themeManager = ThemeManager::getInstance();
+        themeManager.setTheme(themeManager.getCurrentTheme());
 
         tgui::ScrollablePanel::Ptr content = tgui::ScrollablePanel::create();
         content->setAutoLayout(tgui::AutoLayout::Fill);

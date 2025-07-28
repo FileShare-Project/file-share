@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Tue May 28 23:28:58 2024 Léo Lhuile
-** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** InputFileDialog.cpp : Implementation of InputFileDialog class
 */
@@ -14,14 +14,13 @@
 
 namespace FileShare::GUI::Components {
     InputFileDialog::InputFileDialog(const char *typeName, bool initRenderer)
-        : tgui::EditBox(typeName, initRenderer) {
+        : tgui::EditBox(typeName, initRenderer)
+    {
         this->setRenderer(tgui::Theme::getDefault()->getRendererNoThrow("EditBox"));
 
         this->setReadOnly(true);
         this->onClick(&InputFileDialog::openFileDialog, this);
     }
-
-    InputFileDialog::~InputFileDialog() {}
 
     void InputFileDialog::openFileDialog() {
         sf::RenderWindow window = {sf::VideoMode(800, 600), "FileShare - Select folder"};

@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** Foldout.cpp : Implementation of Foldout class
 */
@@ -14,11 +14,10 @@
 
 namespace FileShare::GUI::Components {
     Foldout::Foldout(const char *typeName, bool initRenderer)
-        : tgui::Group(typeName, initRenderer) {
+        : tgui::Group(typeName, initRenderer)
+    {
         this->build();
     }
-
-    Foldout::~Foldout() {}
 
     tgui::Signal &Foldout::getSignal(tgui::String signalName) {
         std::vector<tgui::Signal *> signals = {&this->onClick, &this->onOpen, &this->onClose};

@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** Foldout.hpp : Class to manage a foldout with icon and extra informations.
 */
@@ -19,7 +19,7 @@ namespace FileShare::GUI::Components {
     class Foldout : public tgui::Group {
         public:
             Foldout(const char *typeName = "Components::Foldout", bool initRenderer = true);
-            ~Foldout();
+            ~Foldout() = default;
 
             typedef std::shared_ptr<Foldout> Ptr;
             typedef std::shared_ptr<const Foldout> ConstPtr;

@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** List.cpp : Implementation of List class
 */
@@ -14,10 +14,8 @@
 
 namespace FileShare::GUI::Components {
     List::List(const char *typeName, bool initRenderer)
-        : tgui::Panel(typeName, initRenderer) {
-    }
-
-    List::~List() {}
+        : tgui::Panel(typeName, initRenderer)
+    {}
 
     void List::setSpaceBetweenItems(unsigned int space) {
         this->space = space;
@@ -39,9 +37,9 @@ namespace FileShare::GUI::Components {
         item->setWidth("100%");
         this->onSizeChangeSignals.push_back(
             item->onSizeChange.connect([this, widgetIndex]() {
-            this->updateItemsPosition(widgetIndex);
-            this->updateHeight();
-        })
+                this->updateItemsPosition(widgetIndex);
+                this->updateHeight();
+            })
         );
         this->updateItemsPosition(widgetIndex);
         this->updateHeight();

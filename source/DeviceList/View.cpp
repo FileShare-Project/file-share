@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Thu May 30 08:59:00 2024 Léo Lhuile
-** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** DeviceList/View.cpp : Implementation of DeviceList/View class
 */
@@ -13,7 +13,8 @@
 
 namespace FileShare::GUI::DeviceList {
     View::View(const char *typeName, bool initRenderer)
-        : Components::ListMenu(typeName, initRenderer) {
+        : Components::ListMenu(typeName, initRenderer)
+    {
         this->setAutoLayout(tgui::AutoLayout::Top);
         this->setAutoHeight(true);
         this->getRenderer()->setPadding({6, 6});

@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Thu Jul 24 15:44:13 2025 Léo Lhuile
-** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** ThemeManager.cpp : Implementation of ThemeManager class
 */
@@ -12,12 +12,9 @@
 #include "ThemeManager.hpp"
 
 namespace FileShare::GUI {
-    ThemeManager::ThemeManager() {
-        this->initializeTheme();
-    }
-
     ThemeManager &ThemeManager::getInstance() {
         static ThemeManager instance;
+
         return instance;
     }
 
@@ -105,7 +102,7 @@ namespace FileShare::GUI {
                 std::string scheme(buffer);
                 pclose(pipe);
                 std::transform(scheme.begin(), scheme.end(), scheme.begin(), ::tolower);
-                if (scheme.find("dark") != std::string::npos || scheme.find("breeze dark") != std::string::npos) {
+                if (scheme.find("dark") != std::string::npos) {
                     return "dark";
                 }
             } else {
@@ -129,17 +126,5 @@ namespace FileShare::GUI {
         // Unsupported platform - fallback to dark
         return "dark";
 #endif
-    }
-
-    // TODO: remove after we store the value inside SQLite
-    void ThemeManager::initializeTheme() {
-        std::string actualTheme = this->currentTheme;
-
-        if (this->currentTheme == "system") {
-            actualTheme = detectSystemTheme();
-        }
-
-        this->currentTheme = actualTheme;
-        tgui::Theme::setDefault("assets/themes/" + actualTheme + ".txt");
     }
 }
