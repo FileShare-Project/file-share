@@ -60,6 +60,7 @@ add_executable(file-share
   source/main.cpp
   source/Application.cpp
   source/Debug.cpp
+  source/ThemeManager.cpp
   source/Components/Button.cpp
   source/Components/Foldout.cpp
   source/Components/InputFileDialog.cpp
@@ -70,6 +71,14 @@ add_executable(file-share
 
 target_compile_definitions(file-share PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
 target_link_libraries(file-share tgui sfml-graphics sfml-window sfml-system sqlite_orm::sqlite_orm fsp)
+
+# Platform-specific libraries for theme detection
+if(APPLE)
+    target_link_libraries(file-share "-framework CoreFoundation")
+elseif(WIN32)
+    target_link_libraries(file-share winreg)
+endif()
+
 target_compile_options(file-share PRIVATE
   $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>
   $<$<CXX_COMPILER_ID:MSVC>:/W4>

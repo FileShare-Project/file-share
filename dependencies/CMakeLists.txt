@@ -25,7 +25,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   sqlite_orm
   GIT_REPOSITORY https://github.com/fnc12/sqlite_orm
-  GIT_TAG ff7c878af872f7987b62d825284fb25d6043af10
+  GIT_TAG v1.9.1
 )
 
 set(TGUI_BACKEND "SFML_GRAPHICS")
@@ -33,7 +33,7 @@ set(TGUI_BUILD_FRAMEWORK FALSE)
 FetchContent_Declare(
   tgui
   GIT_REPOSITORY  https://github.com/texus/TGUI
-  GIT_TAG         002ec9d21111d5a42ded92e589b8fb485933b3f9
+  GIT_TAG         v1.10.0
   FIND_PACKAGE_ARGS NAMES TGUI
 )
 

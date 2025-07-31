@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sun May 26 15:18:37 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** ListMenu.cpp : Implementation of ListMenu class
 */
@@ -12,16 +12,12 @@
 #include "Components/ListMenu.hpp"
 
 namespace FileShare::GUI::Components {
-    ListMenu::ListMenu(const char* typeName, bool initRenderer)
+    ListMenu::ListMenu(const char *typeName, bool initRenderer)
         : List(typeName, initRenderer)
-    {
-    }
+    {}
 
-    ListMenu::~ListMenu() {}
-
-    tgui::Signal &ListMenu::getSignal(tgui::String signalName)
-    {
-        std::vector<tgui::Signal*> signals = { &this->onMenuClicked, &this->onMenuActive, &this->onMenuInactive, &this->onSelectionChanged };
+    tgui::Signal &ListMenu::getSignal(tgui::String signalName) {
+        std::vector<tgui::Signal *> signals = {&this->onMenuClicked, &this->onMenuActive, &this->onMenuInactive, &this->onSelectionChanged};
 
         for (auto signal : signals) {
             if (signal->getName() == signalName) {
@@ -32,8 +28,7 @@ namespace FileShare::GUI::Components {
         return tgui::Widget::getSignal(signalName);
     }
 
-    tgui::Widget::Ptr ListMenu::addItem(const tgui::String &icon, const tgui::String &title, const tgui::String &widgetName)
-    {
+    tgui::Widget::Ptr ListMenu::addItem(const tgui::String &icon, const tgui::String &title, const tgui::String &widgetName) {
         if (this->currentFoldout && this->activeItems.size() == 0 && (this->activeMode == ListMenu::ActiveMode::AlwaysOne || this->activeMode == ListMenu::ActiveMode::AtLeastOne)) {
             this->currentFoldout->open();
             this->activeItems.push_back(this->currentFoldout);
@@ -67,8 +62,7 @@ namespace FileShare::GUI::Components {
         return item;
     }
 
-    tgui::Widget::Ptr ListMenu::addSubItem(const tgui::String &title, const tgui::String &widgetName)
-    {
+    tgui::Widget::Ptr ListMenu::addSubItem(const tgui::String &title, const tgui::String &widgetName) {
         if (!this->currentFoldout) {
             throw std::runtime_error("No foldout to add sub item to");
         }
@@ -93,8 +87,7 @@ namespace FileShare::GUI::Components {
         return subItem;
     }
 
-    tgui::Widget::Ptr ListMenu::addTitle(const tgui::String &title, const tgui::String &widgetName)
-    {
+    tgui::Widget::Ptr ListMenu::addTitle(const tgui::String &title, const tgui::String &widgetName) {
         if (this->autoSeparators && this->getWidgets().size() > 0) {
             this->addSpacer(6);
             this->addSeparator();
@@ -113,8 +106,7 @@ namespace FileShare::GUI::Components {
         return label;
     }
 
-    void ListMenu::handleItemClicked(Components::Foldout::Ptr item)
-    {
+    void ListMenu::handleItemClicked(Components::Foldout::Ptr item) {
         if (this->activeMode == ListMenu::ActiveMode::None) {
             return;
         }
@@ -173,8 +165,7 @@ namespace FileShare::GUI::Components {
         this->emitSelectionChanged();
     }
 
-    void ListMenu::handleSubItemClicked(Components::Button::Ptr subItem)
-    {
+    void ListMenu::handleSubItemClicked(Components::Button::Ptr subItem) {
         if (this->activeMode == ListMenu::ActiveMode::None) {
             return;
         }
@@ -206,12 +197,11 @@ namespace FileShare::GUI::Components {
         this->emitSelectionChanged();
     }
 
-    void ListMenu::emitSelectionChanged()
-    {
+    void ListMenu::emitSelectionChanged() {
         size_t activeItemsSize = this->activeItems.size();
         size_t activeSubItemsSize = this->activeSubItems.size();
 
-        std::vector<const tgui::String> selection;
+        std::vector<std::reference_wrapper<const tgui::String>> selection;
         selection.reserve(activeItemsSize + activeSubItemsSize);
 
         for (size_t i = 0; i < activeItemsSize; i++) {

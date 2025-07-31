@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sun May 26 15:18:37 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** List.cpp : Implementation of List class
 */
@@ -13,27 +13,21 @@
 #include "Components/List.hpp"
 
 namespace FileShare::GUI::Components {
-    List::List(const char* typeName, bool initRenderer)
+    List::List(const char *typeName, bool initRenderer)
         : tgui::Panel(typeName, initRenderer)
-    {
-    }
+    {}
 
-    List::~List() {}
-
-    void List::setSpaceBetweenItems(unsigned int space)
-    {
+    void List::setSpaceBetweenItems(unsigned int space) {
         this->space = space;
         this->updateItemsPosition();
     }
 
-    void List::setAutoHeight(bool enable)
-    {
+    void List::setAutoHeight(bool enable) {
         this->autoHeight = enable;
         this->updateHeight();
     }
 
-    void List::add(const tgui::Widget::Ptr &item, const tgui::String &widgetName)
-    {
+    void List::add(const tgui::Widget::Ptr &item, const tgui::String &widgetName) {
         tgui::Panel::add(item, widgetName);
 
         auto widgetIndex = this->getWidgets().size() - 1;
@@ -51,8 +45,7 @@ namespace FileShare::GUI::Components {
         this->updateHeight();
     }
 
-    bool List::remove(const Widget::Ptr &widget)
-    {
+    bool List::remove(const Widget::Ptr &widget) {
         auto widgets = this->getWidgets();
         auto widgetIndex = std::find(widgets.begin(), widgets.end(), widget) - widgets.begin();
 
@@ -68,8 +61,7 @@ namespace FileShare::GUI::Components {
         return success;
     }
 
-    void List::addSpacer(unsigned int height)
-    {
+    void List::addSpacer(unsigned int height) {
         auto spacer = tgui::Panel::create();
         spacer->setHeight(height);
         spacer->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
@@ -77,8 +69,7 @@ namespace FileShare::GUI::Components {
         this->add(spacer);
     }
 
-    void List::addSeparator(const tgui::Layout2d &size, tgui::Color color)
-    {
+    void List::addSeparator(const tgui::Layout2d &size, tgui::Color color) {
         auto separator = tgui::SeparatorLine::create();
 
         this->add(separator);
@@ -88,8 +79,7 @@ namespace FileShare::GUI::Components {
         separator->getRenderer()->setColor(color);
     }
 
-    void List::updateItemsPosition(unsigned int from)
-    {
+    void List::updateItemsPosition(unsigned int from) {
         auto items = this->getWidgets();
         if (from >= items.size()) {
             return;
@@ -105,8 +95,7 @@ namespace FileShare::GUI::Components {
         }
     }
 
-    void List::updateHeight()
-    {
+    void List::updateHeight() {
         if (!this->autoHeight) {
             return;
         }

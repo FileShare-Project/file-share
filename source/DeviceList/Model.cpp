@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Thu May 30 08:59:00 2024 Léo Lhuile
-** Last update Thu May 30 08:59:00 2024 Léo Lhuile
+** Last update Sat Jul 26 21:26:53 2025 Léo Lhuile
 **
 ** DeviceList/Model.cpp : Implementation of DeviceList/Model class
 */
@@ -25,7 +25,7 @@ namespace FileShare::GUI::DeviceList {
     }
 
     std::vector<std::string> Model::getSections() const {
-        return { "LAN", "Own", "Contacts" };
+        return {"LAN", "Own", "Contacts"};
     }
 
     std::vector<std::string> Model::getDevicesInSection(const std::string &section) const {

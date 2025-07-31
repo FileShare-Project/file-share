@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
         if (parser->is_used(EXECUTE_ARG) && !parser->is_used(CONNECT_ARG)) {
             throw std::runtime_error(EXECUTE_ARG " cannot be used without a peer to connect to. Use " CONNECT_ARG " to provide it.");
         }
-    } catch (const std::runtime_error& err) {
+    } catch (const std::runtime_error &err) {
         std::cerr << "Argument error: " << err.what() << std::endl;
         std::cerr << std::endl;
         std::cerr << "Try -h for more information" << std::endl;

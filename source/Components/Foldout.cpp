@@ -4,25 +4,23 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sun May 26 15:18:37 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** Foldout.cpp : Implementation of Foldout class
 */
 
 #include "Components/Foldout.hpp"
+#include "ThemeManager.hpp"
 
 namespace FileShare::GUI::Components {
-    Foldout::Foldout(const char* typeName, bool initRenderer)
+    Foldout::Foldout(const char *typeName, bool initRenderer)
         : tgui::Group(typeName, initRenderer)
     {
         this->build();
     }
 
-    Foldout::~Foldout() {}
-
-    tgui::Signal &Foldout::getSignal(tgui::String signalName)
-    {
-        std::vector<tgui::Signal*> signals = { &this->onClick, &this->onOpen, &this->onClose };
+    tgui::Signal &Foldout::getSignal(tgui::String signalName) {
+        std::vector<tgui::Signal *> signals = {&this->onClick, &this->onOpen, &this->onClose};
 
         for (auto signal : signals) {
             if (signal->getName() == signalName) {
@@ -33,14 +31,12 @@ namespace FileShare::GUI::Components {
         return tgui::Widget::getSignal(signalName);
     }
 
-    void Foldout::addToContent(const tgui::Widget::Ptr &item, const tgui::String &widgetName)
-    {
+    void Foldout::addToContent(const tgui::Widget::Ptr &item, const tgui::String &widgetName) {
         this->content->add(item, widgetName);
         this->updateContentHeight();
     }
 
-    bool Foldout::removeFromContent(const Widget::Ptr &widget)
-    {
+    bool Foldout::removeFromContent(const Widget::Ptr &widget) {
         if (!this->content) {
             return false;
         }
@@ -54,8 +50,7 @@ namespace FileShare::GUI::Components {
         return success;
     }
 
-    void Foldout::build()
-    {
+    void Foldout::build() {
         this->buildHeader();
 
         this->content = Components::List::create();
@@ -72,8 +67,7 @@ namespace FileShare::GUI::Components {
         });
     }
 
-    void Foldout::buildHeader()
-    {
+    void Foldout::buildHeader() {
         this->header = tgui::Group::create();
         this->header->setPosition({0, 0});
         this->header->setWidth("100%");
@@ -87,7 +81,7 @@ namespace FileShare::GUI::Components {
         this->header->add(this->button);
         this->header->setHeight(this->button->getFullSize().y);
 
-        this->icon = tgui::Picture::create("assets/images/arrow_down_black.svg");
+        this->icon = tgui::Picture::create(tgui::String(ThemeManager::getThemedAssetPath("arrow_down.svg")));
         this->icon->setSize({24, 24});
         this->icon->setPosition({"100% - width", "50% - height / 2"});
         this->icon->setRotation(180, {0.5f, 0.5f});
@@ -95,8 +89,7 @@ namespace FileShare::GUI::Components {
         this->header->add(this->icon);
     }
 
-    void Foldout::toggleContent(bool useAnim)
-    {
+    void Foldout::toggleContent(bool useAnim) {
         if (this->button->isActive() != this->isOpened) {
             this->button->setActive(this->isOpened);
         }
@@ -123,7 +116,7 @@ namespace FileShare::GUI::Components {
         } else {
             if (useAnim) {
                 this->resizeWithAnimation({this->getSize().x, this->button->getFullSize().y}, sf::milliseconds(200));
-                this->closeAnimationSignalId = this->onAnimationFinish([=]() {
+                this->closeAnimationSignalId = this->onAnimationFinish([this]() {
                     this->content->setVisible(false);
                     this->onAnimationFinish.disconnect(this->closeAnimationSignalId);
                     this->closeAnimationSignalId = -1;
@@ -136,8 +129,7 @@ namespace FileShare::GUI::Components {
         }
     }
 
-    void Foldout::updateContentHeight()
-    {
+    void Foldout::updateContentHeight() {
         float maxHeight = 0;
         for (const auto &widget : this->content->getWidgets()) {
             const auto position = widget->getPosition();

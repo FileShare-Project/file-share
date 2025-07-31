@@ -4,7 +4,7 @@
 ** Author Léo Lhuile
 **
 ** Started on  Sun May 26 15:18:37 2024 Léo Lhuile
-** Last update Sun May 26 15:18:37 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** Button.cpp : Implementation of Button class
 */
@@ -13,7 +13,7 @@
 #include "Debug.hpp"
 
 namespace FileShare::GUI::Components {
-    Button::Button(const char* typeName, bool initRenderer)
+    Button::Button(const char *typeName, bool initRenderer)
         : tgui::BitmapButton(typeName, initRenderer)
     {
         for (const auto &component : this->m_backgroundComponent->getComponents()) {
@@ -30,10 +30,7 @@ namespace FileShare::GUI::Components {
         this->onClick(&Button::setFocused, this, false);
     }
 
-    Button::~Button() {}
-
-    void Button::canBeActive(bool active, bool automatic)
-    {
+    void Button::canBeActive(bool active, bool automatic) {
         if (active == this->isActive()) {
             return;
         }
@@ -49,8 +46,7 @@ namespace FileShare::GUI::Components {
         }
     }
 
-    void Button::setSize(Size size)
-    {
+    void Button::setSize(Size size) {
         this->size = size;
         if (size == Size::Small) {
             this->setHeight(24);
@@ -67,8 +63,7 @@ namespace FileShare::GUI::Components {
         }
     }
 
-    void Button::setSize(const tgui::Layout2d& size)
-    {
+    void Button::setSize(const tgui::Layout2d &size) {
         if (this->getImageScaling() >= 0) {
             tgui::BitmapButton::setSize(size);
             return;
@@ -78,8 +73,7 @@ namespace FileShare::GUI::Components {
         this->recalculateGlyphSize();
     }
 
-    void Button::updateSize()
-    {
+    void Button::updateSize() {
         if (this->getImageScaling() >= 0) {
             tgui::BitmapButton::updateSize();
             return;
@@ -103,8 +97,7 @@ namespace FileShare::GUI::Components {
 
             this->recalculateGlyphSize();
 
-            if (this->m_string.empty())
-            {
+            if (this->m_string.empty()) {
                 const tgui::Vector2f innerSize = this->m_backgroundComponent->getClientSize();
 
                 Widget::setSize({
@@ -129,8 +122,7 @@ namespace FileShare::GUI::Components {
         this->updateTextPosition();
     }
 
-    void Button::updateTextPosition()
-    {
+    void Button::updateTextPosition() {
         if (this->getImageScaling() >= 0) {
             tgui::BitmapButton::updateTextPosition();
             return;
@@ -138,8 +130,7 @@ namespace FileShare::GUI::Components {
 
         const tgui::Vector2f innerSize = this->m_backgroundComponent->getClientSize();
         tgui::Vector2f contentSize = this->m_textComponent->getSize();
-        if (!this->m_string.empty())
-        {
+        if (!this->m_string.empty()) {
             contentSize.x += this->distanceBetweenTextAndImage + this->imageComponent->getSize().x;
             contentSize.y = std::max(contentSize.y, this->imageComponent->getSize().y);
         }
@@ -147,7 +138,7 @@ namespace FileShare::GUI::Components {
         this->m_textPosition.x.updateParentSize(innerSize.x);
         this->m_textPosition.y.updateParentSize(innerSize.y);
 
-        auto offsetX = 6+ this->offset;
+        auto offsetX = 6 + this->offset;
         if (this->alignment == Alignment::Center) offsetX = 0;
         if (this->alignment == Alignment::Right) offsetX = -offsetX;
 
@@ -168,8 +159,7 @@ namespace FileShare::GUI::Components {
         }
     }
 
-    void Button::recalculateGlyphSize()
-    {
+    void Button::recalculateGlyphSize() {
         if (!this->imageComponent->isVisible()) {
             return;
         }
@@ -195,134 +185,25 @@ namespace FileShare::GUI::Components {
 
     void Button::updateAligment() {
         if (alignment == Alignment::Left) {
-            this->setTextPosition({ "0%", "50%" }, { 0.f, 0.5f });
+            this->setTextPosition({"0%", "50%"}, {0.f, 0.5f});
         } else if (alignment == Alignment::Center) {
-            this->setTextPosition({ "50%", "50%" }, { 0.5f, 0.5f });
+            this->setTextPosition({"50%", "50%"}, {0.5f, 0.5f});
         } else if (alignment == Alignment::Right) {
-            this->setTextPosition({ "100%", "50%" }, { 1.f, 0.5f });
+            this->setTextPosition({"100%", "50%"}, {1.f, 0.5f});
         }
     }
 
     void Button::updateStyle() {
-        auto renderer = this->getRenderer();
-        renderer->setRoundedBorderRadius(4.f);
+        static const std::array<std::string, 4> baseNames = {"ButtonPrimary", "ButtonSecondary", "ButtonSoft", "ButtonDanger"};
 
-        if (type == Type::Primary) {
-            renderer->setBorders({1, 1, 1, 1});
-
-            this->backgroundColor = this->ghost ? tgui::Color::White : tgui::Color("#007BFF");
-            this->textColor = this->ghost ? tgui::Color("#007BFF") : tgui::Color::White;
-            this->borderColor = tgui::Color("#0056b3");
-
-            this->backgroundColorActive = this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#0056b3");
-            this->textColorActive = this->ghost ? tgui::Color("#0056b3") : tgui::Color::White;
-            this->borderColorActive = tgui::Color("#003f7f");
-
-            renderer->setBackgroundColorFocused(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#0056b3"));
-            renderer->setTextColorFocused(this->ghost ? tgui::Color("#0056b3") : tgui::Color::White);
-            renderer->setBorderColorFocused(tgui::Color("#003f7f"));
-
-            renderer->setBackgroundColorHover(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#0069d9"));
-            renderer->setTextColorHover(this->ghost ? tgui::Color("#0069d9") : tgui::Color::White);
-            renderer->setBorderColorHover(tgui::Color("#004c91"));
-
-            renderer->setBackgroundColorDown(this->ghost ? tgui::Color("#CCCCCC") : tgui::Color("#004085"));
-            renderer->setTextColorDown(this->ghost ? tgui::Color("#004085") : tgui::Color::White);
-            renderer->setBorderColorDown(tgui::Color("#002752"));
-
-            renderer->setBackgroundColorDisabled(this->ghost ? tgui::Color("#E0E0E0") : tgui::Color("#7DA2BF"));
-            renderer->setTextColorDisabled(this->ghost ? tgui::Color("#525252") : tgui::Color("#525252"));
-            renderer->setBorderColorDisabled(tgui::Color("#A1A1A1"));
-        } else if (type == Type::Secondary) {
-            renderer->setBorders({1, 1, 1, 1});
-
-            this->backgroundColor = this->ghost ? tgui::Color::White : tgui::Color("#6C757D");
-            this->textColor = this->ghost ? tgui::Color("#6C757D") : tgui::Color::White;
-            this->borderColor = tgui::Color("#545B62");
-
-            this->backgroundColorActive = this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#5A6268");
-            this->textColorActive = this->ghost ? tgui::Color("#5A6268") : tgui::Color::White;
-            this->borderColorActive = tgui::Color("#3A3F44");
-
-            renderer->setBackgroundColorFocused(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#5A6268"));
-            renderer->setTextColorFocused(this->ghost ? tgui::Color("#5A6268") : tgui::Color::White);
-            renderer->setBorderColorFocused(tgui::Color("#3A3F44"));
-
-            renderer->setBackgroundColorHover(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#545B62"));
-            renderer->setTextColorHover(this->ghost ? tgui::Color("#545B62") : tgui::Color::White);
-            renderer->setBorderColorHover(tgui::Color("#3A3F44"));
-
-            renderer->setBackgroundColorDown(this->ghost ? tgui::Color("#CCCCCC") : tgui::Color("#3A3F44"));
-            renderer->setTextColorDown(this->ghost ? tgui::Color("#3A3F44") : tgui::Color::White);
-            renderer->setBorderColorDown(tgui::Color("#1A1C1F"));
-
-            renderer->setBackgroundColorDisabled(this->ghost ? tgui::Color("#E0E0E0") : tgui::Color("#B0B0B0"));
-            renderer->setTextColorDisabled(this->ghost ? tgui::Color("#525252") : tgui::Color("#525252"));
-            renderer->setBorderColorDisabled(tgui::Color("#A1A1A1"));
-        } else if (type == Type::Soft) {
-            renderer->setBorders({0, 0, 0, 0});
-
-            this->backgroundColor = this->ghost ? tgui::Color::Transparent : tgui::Color("#F9F9F9");
-            this->textColor = tgui::Color("#333333");
-            this->borderColor = tgui::Color("#CCCCCC");
-
-            this->backgroundColorActive = this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#F9F9F9");
-            this->textColorActive = tgui::Color("#333333");
-            this->borderColorActive = tgui::Color("#CCCCCC");
-
-            renderer->setBackgroundColorHover(tgui::Color("#DDDDDD"));
-            renderer->setTextColorHover(tgui::Color("#333333"));
-            renderer->setBorderColorHover(tgui::Color("#CCCCCC"));
-
-            renderer->setBackgroundColorDown(tgui::Color("#CCCCCC"));
-            renderer->setTextColorDown(tgui::Color("#333333"));
-            renderer->setBorderColorDown(tgui::Color("#CCCCCC"));
-
-            renderer->setBackgroundColorFocused(tgui::Color("#EFEFEF"));
-            renderer->setTextColorFocused(tgui::Color("#333333"));
-            renderer->setBorderColorFocused(tgui::Color("#CCCCCC"));
-
-            renderer->setBackgroundColorDisabled(tgui::Color("#E0E0E0"));
-            renderer->setTextColorDisabled(tgui::Color("#525252"));
-            renderer->setBorderColorDisabled(tgui::Color("#A1A1A1"));
-        } else if (type == Type::Danger) {
-            renderer->setBorders({1, 1, 1, 1});
-
-            this->backgroundColor = this->ghost ? tgui::Color::White : tgui::Color("#DC3545");
-            this->textColor = this->ghost ? tgui::Color("#DC3545") : tgui::Color::White;
-            this->borderColor = tgui::Color("#C82333");
-
-            this->backgroundColorActive = this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#DC3545");
-            this->textColorActive = this->ghost ? tgui::Color("#DC3545") : tgui::Color::White;
-            this->borderColorActive = tgui::Color("#8B1A25");
-
-            renderer->setBackgroundColorFocused(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#B02A37"));
-            renderer->setTextColorFocused(this->ghost ? tgui::Color("#B02A37") : tgui::Color::White);
-            renderer->setBorderColorFocused(tgui::Color("#8B1A25"));
-
-            renderer->setBackgroundColorHover(this->ghost ? tgui::Color("#E8E8E8") : tgui::Color("#C82333"));
-            renderer->setTextColorHover(this->ghost ? tgui::Color("#C82333") : tgui::Color::White);
-            renderer->setBorderColorHover(tgui::Color("#A91D2F"));
-
-            renderer->setBackgroundColorDown(this->ghost ? tgui::Color("#CCCCCC") : tgui::Color("#9B1C28"));
-            renderer->setTextColorDown(this->ghost ? tgui::Color("#9B1C28") : tgui::Color::White);
-            renderer->setBorderColorDown(tgui::Color("#7A1823"));
-
-            renderer->setBackgroundColorDisabled(this->ghost ? tgui::Color("#E0E0E0") : tgui::Color("#D6A8A8"));
-            renderer->setTextColorDisabled(this->ghost ? tgui::Color("#525252") : tgui::Color("#525252"));
-            renderer->setBorderColorDisabled(tgui::Color("#A1A1A1"));
+        std::string themeSection = baseNames[static_cast<int>(type)];
+        if (ghost) {
+            themeSection += "Ghost";
+        }
+        if (this->isActive()) {
+            themeSection += "Active";
         }
 
-        this->updateActiveStyle();
-    }
-
-    void Button::updateActiveStyle()
-    {
-        auto renderer = this->getRenderer();
-        auto isActive = this->isActive();
-
-        renderer->setBackgroundColor(isActive ? this->backgroundColorActive : this->backgroundColor);
-        renderer->setTextColor(isActive ? this->textColorActive : this->textColor);
-        renderer->setBorderColor(isActive ? this->borderColorActive : this->borderColor);
+        this->setRenderer(tgui::Theme::getDefault()->getRenderer(themeSection));
     }
 }

@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sat Jan 15 21:08:44 2022 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2022 Léo Lhuile
+** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** ListMenu.hpp : Class to manage a menu rendered as a list.
 */
@@ -26,8 +26,8 @@ namespace FileShare::GUI::Components {
                 Multiple,
             };
 
-            ListMenu(const char* typeName = "Components::ListMenu", bool initRenderer = true);
-            ~ListMenu();
+            ListMenu(const char *typeName = "Components::ListMenu", bool initRenderer = true);
+            ~ListMenu() = default;
 
             typedef std::shared_ptr<ListMenu> Ptr;
             typedef std::shared_ptr<const ListMenu> ConstPtr;
@@ -40,7 +40,7 @@ namespace FileShare::GUI::Components {
             tgui::SignalString onMenuClicked = { "MenuClicked" };
             tgui::SignalString onMenuActive = { "MenuActived" };
             tgui::SignalString onMenuInactive = { "MenuInactived" };
-            tgui::SignalTyped<const std::vector<const tgui::String>> onSelectionChanged = { "SelectionChanged" };
+            tgui::SignalTyped<const std::vector<std::reference_wrapper<const tgui::String>> &> onSelectionChanged = { "SelectionChanged" };
 
             void setAutoSeparatorsBeforeTitles(bool enable = true) { this->autoSeparators = enable; }
 

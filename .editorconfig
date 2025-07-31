@@ -5,7 +5,34 @@ end_of_line = lf
 insert_final_newline = true
 
 [*.{c++,cc,cpp,cxx,h,h++,hh,hpp,hxx,inl,ipp,tlh,tli}]
-cpp_indent_case_contents_when_block = true
-cpp_new_line_before_open_brace_namespace = same_line
 indent_size = 4
 indent_style = space
+
+# Braces and new lines
+cpp_new_line_before_open_brace_namespace = same_line
+cpp_new_line_before_open_brace_type = same_line
+cpp_new_line_before_open_brace_function = same_line
+cpp_new_line_before_open_brace_block = same_line
+cpp_new_line_before_open_brace_lambda = same_line
+cpp_new_line_before_else = false
+cpp_new_line_before_catch = false
+
+# Pointers and references
+cpp_space_pointer_reference_alignment = right
+
+# General spacing
+cpp_space_before_function_open_parenthesis = never
+cpp_space_after_keywords_in_control_flow_statements = true
+cpp_space_within_control_flow_statement_parentheses = false
+cpp_space_before_block_open_brace = true
+cpp_space_after_comma = true
+cpp_space_before_comma = false
+cpp_space_within_initializer_list_braces = false
+
+# Indentation
+cpp_indent_case_contents_when_block = true
+cpp_indent_namespace_contents = true
+cpp_indent_lambda_braces_when_parameter = false
+cpp_indent_multi_line_relative_to = statement_begin
+cpp_indent_within_parentheses = indent
+cpp_indent_preserve_within_parentheses = true

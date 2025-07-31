@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sat Jan 15 21:08:44 2022 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2022 Léo Lhuile
+** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** Application.hpp : Class to manage the application.
 */
@@ -22,7 +22,7 @@ namespace FileShare::GUI {
     class Application {
         public:
             Application();
-            ~Application();
+            ~Application() = default;
 
             void init();
             void loop();

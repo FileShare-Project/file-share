@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sat Jan 15 21:08:44 2022 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2022 Léo Lhuile
+** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
+** Last update Wed Sep 14 22:26:27 2024 Léo Lhuile
 **
 ** Settings/View.hpp : Class to manage the settings view
 */
@@ -18,7 +18,7 @@
 namespace FileShare::GUI::Settings {
     class View : public Components::ListMenu {
         public:
-            View(const char* typeName = "Settings::View", bool initRenderer = true);
+            View(const char *typeName = "Settings::View", bool initRenderer = true);
             ~View();
 
             typedef std::shared_ptr<View> Ptr;
@@ -50,6 +50,6 @@ namespace FileShare::GUI::Settings {
             std::map<tgui::String, tgui::Widget::Ptr> menuItems;
             tgui::Widget::Ptr currentMenuContent = nullptr;
 
-            void handleMenuSelectionChanged(const std::vector<const tgui::String> selection);
+            void handleMenuSelectionChanged(const std::vector<std::reference_wrapper<const tgui::String>> &selection);
     };
 }

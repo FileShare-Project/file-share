@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sat Jan 15 21:08:44 2022 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2022 Léo Lhuile
+** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
+** Last update Wed Sep 14 22:26:27 2024 Léo Lhuile
 **
 ** DeviceList/View.hpp : Class to manage the device list view
 */
@@ -18,7 +18,7 @@
 namespace FileShare::GUI::DeviceList {
     class View : public Components::ListMenu {
         public:
-            View(const char* typeName = "DeviceList::View", bool initRenderer = true);
+            View(const char *typeName = "DeviceList::View", bool initRenderer = true);
             ~View();
 
             typedef std::shared_ptr<View> Ptr;

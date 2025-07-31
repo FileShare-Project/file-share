@@ -3,8 +3,8 @@
 **
 ** Author Léo Lhuile
 **
-** Started on  Sat Jan 15 21:08:44 2022 Léo Lhuile
-** Last update Wed Sep 14 22:26:27 2022 Léo Lhuile
+** Started on  Sat Jan 15 21:08:44 2024 Léo Lhuile
+** Last update Mon Jul 28 10:03:12 2025 Léo Lhuile
 **
 ** List.hpp : Class to manage a list and render it horizontally.
 */
@@ -16,8 +16,8 @@
 namespace FileShare::GUI::Components {
     class List : public tgui::Panel {
         public:
-            List(const char* typeName = "Components::List", bool initRenderer = true);
-            ~List();
+            List(const char *typeName = "Components::List", bool initRenderer = true);
+            ~List() = default;
 
             typedef std::shared_ptr<List> Ptr;
             typedef std::shared_ptr<const List> ConstPtr;
