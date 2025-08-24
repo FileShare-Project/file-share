@@ -4,7 +4,7 @@
 ** Author Francois Michaut
 **
 ** Started on  Sat Nov 11 11:06:03 2023 Francois Michaut
-** Last update Fri Aug 22 17:19:40 2025 Francois Michaut
+** Last update Sun Aug 24 20:04:30 2025 Francois Michaut
 **
 ** main.cpp : Main entry point of FileShare CLI
 */
@@ -29,6 +29,8 @@
 #define EXECUTE_ARG "--execute"
 #define CONFIG_ARG "--config"
 #define SERVER_CONFIG_ARG "--server-config"
+#define DEFAULT_CONFIG_ARG "--default-config"
+#define DEFAULT_SERVER_CONFIG_ARG "--default-server-config"
 
 void interactive_mode(FileShare::Server &server);
 
@@ -48,6 +50,14 @@ static auto setup_args() -> std::shared_ptr<argparse::ArgumentParser> {
     parser->add_argument(CONFIG_ARG)
         .default_value("")
         .help("Speficy the path to the peer config file.");
+
+    parser->add_argument(DEFAULT_SERVER_CONFIG_ARG)
+        .flag()
+        .help("Use the default server config.");
+
+    parser->add_argument(DEFAULT_CONFIG_ARG)
+        .flag()
+        .help("Use the default peer config.");
 
     parser->add_argument("-c", CONNECT_ARG)
         .nargs(1, 2)
@@ -124,13 +134,29 @@ static void run_server(FileShare::Server &server) {
     }
 }
 
-static void run(std::shared_ptr<argparse::ArgumentParser> &parser) {
+static auto get_server_config(std::shared_ptr<argparse::ArgumentParser> &parser) -> FileShare::ServerConfig {
     auto server_config_path = parser->get<std::string>(SERVER_CONFIG_ARG);
+
+    if (parser->get<bool>(DEFAULT_SERVER_CONFIG_ARG)) {
+        return FileShare::Server::default_config();
+    }
+    return FileShare::ServerConfig::load(server_config_path);
+}
+
+static auto get_default_peer_config(std::shared_ptr<argparse::ArgumentParser> &parser) -> FileShare::Config {
     auto config_path = parser->get<std::string>(CONFIG_ARG);
+
+    if (parser->get<bool>(DEFAULT_CONFIG_ARG)) {
+        return FileShare::Server::default_peer_config();
+    }
+    return FileShare::Config::load(config_path);
+}
+
+static void run(std::shared_ptr<argparse::ArgumentParser> &parser) {
     auto cmds = parser->get<std::vector<std::string>>(EXECUTE_ARG);
 
-    FileShare::ServerConfig config = FileShare::ServerConfig::load(server_config_path);
-    FileShare::Config peer_config = FileShare::Config::load(config_path);
+    FileShare::ServerConfig config = get_server_config(parser);
+    FileShare::Config peer_config = get_default_peer_config(parser);
 
     config.set_server_disabled(!parser->get<bool>(SERVER_ARG));
     FileShare::Server server(config, peer_config);
