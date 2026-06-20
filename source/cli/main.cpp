@@ -4,7 +4,7 @@
 ** Author Francois Michaut
 **
 ** Started on  Sat Nov 11 11:06:03 2023 Francois Michaut
-** Last update Sun Aug 24 20:04:30 2025 Francois Michaut
+** Last update Sat May 23 17:24:04 2026 Francois Michaut
 **
 ** main.cpp : Main entry point of FileShare CLI
 */
@@ -12,6 +12,7 @@
 #include "FileShareVersion.hpp"
 
 #include <FileShare/Config/ServerConfig.hpp>
+#include <FileShare/Errors/ConfigErrors.hpp>
 #include <FileShare/Peer/PreAuthPeer.hpp>
 #include <FileShare/Server.hpp>
 
@@ -20,6 +21,9 @@
 #include <csignal>
 #include <iostream>
 #include <memory>
+
+// TODO: Check if we can use _CRT_NONSTDC_NO_DEPRECATE under windows
+#include <unistd.h>
 
 #define DESCRIPTION "" // TODO
 
@@ -34,21 +38,26 @@
 
 void interactive_mode(FileShare::Server &server);
 
+auto interactive_user_question(const std::string_view &question) -> bool;
+auto interactive_user_input(const std::string_view &question) -> std::string;
+
 static auto setup_args() -> std::shared_ptr<argparse::ArgumentParser> {
     auto parser = std::make_shared<argparse::ArgumentParser>("file-share-cli", FILE_SHARE_VERSION);
 
     parser->add_description(DESCRIPTION);
+
+    // TODO: Add argument groups, and group arguments better
 
     parser->add_argument("-s", SERVER_ARG)
         .flag()
         .help("Enable server, allowing other peers to connect. The program will keep running until killed.");
 
     parser->add_argument(SERVER_CONFIG_ARG)
-        .default_value("")
+        .metavar("PATH")
         .help("Speficy the path to the server config file.");
 
     parser->add_argument(CONFIG_ARG)
-        .default_value("")
+        .metavar("PATH")
         .help("Speficy the path to the peer config file.");
 
     parser->add_argument(DEFAULT_SERVER_CONFIG_ARG)
@@ -60,11 +69,13 @@ static auto setup_args() -> std::shared_ptr<argparse::ArgumentParser> {
         .help("Use the default peer config.");
 
     parser->add_argument("-c", CONNECT_ARG)
-        .nargs(1, 2)
-        .help("Connect to an external server. Format '-c ip [port]'. Required to execute commands.");
+        .nargs(1, 2) // TODO: Instead of using nargs, use a custom action() that would parse the IP and Port in an IPv4 Endpoint. Also change format to ip[:port]
+        .metavar("IP [PORT]") // TODO: Remove the extra "..." that argparse adds
+        .help("Connect to an external server. Format: '-c ip [port]'. Required to execute commands.");
 
     parser->add_argument("-e", EXECUTE_ARG)
         .append()
+        .metavar("COMMAND")
         .help("Add a command to be executed. Repeat the flag to add multiple commands.");
 
     parser->add_argument("-i", INTERACTIVE_ARG)
@@ -76,6 +87,7 @@ static auto setup_args() -> std::shared_ptr<argparse::ArgumentParser> {
     return parser;
 }
 
+// TODO: Replace this by calling the corresponding functions in interactive.cpp
 static void execute_command(std::shared_ptr<FileShare::Peer> &peer, const std::string& cmd) {
     std::stringstream ss(cmd);
     std::string str;
@@ -134,29 +146,70 @@ static void run_server(FileShare::Server &server) {
     }
 }
 
-static auto get_server_config(std::shared_ptr<argparse::ArgumentParser> &parser) -> FileShare::ServerConfig {
-    auto server_config_path = parser->get<std::string>(SERVER_CONFIG_ARG);
+template <class Config> auto get_config(std::shared_ptr<argparse::ArgumentParser> &parser, std::string_view config_arg, std::string_view default_config_arg, Config default_config) -> Config {
+    auto config_path = parser->present<std::string>(config_arg);
 
-    if (parser->get<bool>(DEFAULT_SERVER_CONFIG_ARG)) {
-        return FileShare::Server::default_config();
+    if (parser->get<bool>(default_config_arg)) {
+        return default_config;
     }
-    return FileShare::ServerConfig::load(server_config_path);
+    if (config_path) {
+        return Config::load(config_path.value());
+    }
+    return Config::load(); // Load default config path
 }
 
-static auto get_default_peer_config(std::shared_ptr<argparse::ArgumentParser> &parser) -> FileShare::Config {
-    auto config_path = parser->get<std::string>(CONFIG_ARG);
+static auto get_configs(std::shared_ptr<argparse::ArgumentParser> &parser, bool is_a_tty) -> std::pair<FileShare::ServerConfig, FileShare::Config> {
+    FileShare::ServerConfig server_config;
+    FileShare::Config peer_config;
+    bool first_time_create_configs = false;
 
-    if (parser->get<bool>(DEFAULT_CONFIG_ARG)) {
-        return FileShare::Server::default_peer_config();
+    try {
+        server_config = get_config<FileShare::ServerConfig>(parser, SERVER_CONFIG_ARG, DEFAULT_SERVER_CONFIG_ARG, FileShare::Server::default_config());
+    } catch (const FileShare::Errors::Config::NotFoundError &error) {
+        if (parser->is_used(SERVER_CONFIG_ARG)) {
+            throw error;
+        }
+        if (!is_a_tty) {
+            std::cerr << "Server config not found and cannot ask to create it in non-interactive mode. Please create a config file or use " DEFAULT_SERVER_CONFIG_ARG " to create a new one with the default settings." << std::endl;
+            throw error;
+        }
+
+        first_time_create_configs = interactive_user_question("Server config not found. Do you want to create a new one with default settings?");
+
+        if (first_time_create_configs) {
+            std::string device_name = interactive_user_input("Enter a distinguisable name for this device (will be visible by other peers)");
+
+            if (device_name.empty()) { // User closed STDIN -> TODO Handle this better
+                throw std::runtime_error("Device name cannot be empty");
+            }
+            server_config = FileShare::Server::default_config();
+            server_config.set_device_name(device_name);
+            std::cout << "Selected device name: " << std::quoted(device_name) << std::endl;
+            server_config.save();
+        } else {
+            throw error;
+        }
     }
-    return FileShare::Config::load(config_path);
+    try {
+        peer_config = get_config<FileShare::Config>(parser, CONFIG_ARG, DEFAULT_CONFIG_ARG, FileShare::Server::default_peer_config());
+    } catch (const FileShare::Errors::Config::NotFoundError &error) {
+        if (parser->is_used(CONFIG_ARG)) {
+            throw error;
+        }
+        if (!first_time_create_configs) {
+            std::cerr << "Default peer config not found. Check the permissions of the file or use " DEFAULT_CONFIG_ARG " to create a new one with default settings." << std::endl;
+            throw error;
+        }
+        peer_config = FileShare::Server::default_peer_config();
+        peer_config.save();
+    }
+
+    return {server_config, peer_config};
 }
 
-static void run(std::shared_ptr<argparse::ArgumentParser> &parser) {
+static void run(std::shared_ptr<argparse::ArgumentParser> &parser, bool is_a_tty) {
     auto cmds = parser->get<std::vector<std::string>>(EXECUTE_ARG);
-
-    FileShare::ServerConfig config = get_server_config(parser);
-    FileShare::Config peer_config = get_default_peer_config(parser);
+    auto [config, peer_config] = get_configs(parser, is_a_tty);
 
     config.set_server_disabled(!parser->get<bool>(SERVER_ARG));
     FileShare::Server server(config, peer_config);
@@ -178,7 +231,7 @@ static void run(std::shared_ptr<argparse::ArgumentParser> &parser) {
             }
         }
     }
-    if (parser->get<bool>(INTERACTIVE_ARG)) {
+    if (parser->get<bool>(INTERACTIVE_ARG) || (is_a_tty && !parser->is_used(EXECUTE_ARG))) {
         interactive_mode(server);
     } else if (!server.disabled()) {
         std::cout << "Running Server: Listening on " << server.get_server_endpoint().to_string() << " (Press CTRL+C to stop)" << std::endl;
@@ -188,6 +241,7 @@ static void run(std::shared_ptr<argparse::ArgumentParser> &parser) {
 
 auto main(int argc, char *argv[]) -> int {
     std::shared_ptr<argparse::ArgumentParser> parser = setup_args();
+    bool is_a_tty = isatty(fileno(stdin));
 
     try {
         parser->parse_args(argc, argv);
@@ -204,6 +258,6 @@ auto main(int argc, char *argv[]) -> int {
         return 1;
     }
 
-    run(parser);
+    run(parser, is_a_tty);
     return 0;
 }

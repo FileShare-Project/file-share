@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Wed Jul 10 10:27:39 2024 Francois Michaut
-## Last update Sun Aug 24 20:34:12 2025 Francois Michaut
+## Last update Sat May 23 17:02:38 2026 Francois Michaut
 ##
 ## CMakeLists.txt : CMake to fetch and build the dependecies of the FileShare executable
 ##
@@ -14,7 +14,7 @@ include(FetchContent)
 FetchContent_Declare(
   argparse
   GIT_REPOSITORY  https://github.com/p-ranav/argparse.git
-  GIT_TAG         af442b4da0cd7a07b56fa709bd16571889dc7fda
+  GIT_TAG         3eda91b2e1ce7d569f84ba295507c4cd8fd96910
 )
 FetchContent_Declare(
   SFML

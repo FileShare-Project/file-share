@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Sat Jan 15 01:19:13 2022 Francois Michaut
-## Last update Sun Aug 24 18:59:20 2025 Francois Michaut
+## Last update Fri May 22 18:43:01 2026 Francois Michaut
 ##
 ## CMakeLists.txt : Top level CMake
 ##
@@ -89,6 +89,7 @@ if (BUILD_CLI)
   add_executable(file-share-cli
     source/cli/main.cpp
     source/cli/interactive.cpp
+    source/cli/utils.cpp
   )
 
   target_compile_definitions(file-share-cli PRIVATE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64)
