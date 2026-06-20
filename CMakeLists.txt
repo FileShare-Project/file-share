@@ -4,7 +4,7 @@
 ## Author Francois Michaut
 ##
 ## Started on  Sat Jan 15 01:19:13 2022 Francois Michaut
-## Last update Fri May 22 18:43:01 2026 Francois Michaut
+## Last update Fri Jun 12 01:02:32 2026 Francois Michaut
 ##
 ## CMakeLists.txt : Top level CMake
 ##
@@ -30,7 +30,7 @@ endif()
 project(FileShare VERSION 0.1.0 LANGUAGES C CXX)
 configure_file(include/FileShareVersion.hpp.in FileShareVersion.hpp)
 
-add_subdirectory(dependencies)
+add_subdirectory(dependencies EXCLUDE_FROM_ALL)
 
 include_directories(
   "${CMAKE_CURRENT_BINARY_DIR}" # For the configured Version file

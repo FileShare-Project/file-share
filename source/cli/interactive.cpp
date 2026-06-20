@@ -4,7 +4,7 @@
 ** Author Francois Michaut
 **
 ** Started on  Wed Jul 23 13:49:52 2025 Francois Michaut
-** Last update Wed May 27 12:06:41 2026 Francois Michaut
+** Last update Sat Jun 20 10:39:22 2026 Francois Michaut
 **
 ** interactive.cpp : Interractive Mode logic
 */
@@ -12,6 +12,7 @@
 #include "FileShare/Peer/Peer.hpp"
 #include "FileShare/Peer/PeerBase.hpp"
 #include "FileShare/Peer/PreAuthPeer.hpp"
+#include "FileShare/Protocol/RequestData.hpp"
 #include "FileShareVersion.hpp"
 
 #include <FileShare/Config/ServerConfig.hpp>
@@ -153,10 +154,11 @@ static void display_interactive_help() {
     std::cout << "\t\t" << "- RECEIVE_FILE <REMOTE_PATH>: Request a file download\n";
     std::cout << "\t\t" << "- SEND_FILE <LOCAL_PATH>: Send a file to the peer.\n";
 
-    std::cout << "\t" << "- TRANSFERS (LIST|ACCEPT): (Interractive) Display or manage transfers:\n";
-    std::cout << "\t\t" << "- LIST: Display ongoing Downloads and Uploads transfers and their "
+    std::cout << "\t" << "- TRANSFERS (LIST|ACCEPT): Display or manage transfers:\n";
+    std::cout << "\t\t" << "- LIST: (default) Display ongoing Downloads and Uploads transfers and their "
         "progress, as well as pending transfer requests.\n";
     std::cout << "\t\t" << "- ACCEPT <ID>: Accept a pending transfer request.\n";
+    std::cout << "\t\t" << "- REJECT <ID>: Reject a pending transfer request.\n";
 
     std::cout << "\nInterractive commands will prompt for arguments selection and/or display "
         "choices to select from.\n";
@@ -179,7 +181,36 @@ static auto operator<<(std::ostream &out, const FileShare::ServerConfig &config)
         "\tDEVICE_NAME = " << config.get_device_name() << '\n' <<
         "\tPRIVATE_KEYS_DIR = " << config.get_private_keys_dir() << '\n' <<
         "\tPRIVATE_KEY_NAME = " << config.get_private_key_name() << '\n' <<
+        "\tSERVER_ENDPOINT = " << config.get_server_endpoint().to_string() << '\n' <<
         '}';
+}
+
+static void display_transfer(const FileShare::Protocol::Request &request, const FileShare::Peer_ptr &peer, std::size_t index) {
+    std::cout << index << ". From: " << peer->get_device_uuid() << ": "
+              << request.code << " - ";
+    switch (request.code) {
+        case FileShare::Protocol::CommandCode::SEND_FILE: {
+            auto data = std::dynamic_pointer_cast<FileShare::Protocol::SendFileData>(request.request);
+
+            std::cout << data->filepath << '\n';
+            break;
+        }
+        case FileShare::Protocol::CommandCode::RECEIVE_FILE: {
+            auto data = std::dynamic_pointer_cast<FileShare::Protocol::ReceiveFileData>(request.request);
+
+            std::cout << data->filepath << '\n';
+            break;
+        }
+        case FileShare::Protocol::CommandCode::LIST_FILES: {
+            auto data = std::dynamic_pointer_cast<FileShare::Protocol::ListFilesData>(request.request);
+
+            std::cout << data->folderpath << '\n';
+            break;
+        }
+        default: {
+            std::cerr << "Unhandled request type: " << request.code << '\n';
+        }
+    }
 }
 
 static auto get_peer(InteractiveState &state, std::size_t index, bool include_pending = false, bool include_connected = true) -> FileShare::PeerBase_ptr {
@@ -190,13 +221,16 @@ static auto get_peer(InteractiveState &state, std::size_t index, bool include_pe
         !include_pending && include_connected ? " connected" : ""
     );
 
-    if (index <= pending_peers.size()) {
+    if (include_pending && index <= pending_peers.size()) {
         auto peer = *std::next(pending_peers.begin(), static_cast<ssize_t>(index - 1));
 
         return peer;
     }
-    if (index - pending_peers.size() <= peers.size()) {
-        auto peer = *std::next(peers.begin(), static_cast<ssize_t>(index - pending_peers.size() - 1));
+    if (include_pending && include_connected) {
+        index -= pending_peers.size();
+    }
+    if (include_connected && index <= peers.size()) {
+        auto peer = *std::next(peers.begin(), static_cast<ssize_t>(index - 1));
 
         return peer;
     }
@@ -214,8 +248,8 @@ static auto get_peer(InteractiveState &state, std::stringstream &ss, bool includ
     return get_peer(state, index, include_pending, include_connected);
 }
 
-static auto get_peer(InteractiveState &state, const std::string &input, bool include_pending = false, bool include_connected = true) -> FileShare::PeerBase_ptr {
-    std::stringstream ss{input};
+static auto get_peer(InteractiveState &state, std::string input, bool include_pending = false, bool include_connected = true) -> FileShare::PeerBase_ptr {
+    std::stringstream ss{std::move(input)};
 
     return get_peer(state, ss, include_pending, include_connected);
 }
@@ -287,7 +321,10 @@ static void config_set_command(InteractiveState &state, std::string_view config,
     static const ConfigSetterMap setter_map = {
         {"device_name", &FileShare::ServerConfig::set_device_name},
         {"private_keys_dir", &FileShare::ServerConfig::set_private_keys_dir},
-        {"private_key_name", &FileShare::ServerConfig::set_private_key_name}
+        {"private_key_name", &FileShare::ServerConfig::set_private_key_name},
+        {"server_endpoint", [](FileShare::ServerConfig *config, std::string value) -> FileShare::ServerConfig & {
+            return config->set_server_endpoint(value);
+        }}
     };
 
     std::string name;
@@ -470,7 +507,7 @@ static void peer_disconnect_command(InteractiveState &state, std::stringstream &
         peer_list_command(state, true);
         return;
     }
-    auto peer = get_peer(state, args, true, false);
+    auto peer = get_peer(state, args, true, true);
 
     if (peer) {
         peer->disconnect();
@@ -602,7 +639,53 @@ static void execute_command(InteractiveState &state, std::stringstream &args) {
 }
 
 static void transfers_command(InteractiveState &state, std::stringstream &args) {
-    // TODO: List Transfers
+    std::string subcommand;
+
+    args >> subcommand;
+    string_lowercase(subcommand);
+
+    if (subcommand.empty()) {
+        subcommand = "list";
+    }
+    if (subcommand == "list") {
+        std::cout << "TODO: List Ongoing Transfers\n";
+
+        std::size_t index = 1;
+        std::cout << "Pending Transfer Requests :\n";
+        for (auto &event : state.pending_events) {
+            if (!event.is_request()) {
+                continue;
+            }
+            auto request = event.request().value();
+            auto peer = std::dynamic_pointer_cast<FileShare::Peer>(event.peer());
+
+            display_transfer(request, peer, index);
+            index++;
+        }
+    } else if (subcommand == "accept" || subcommand == "reject") {
+        std::size_t index = 0;
+
+        if (!(args >> index) || index == 0 || index > state.pending_events.size()) {
+            std::cerr << "Invalid Input ! Please enter a valid transfer ID.\n";
+            return;
+        }
+
+        auto iter = std::next(state.pending_events.begin(), index - 1);
+        auto &event = *iter;
+        auto peer = std::dynamic_pointer_cast<FileShare::Peer>(event.peer());
+
+        if (subcommand == "accept") {
+            peer->respond_to_request(event.request().value(), FileShare::Protocol::StatusCode::STATUS_OK);
+            std::cout << "Transfer accepted.\n";
+        } else {
+            peer->respond_to_request(event.request().value(), FileShare::Protocol::StatusCode::FORBIDDEN);
+            std::cout << "Transfer rejected.\n";
+        }
+
+        state.pending_events.erase(iter);
+    } else {
+        std::cerr << "Unknown Transfers Subcommand " << std::quoted(subcommand, '\'') << '\n';
+    }
 }
 
 static void handle_main_menu(InteractiveState &state, const std::string &input) {
@@ -690,16 +773,6 @@ static void display_prompt(InteractiveState &state) {
     if (pending_requests > 0) {
         ss << (empty ? "" : ", ") << "Pending Requests: " << pending_requests;
         empty = false;
-
-        std::cout << "TODO: REMOVE - Accepting all pending requests\n";
-        for (auto &event : state.pending_events) {
-            if (event.REQUEST) {
-                auto peer = std::dynamic_pointer_cast<FileShare::Peer>(event.peer());
-
-                peer->respond_to_request(event.request().value(), FileShare::Protocol::StatusCode::STATUS_OK);
-            }
-        }
-        state.pending_events.clear();
     }
     std::cout << ss.str() << (empty ? "" : ".\n");
 
@@ -780,7 +853,6 @@ void interactive_mode(FileShare::Server &server) {
         }
         if (nb_ready > 0) {
             server.process_events(accept_cb, request_cb); // Server poll + handle events
-
             // TODO: Smth happened on server -> \r and refresh screen
         }
 
